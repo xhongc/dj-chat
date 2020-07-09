@@ -1,0 +1,132 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <title>Charles</title>
+
+  <!-- Bootstrap -->
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+  <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon"/>
+  <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon"/>
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{% static 'css/AdminLTE.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/_all-skins.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/ionicons.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/jquery-jvectormap.css' %}">
+  <link rel="stylesheet" href="{% static 'css/dataTables.bootstrap.min.css' %}">
+
+  <link rel="stylesheet" href="{% static 'css/xtiper.css' %}">
+  <link rel="stylesheet" href="{% static 'css/xui.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+  <link rel="stylesheet" href="{% static 'css/LobiBox.min.css' %}">
+
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+
+  <![endif]-->
+</head>
+{% block css %} {% endblock %}
+
+<body>
+{% block body %} {% endblock %}
+</body>
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/xtiper.min.js' %}"></script>
+<script src="{% static 'js/notifications.min.js' %}"></script>
+<script src="{% static 'js/lobibox.min.js' %}"></script>
+<script src="{% static 'js/re-websocket.min.js' %}"></script>
+
+<script>
+    String.prototype.format = function () {
+        //将arguments转化为数组（ES5中并非严格的数组）
+        var args = Array.prototype.slice.call(arguments);
+        var count = 0;
+        //通过正则替换%s
+        return this.replace(/%s/g, function (s, i) {
+            return args[count++];
+        });
+    };
+    $.ajaxSetup({
+        dataType: "json",
+        cache: false,
+        headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+            'Authorization': 'Jwt ' + window.localStorage.token
+        },
+        xhrFields: {
+            withCredentials: true
+        },
+        complete: function (data) {
+            //token过期，则跳转到登录页面
+            if (data.status === 401) {
+                window.location.href = '/login/'
+            }
+        }
+    });
+    var uid = "{{ user.profile.unicode_id }}";
+    if (window.location.pathname !== '/bc/') {
+        notificationConnect(uid);
+    }
+
+    function notificationConnect(uid) {
+        if (!window.localStorage.token) {
+            if (window.location.pathname === '/login/') {
+                return false
+            } else {
+                window.location.href = '/login/'
+            }
+
+        } else {
+            if (uid === undefined) {
+                return false
+            } else {
+                ntfSocket = new ReconnectingWebSocket(
+                    'ws://' + window.location.host +
+                    '/ws/notification/' + uid + '/?token=Jwt ' + window.localStorage.token);
+            }
+        }
+        ntfSocket.onopen = function (e) {
+            $('#id_online').html('Online')
+        };
+        ntfSocket.onmessage = function (e) {
+            var data = JSON.parse(e.data);
+            Lobibox.notify(
+                // 'warning', 'info', 'success', 'error'
+                'error',
+                {
+                    title: data['send_user_nick_name'],
+                    size: 'normal',
+                    showClass: 'flipInX',
+                    hideClass: 'zoomOutDown',
+                    msg: data['message'],
+                    icon: false,
+                    delay: 6000,
+                    img: data['img'],
+                    closable: true,
+                    closeOnClick: true,
+                    soundPath: '/src/sounds/',
+
+                }
+            );
+        };
+        ntfSocket.onclose = function (e) {
+        };
+        ntfSocket.onerror = function (e) {
+            ntfSocket.close()
+        };
+        return true
+    }
+
+</script>
+{% block script %} {% endblock %}
+</html>

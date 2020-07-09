@@ -1,0 +1,20 @@
+@charset "utf-8";
+body, input, textarea, select, button, code, pre {font-family:"Arial", "PingFangSC-Light", "Microsoft Yahei", "宋体", sans-serif;}
+body {font-size:12px; color:#222;}
+a {color:#222; text-decoration:none;}
+a:focus {outline:0; -moz-outline:none;} /*for ff*/
+a:hover {text-decoration:none;}
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,code,pre,form,fieldset,legend,input,button,textarea,area,blockquote,th,td,p {margin:0; padding:0;}
+img, a img, button {border:0;}
+img {vertical-align:middle;}
+table {border-collapse:collapse; border-spacing:0;}
+ul li {list-style-type:none;}
+input, textarea, select, button {outline:none;}
+input[type="text"], textarea {resize:none; -webkit-appearance:none; border-radius:0;}
+button[type="submit"], button[type="button"], input[type="submit"], input[type="button"], label, label input[type="checkbox"], label input[type="radio"] {cursor:pointer;}
+select {border:1px #ddd solid;}
+/*重置select默认样式*/
+select {appearance:none; -moz-appearance:none; -webkit-appearance:none; background:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAGBAMAAAAFwGKyAAAAElBMVEUAAAAAAAAAAAAAAAAAAAAAAADgKxmiAAAABXRSTlMAvDS0P4Bi/F4AAAAjSURBVAjXYxANDWQAAtfQEBDFGCoAophCFRhAwJgBDJRABABR1wLcaCoA8QAAAABJRU5ErkJggg==") no-repeat right center #fff; height:24px; padding-right:5px; border-radius:0;}
+/** {touch-action:pan-y;}*/
+
+body, html {width:100%; overflow-x:hidden;}

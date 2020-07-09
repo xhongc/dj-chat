@@ -1,0 +1,231 @@
+@charset "utf-8";
+
+/*****表单控件*****/
+label {cursor:pointer;}
+input, textarea, select, button {outline:none;}
+.xinput, .xtext {border:1px solid #bebebe; -webkit-box-sizing:border-box; box-sizing:border-box; font-size:14px; color:#333; width:200px; border-radius:0; appearance:none; -moz-appearance:none; -webkit-appearance:none;}
+.xinput, .xtext, .xselect {-webkit-transition:0.2s ease-in; transition:0.2s ease-in;}
+.xinput, .xtext {transition-property:box-shadow,border-color;}
+.xselect {transition-property:box-shadow;}
+.xinput::-webkit-input-placeholder, .xtext::-webkit-input-placeholder {color:#a9a9a9;}
+.xinput {height:34px;  padding:0 8px;}
+.xtext {height:80px; padding:4px 8px; line-height:20px;}
+.xinput.xunder, .xtext.xunder {border-top:0; border-left:0; border-right:0; border-bottom:1px solid #bebebe; background-color:transparent;}
+.xinput:focus, .xtext:focus, .xselect:hover {border-color:#7a9cd3; box-shadow:inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(122,156,211,0.6);}
+.xinput.xunder:focus, .xtext.xunder:focus {border-color:#7a9cd3; -webkit-box-shadow:inset 0 0 0 rgba(0,0,0,0),0 0 0 rgba(0,0,0,0); box-shadow:inset 0 0 0 rgba(0,0,0,0),0 0 8px rgba(0,0,0,0);}
+.xinput.xwidth1, .xtext.xwidth1, .xselect.xwidth1 {width:250px;}
+.xinput.xwidth2, .xtext.xwidth2, .xselect.xwidth2 {width:300px;}
+.xinput.xwidth3, .xtext.xwidth3, .xselect.xwidth3 {width:350px;}
+.xinput.xwidth4, .xtext.xwidth4, .xselect.xwidth4 {width:400px;}
+.xinput.xwidth5, .xtext.xwidth5, .xselect.xwidth5 {width:450px;}
+.xinput.xwidth6, .xtext.xwidth6, .xselect.xwidth6 {width:500px;}
+.xinput.xheight1, .xselect.xheight1 {height:38px;}
+.xinput.xheight2, .xselect.xheight2 {height:42px;}
+.xinput.xheight3, .xselect.xheight3 {height:46px;}
+.xinput.xheight4, .xselect.xheight4 {height:50px;}
+.xtext.xheight1 {height:100px;}
+.xtext.xheight2 {height:120px;}
+.xtext.xheight3 {height:140px;}
+.xtext.xheight4 {height:160px;}
+.xtext.xheight5 {height:180px;}
+.xtext.xheight6 {height:200px;}
+.xinput.xful, .xtext.xful, .xbutton.xful, .xselect.xful {width:100%;}
+.xinput.xround, .xtext.xround, .xbutton.xround, .xselect.xround, .xtable.xround, .xtablein.xround>table, .xtablein.xtableall.xround table {-webkit-border-radius:5px; -moz-border-radius:5px; border-radius:5px;}
+.xinput.xreadonly {background-color:#eee; cursor:not-allowed; color:#a9a9a9;}
+.xinput.xreadonly:focus {border-color:#bebebe; box-shadow:inset 0 0 0 rgba(0,0,0,0),0 0 0 rgba(0,0,0,0);}
+.xbutton {box-shadow:inset 0px 0px 2px #fff; -webkit-box-shadow:inset 0px 0px 2px #fff; -moz-box-shadow:inset 0px 0px 2px #fff; padding:0 18px; height:38px; cursor:pointer; font-size:14px; -webkit-border-radius:0; -moz-border-radius:0; border-radius:0;}
+.xbutton.xmin {min-width:72px;}
+.xselect {width:200px; height:34px; border:1px solid #bebebe; padding:0 16px 0 6px; -webkit-box-sizing:border-box; box-sizing:border-box; border-radius:0; appearance:none; -moz-appearance:none; -webkit-appearance:none; background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAEAQMAAABvKif3AAAABlBMVEUAAABAQEBTWDqaAAAAAXRSTlMAQObYZgAAABRJREFUCNdj+MfAUMPAYMHAIMAAABAOAcNSkrYcAAAAAElFTkSuQmCC"); background-repeat:no-repeat; background-position:right center; background-color:#fff;}
+.xselect.xblack {background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAEAQMAAABvKif3AAAABlBMVEUAAAD///+l2Z/dAAAAAXRSTlMAQObYZgAAABRJREFUCNdj+MfAUMPAYMHAIMAAABAOAcNSkrYcAAAAAElFTkSuQmCC"); background-color:#333; border-color:#333; color:#fff;}
+
+/*normal*/
+.xbutton, .xfile span {color:#333; border:1px solid #bebebe; background-image:-moz-linear-gradient(top,#fff,#f1f1f1); background-image:-webkit-gradient(linear,0 0,0 100%,from(#fff),to(#f1f1f1)); background-image:-webkit-linear-gradient(top,#fff,#f1f1f1); background-image:-o-linear-gradient(top,#fff,#f1f1f1); background-image:linear-gradient(to bottom,#fff,#f1f1f1);}
+.xbutton:hover, .xfile:hover span {border:1px solid #bebebe; background-image:-moz-linear-gradient(top,#f1f1f1,#fff); background-image:-webkit-gradient(linear,0 0,0 100%,from(#f1f1f1),to(#fff)); background-image:-webkit-linear-gradient(top,#f1f1f1,#fff); background-image:-o-linear-gradient(top,#f1f1f1,#fff); background-image:linear-gradient(to bottom,#f1f1f1,#fff);}
+.xbutton:active {box-shadow:inset 0px 0px 3px rgba(0,0,0,0.3); -o-box-shadow:inset 0px 0px 3px rgba(0,0,0,0.3); -webkit-box-shadow:inset 0px 0px 3px rgba(0,0,0,0.3); -moz-box-shadow:inset 0px 0px 3px rgba(0,0,0,0.3);}
+
+/*xblue*/
+.xbutton.xblue, .xfile.xblue span {background-image:none; color:#fff; border:1px solid #0e73e9; background-color:#0e73e9;}
+.xbutton.xblue:hover, .xfile.xblue:hover span {background-color:#005ecd;}
+
+/*xred*/
+.xbutton.xred, .xfile.xred span {background-image:none; color:#fff; border:1px solid #e84543; background-color:#e84543;}
+.xbutton.xred:hover, .xfile.xred:hover span {background-color:#d11210;}
+
+/*xyellow*/
+.xbutton.xyellow, .xfile.xyellow span {background-image:none; color:#fff; border:1px solid #f4c044; background-color:#f4c044;}
+.xbutton.xyellow:hover, .xfile.xyellow:hover span {background-color:#d7a12e;}
+
+/*xgreen*/
+.xbutton.xgreen, .xfile.xgreen span {background-image:none; color:#fff; border:1px solid #5cb85c; background-color:#5cb85c;}
+.xbutton.xgreen:hover, .xfile.xgreen:hover span {background-color:#2aa62a;}
+
+/*xblack*/
+.xbutton.xblack, .xfile.xblack span {background-image:none; color:#fff; border:1px solid #444444; background-color:#444444;}
+.xbutton.xblack:hover, .xfile.xblack:hover span {background-color:#222222;}
+
+/*xrem*/
+.xbutton.xrem, .xfile.xrem span {background-image:none; color:#fff; border:1px solid #2b84d0; background-color:#2b84d0;}
+.xbutton.xrem:hover, .xfile.xrem:hover span {background-color:#106ebf;}
+
+/*xcoffee*/
+.xbutton.xcoffee, .xfile.xcoffee span {background-image:none; color:#fff; border:1px solid #6b5440; background-color:#6b5440;}
+.xbutton.xcoffee:hover, .xfile.xcoffee:hover span {background-color:#503b2a;}
+
+/*disabled*/
+.xbutton.xdisabled:hover, .xbutton:disabled:hover {box-shadow:none;}
+.xbutton.xdisabled, .xbutton.disabled:hover, .xbutton:disabled, .xbutton:disabled:hover {color:#aeaeae; border:1px solid #d0d0d0; cursor:default; background-image:-moz-linear-gradient(top,#fff,#f1f1f1); background-image:-webkit-gradient(linear,0 0,0 100%,from(#fff),to(#f1f1f1)); background-image:-webkit-linear-gradient(top,#fff,#f1f1f1); background-image:-o-linear-gradient(top,#fff,#f1f1f1); background-image:linear-gradient(to bottom,#fff,#f1f1f1);}
+
+/*xbutton-lit*/
+.xfile.xlit {height:34px; min-width:58px;}
+.xbutton.xlit, .xfile.xlit span {height:34px; font-size:12px; padding:0 12px; min-width:58px;}
+.xfile.xlit i, .xfile.xlit img {position:relative; top:-1px;}
+/*****表单控件*****/
+
+
+/*****单选框*****/
+.xradio {height:20px; line-height:20px; position:relative; font-size:14px; margin-bottom:10px;}
+.xradio:last-child {margin-bottom:0;}
+span.xradio {display:inline-block; margin-bottom:0; margin-right:18px; vertical-align:top;}
+.xradio label span {margin-left:26px; color:#333;}
+.xradio label input[type="radio"] {position:absolute; z-index:-1; width:0; height:0; overflow:hidden; visibility:hidden; opacity:0;}
+.xradio label em {display:block; width:20px; height:20px; border-radius:50%; border:1px solid #ddd; background-color:#fff; -webkit-box-sizing:border-box; box-sizing:border-box; position:absolute; top:0; left:0; -webkit-transition:0.1s ease-in; transition:0.1s ease-in; -webkit-transition-property:border-color,background-color; transition-property:border-color,background-color;}
+.xradio label, .xradio label span {height:20px; line-height:20px; display:inline-block;}
+.xradio label input[type="radio"]:checked + em {border-color:#696969; background-color:#696969; background-clip:content-box; padding:4px;}
+.xradio.xblue label input[type="radio"]:checked + em, .xradio.xblue2 label input[type="radio"]:checked + em {border-color:#005ecd; background-color:#005ecd;}
+.xradio.xred label input[type="radio"]:checked + em, .xradio.xred2 label input[type="radio"]:checked + em {border-color:#e84543; background-color:#e84543;}
+.xradio.xyellow label input[type="radio"]:checked + em, .xradio.xyellow2 label input[type="radio"]:checked + em {border-color:#f4c044; background-color:#f4c044;}
+.xradio.xgreen label input[type="radio"]:checked + em, .xradio.xgreen2 label input[type="radio"]:checked + em {border-color:#5cb85c; background-color:#5cb85c;}
+.xradio.xblack label input[type="radio"]:checked + em, .xradio.xblack2 label input[type="radio"]:checked + em {border-color:#222222; background-color:#222222;}
+.xradio.xblue2 label input[type="radio"]:checked + em + span {color:#005ecd;}
+.xradio.xred2 label input[type="radio"]:checked + em + span {color:#e84543;}
+.xradio.xyellow2 label input[type="radio"]:checked + em + span {color:#f4c044;}
+.xradio.xgreen2 label input[type="radio"]:checked + em + span {color:#5cb85c;}
+.xradio.xblack2 label input[type="radio"]:checked + em + span {color:#222222;}
+/*****单选框*****/
+
+
+/*****复选框*****/
+.xcheckbox {min-width:20px; height:20px; line-height:20px; position:relative; font-size:14px; margin-bottom:10px;}
+.xcheckbox:last-child {margin-bottom:0;}
+span.xcheckbox {display:inline-block; margin-bottom:0; margin-right:18px; vertical-align:top;}
+span.xcheckbox:last-child {margin-right:0;}
+.xcheckbox label span {margin-left:26px; color:#333;}
+.xcheckbox label input[type="checkbox"] {position:absolute; z-index:-1; width:0; height:0; overflow:hidden; visibility:hidden; opacity:0;}
+.xcheckbox label em {display:block; width:20px; height:20px; border-radius:4px; border:1px solid #ddd; background-color:#fff; -webkit-box-sizing:border-box; box-sizing:border-box; position:absolute; top:0; left:0; -webkit-transition:0.1s ease-in; transition:0.1s ease-in; -webkit-transition-property:border-color,background-color; transition-property:border-color,background-color;}
+.xcheckbox label em:before, .xcheckbox label em:after {content:""; display:block; position:absolute; background:#fff;}
+.xcheckbox label em:before {width:6px; height:2px; -webkit-transform:rotate(45deg); transform:rotate(45deg); top:10px; left:3px;}
+.xcheckbox label em:after {width:10px; height:2px; -webkit-transform:rotate(128deg); transform:rotate(128deg); top:8px; left:6px;}
+.xcheckbox label, .xcheckbox label span {height:20px; line-height:20px; display:inline-block;}
+.xcheckbox label input[type="checkbox"]:checked + em {border-color:#696969; background-color:#696969;}
+.xcheckbox.xblue label input[type="checkbox"]:checked + em, .xcheckbox.xblue2 label input[type="checkbox"]:checked + em {border-color:#005ecd; background-color:#005ecd;}
+.xcheckbox.xred label input[type="checkbox"]:checked + em, .xcheckbox.xred2 label input[type="checkbox"]:checked + em {border-color:#e84543; background-color:#e84543;}
+.xcheckbox.xyellow label input[type="checkbox"]:checked + em, .xcheckbox.xyellow2 label input[type="checkbox"]:checked + em {border-color:#f4c044; background-color:#f4c044;}
+.xcheckbox.xgreen label input[type="checkbox"]:checked + em, .xcheckbox.xgreen2 label input[type="checkbox"]:checked + em {border-color:#5cb85c; background-color:#5cb85c;}
+.xcheckbox.xblack label input[type="checkbox"]:checked + em, .xcheckbox.xblack2 label input[type="checkbox"]:checked + em {border-color:#222222; background-color:#222222;}
+.xcheckbox.xblue2 label input[type="checkbox"]:checked + em + span {color:#005ecd;}
+.xcheckbox.xred2 label input[type="checkbox"]:checked + em + span {color:#e84543;}
+.xcheckbox.xyellow2 label input[type="checkbox"]:checked + em + span {color:#f4c044;}
+.xcheckbox.xgreen2 label input[type="checkbox"]:checked + em + span {color:#5cb85c;}
+.xcheckbox.xblack2 label input[type="checkbox"]:checked + em + span {color:#222222;}
+/*****复选框*****/
+
+
+/*****开关*****/
+/*默认样式*/
+.xswitch {position:relative; -webkit-touch-callout:none; cursor:pointer; overflow:hidden; width:42px; height:24px; border:1px solid #dddddd; border-radius:13px; -webkit-appearance:none; -webkit-user-select:none; -webkit-box-sizing:border-box; box-sizing:border-box; background-color:#fff;}
+.xswitch:before {content:""; width:22px; height:22px; line-height:24px; text-transform:uppercase; position:absolute; top:0; left:0; border-radius:50%; -webkit-border-radius:50%; background-color:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.4); -webkit-box-sizing:border-box; box-sizing:border-box; -webkit-transition:0.2s ease-in; transition:0.2s ease-in; -webkit-transition-property:background-color,left; transition-property:background-color,left;}
+.xswitch:checked {border-color:#696969; background-color:#696969; color:#fff;}
+.xswitch:checked:before {left:20px;}
+.xswitch.xonoff {width:64px;}
+.xswitch.xonoff:before {content:"OFF"; text-indent:27px;}
+.xswitch.xonoff:checked:before {content:"ON"; left:40px; text-indent:-28px;}
+.xswitch.xblue:checked {border-color:#005ecd; background:#005ecd;}
+.xswitch.xred:checked {border-color:#e84543; background:#e84543;}
+.xswitch.xyellow:checked {border-color:#f4c044; background:#f4c044;}
+.xswitch.xgreen:checked {border-color:#5cb85c; background:#5cb85c;}
+.xswitch.xblack:checked {border-color:#222222; background:#222222;}
+
+/*自定义文字描述*/
+.xswitch-tip {display:inline-block; height:24px; position:relative; margin-bottom:10px;}
+.xswitch-tip:last-child {margin-bottom:0;}
+span.xswitch-tip {margin-bottom:0; margin-right:10px; vertical-align:top;}
+span.xswitch-tip:last-child {margin-right:0;}
+div.xswitch-tip {display:table;}
+.xswitch-tip label, .xswitch-tip span {height:24px; display:block;}
+.xswitch-tip span {font-size:12px; min-width:24px; text-align:center; line-height:24px; padding-left:28px; padding-right:12px; color:#999; position:relative; z-index:2; overflow-y:hidden;}
+.xswitch-tip span + span {display:none;}
+.xswitch-tip input[type="checkbox"] {position:absolute; z-index:-1; width:0; height:0; overflow:hidden; visibility:hidden; opacity:0;}
+.xswitch-tip label em {-webkit-box-sizing:border-box; box-sizing:border-box; -webkit-border-radius:10px; -moz-border-radius:10px; border-radius:15px; border:1px solid #ddd; position:absolute; top:0; left:0; width:100%; height:24px; z-index:1;}
+.xswitch-tip label em:after {content:""; display:block; width:22px; height:22px; border-radius:50%; background-color:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.4); position:absolute; top:0; left:0; -webkit-box-sizing:border-box; box-sizing:border-box;}
+.xswitch-tip label input[type="checkbox"]:checked + em {border-color:#696969; background-color:#696969;}
+.xswitch-tip label input[type="checkbox"]:checked + em:after {left:auto; right:0; background-color:#fff;}
+.xswitch-tip label input[type="checkbox"]:checked + em + span, .xswitch-tip label input[type="checkbox"]:checked + em + span + span {padding-left:12px; padding-right:28px; color:#fff;}
+.xswitch-tip label input[type="checkbox"]:checked + em + span {display:none;}
+.xswitch-tip label input[type="checkbox"]:checked + em + span + span {display:block;}
+.xswitch-tip label input[type="checkbox"]:checked + em + span:after {content:"ON";}
+.xswitch-tip span, .xswitch-tip label em, .xswitch-tip label em:after {-webkit-transition:0.2s ease-in; transition:0.2s ease-in; -webkit-transition-property:border-color,background-color; transition-property:border-color,background-color;}
+.xswitch-tip.xblue label input[type="checkbox"]:checked + em {border-color:#005ecd; background-color:#005ecd;}
+.xswitch-tip.xred label input[type="checkbox"]:checked + em {border-color:#e84543; background-color:#e84543;}
+.xswitch-tip.xyellow label input[type="checkbox"]:checked + em {border-color:#f4c044; background-color:#f4c044;}
+.xswitch-tip.xgreen label input[type="checkbox"]:checked + em {border-color:#5cb85c; background-color:#5cb85c;}
+.xswitch-tip.xblack label input[type="checkbox"]:checked + em {border-color:#222222; background-color:#222222;}
+/*****开关*****/
+
+
+/*****上传控件*****/
+.xfile {display:inline-block; height:36px; position:relative; margin-bottom:10px; cursor:pointer;}
+.xfile:last-child {margin-bottom:0;}
+span.xfile {margin-bottom:0; margin-right:10px; vertical-align:top;}
+span.xfile:last-child {margin-right:0;}
+div.xfile {display:table;}
+.xfile input[type="file"] {width:100%; height:100%; opacity:0; position:absolute; top:0; left:0; font-size:0; cursor:pointer; z-index:2;}
+.xfile span {-webkit-box-sizing:border-box; box-sizing:border-box; display:inline-block; vertical-align:middle; padding:0 15px; height:36px; line-height:36px; -webkit-border-radius:5px; -moz-border-radius:5px; border-radius:5px; font-size:14px; position:relative; z-index:1;}
+/*.xfile i, .xfile img {height:18px; display:inline-block; vertical-align:middle; overflow:hidden; margin-right:6px;}*/
+.xfile i, .xfile img {height:20px; line-height:20px; display:inline-block; vertical-align:middle; margin-right:6px;}
+.xfile i {transform:translateY(-1px);}
+.xfile img {transform:translateY(-2px);}
+.xfile i {min-width:20px; font-size:20px; background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAjVBMVEUAAAAiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiLrJpnlAAAALnRSTlMA9gOr6PrJEQ3zY9nTvrWkiX1oTz06Mi0mHBft4Z+YlpKFgW5dCN25sHhFV0QkMVMqTAAAAgtJREFUSMftldtyskAQhIeFhQgeOCMQQIjGQ5J+/8f7Z1HUuBbhv0xVvgutmra3Z4pZpD80MrdeMrWbTTQk5gzArP8wkwmGF9+Awrh8+S8/OfIFGGlXXVfZEswiH3c4tjq5SQUxIm1UlO2MOcQKwDy+FeI5F1ZixLJVhxb3lULFbkdG9wArfxjOAryX0RD3seiOxOycJQ+y08o8ztLZ6XPH7cLjFhCQRsBly1u0sbivnha4cNItp0Fb3ETRYuDd0S3O+1Vuh6AGKroKP9wge7qlgfsRVhaY5lzp1P51+Y+r1KlF7frFlRwR0wRiDpIJD7IHjE+axKcB7AWlHOLTRHyOSenIbRVTLQW3dqQDYNJkTOBAtnrikwkAmzwgfKKJKBKkEwKeSjk+0TaGsSGdo0pZApUuvaEs8abXK2BJLfCq3aBIwrIgI+0OvgItxYB2XFJCWVAmWjgQ085mef1NWPNZysL5DwLX7B03wdL8Xirmak8ta6aE4t6hhL7ZWh23Fdd+1XXzV4ax8tW1us4ptiq8Pv9mD8YOojRbX/o9CGURh8uc6yyNAhvM/nKCs0KPlMZGkNu/H03DMPt3p0tiY0iJnpVze6jDXZ05JEK/oLOFCj8U5MyGW/5tTRzX9EopJacoBouCU1goPdN1tMeUp0kmSLeQyJI0H/nP0CwDv9fSAM1/Wr7q+ov+eMI/GuVEnRAec4IAAAAASUVORK5CYII="); background-repeat:no-repeat; background-size:100% 100%;}
+.xfile.xblue i, .xfile.xred i, .xfile.xyellow i, .xfile.xgreen i, .xfile.xblack i {background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAk1BMVEUAAAD////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////ROyVeAAAAMHRSTlMA9qv6ApcZ8+rmtWMlEg8G2dPIu6SJhGhPPToL7t7Jn5KAfW5dRDEu4cB4HstXNCpvk6ktAAACBElEQVRIx+3U25aiMBAF0AMJKCKCInfvraBtX87/f90QBKc1PTSvs1bvB3ioVakUVIJfmk/XmtQs9xPD5OaI5Kh5mPmAhCIyqBjtKyrwAztkTWy2+/12I1gLbfTyFmplq/RR80tLlVp46CGXJOcZ7rI5yaXsSTmqRe2HjaqyR/zTLCCdKx5cHTKY9RZx8cTtKVPMJuTcxxN/Tk5mhd53Fl8Ch+QBmgNJJ7jE2cNXOF3YOkFzYuvyNyhjdtYeNN6anbgrZFGV3ibv7qHCN6qD+55sHdYsNPZq/mL7x1GK1aDum8EVpJNhgMwhRQ7IkDROGORkkKFEKcgIA0WkKPFKjm0MZI/JV0xIE4OZ5AQb9RUG25MbBGQCnZ+mPnQJGeBN7U63M4wdNKrzN9XLFpoXrlZ8gWareonJtXaCUsHxmCLVzuCajJGR2nL5iiqFq1wrTmbwN6QzfQhMz7yl8PwUcMiND6Qk519D9lzN6Xg8UgH7a4YKpN3sn4/+fb8hyWhpGMuIZHjv0z+e79NfhKwtDulHNW33a0qVIs22z2n1kR4WVCsU7bpLNoQwdhJucz+ahmE2d6cLuTOEYGM5QyfpzurIg0wiG7cU2FEi4Y26U/4wJp5rBishRF1F6VKUukodWAWm62nX2LXMKwk9BbLKy2uBHlrKzf+bYnU/eripZU3x6xt/AO1sSHEnY+LbAAAAAElFTkSuQmCC");}
+.xfile i[class^="icon-"], .xfile i[class*=" icon-"], .xfile i[class^="ico-"], .xfile i[class*=" ico-"], .xfile i[class^="ion-"], .xfile i[class*=" ion-"], .xfile i[class^="glyphicon-"], .xfile i[class*=" glyphicon-"], .xfile i[class^="fa-"], .xfile i[class*=" fa-"], .xfile i[class^="ti-"], .xfile i[class*=" ti-"], .xfile i[class^="zmdi-"], .xfile i[class*=" zmdi-"], .xfile i[class^="wi-"], .xfile i[class*=" wi-"] {background-image:none;}
+/*****上传控件*****/
+
+/*****表格*****/
+/*默认样式*/
+.xtable, .xtablein>table, .xtablein.xtableall table {font-size:14px; width:100%; border-collapse:collapse; border-spacing:0;}
+.xtable>thead>tr>th, .xtable>thead>tr>td, .xtable>tbody>tr>th, .xtable>tbody>tr>td, .xtablein>table>thead>tr>th, .xtablein>table>thead>tr>td, .xtablein>table>tbody>tr>th, .xtablein>table>tbody>tr>td, .xtablein.xtableall table>thead>tr>th, .xtablein.xtableall table>thead>tr>td, .xtablein.xtableall table>tbody>tr>th, .xtablein.xtableall table>tbody>tr>td {padding:8px; border:1px solid #ddd;}
+
+/*首行样式*/
+.xtable.xfirst>thead>tr:first-child>th, .xtable.xfirst>thead>tr:first-child>td, .xtable.xfirst>tbody>tr:first-child>th, .xtable.xfirst>tbody>tr:first-child>td, .xtablein.xfirst>table>thead>tr:first-child>th, .xtablein.xfirst>table>thead>tr:first-child>td, .xtablein.xfirst>table>tbody>tr:first-child>th, .xtablein.xfirst>table>tbody>tr:first-child>td, .xtablein.xtableall.xfirst table>thead>tr:first-child>th, .xtablein.xtableall.xfirst table>thead>tr:first-child>td, .xtablein.xtableall.xfirst table>tbody>tr:first-child>th, .xtablein.xtableall.xfirst table>tbody>tr:first-child>td {font-size:14px; font-weight:bold; background-color:#f0f0f0; padding:11px 8px;}
+
+/*无外部边框*/
+.xtable.xnobor-out>thead>tr:first-child>th, .xtable.xnobor-out>thead>tr:first-child>td, .xtable.xnobor-out>tbody>tr:first-child>th, .xtable.xnobor-out>tbody>tr:first-child>td, .xtablein.xnobor-out>table>thead>tr:first-child>th, .xtablein.xnobor-out>table>thead>tr:first-child>td, .xtablein.xnobor-out>table>tbody>tr:first-child>th, .xtablein.xnobor-out>table>tbody>tr:first-child>td, .xtablein.xtableall.xnobor-out table>thead>tr:first-child>th, .xtablein.xtableall.xnobor-out table>thead>tr:first-child>td, .xtablein.xtableall.xnobor-out table>tbody>tr:first-child>th, .xtablein.xtableall.xnobor-out table>tbody>tr:first-child>td {border-top:0;}
+.xtable.xnobor-out>thead>tr:last-child>th, .xtable.xnobor-out>thead>tr:last-child>td, .xtable.xnobor-out>tbody>tr:last-child>th, .xtable.xnobor-out>tbody>tr:last-child>td, .xtablein.xnobor-out>table>thead>tr:last-child>th, .xtablein.xnobor-out>table>thead>tr:last-child>td, .xtablein.xnobor-out>table>tbody>tr:last-child>th, .xtablein.xnobor-out>table>tbody>tr:last-child>td, .xtablein.xtableall.xnobor-out table>thead>tr:last-child>th, .xtablein.xtableall.xnobor-out table>thead>tr:last-child>td, .xtablein.xtableall.xnobor-out table>tbody>tr:last-child>th, .xtablein.xtableall.xnobor-out table>tbody>tr:last-child>td {border-bottom:0;}
+.xtable.xnobor-out>thead>tr>th:first-child, .xtable.xnobor-out>thead>tr>td:first-child, .xtable.xnobor-out>tbody>tr>th:first-child, .xtable.xnobor-out>tbody>tr>td:first-child, .xtablein.xnobor-out>table>thead>tr>th:first-child, .xtablein.xnobor-out>table>thead>tr>td:first-child, .xtablein.xnobor-out>table>tbody>tr>th:first-child, .xtablein.xnobor-out>table>tbody>tr>td:first-child, .xtablein.xtableall.xnobor-out table>thead>tr>th:first-child, .xtablein.xtableall.xnobor-out table>thead>tr>td:first-child, .xtablein.xtableall.xnobor-out table>tbody>tr>th:first-child, .xtablein.xtableall.xnobor-out table>tbody>tr>td:first-child {border-left:0;}
+.xtable.xnobor-out>thead>tr>th:last-child, .xtable.xnobor-out>thead>tr>td:last-child, .xtable.xnobor-out>tbody>tr>th:last-child, .xtable.xnobor-out>tbody>tr>td:last-child, .xtablein.xnobor-out>table>thead>tr>th:last-child, .xtablein.xnobor-out>table>thead>tr>td:last-child, .xtablein.xnobor-out>table>tbody>tr>th:last-child, .xtablein.xnobor-out>table>tbody>tr>td:last-child, .xtablein.xtableall.xnobor-out table>thead>tr>th:last-child, .xtablein.xtableall.xnobor-out table>thead>tr>td:last-child, .xtablein.xtableall.xnobor-out table>tbody>tr>th:last-child, .xtablein.xtableall.xnobor-out table>tbody>tr>td:last-child {border-right:0;}
+
+/*无内部边框、无全部边框*/
+.xtable.xnobor-in, .xtablein.xnobor-in>table {border:1px solid #ddd;}
+.xtable.xnobor-in>thead>tr>th, .xtable.xnobor-in>thead>tr>td, .xtable.xnobor-in>tbody>tr>th, .xtable.xnobor-in>tbody>tr>td, .xtable.xnobor-all>thead>tr>th, .xtable.xnobor-all>thead>tr>td, .xtable.xnobor-all>tbody>tr>th, .xtable.xnobor-all>tbody>tr>td, .xtablein.xnobor-in>table>thead>tr>th, .xtablein.xnobor-in>table>thead>tr>td, .xtablein.xnobor-in>table>tbody>tr>th, .xtablein.xnobor-in>table>tbody>tr>td, .xtablein.xnobor-all>table>thead>tr>th, .xtablein.xnobor-all>table>thead>tr>td, .xtablein.xnobor-all>table>tbody>tr>th, .xtablein.xnobor-all>table>tbody>tr>td, .xtablein.xtableall.xnobor-in table>thead>tr>th, .xtablein.xtableall.xnobor-in table>thead>tr>td, .xtablein.xtableall.xnobor-in table>tbody>tr>th, .xtablein.xtableall.xnobor-in table>tbody>tr>td, .xtablein.xtableall.xnobor-all table>thead>tr>th, .xtablein.xtableall.xnobor-all table>thead>tr>td, .xtablein.xtableall.xnobor-all table>tbody>tr>th, .xtablein.xtableall.xnobor-all table>tbody>tr>td {border:0;}
+
+/*水平边框样式*/
+.xtable.xbor-tr, .xtablein.xbor-tr>table, .xtablein.xtableall.xbor-tr table {border-bottom:1px solid #ddd; border-left:1px solid #ddd; border-right:1px solid #ddd;}
+.xtable.xbor-tr>thead>tr>th, .xtable.xbor-tr>thead>tr>td, .xtable.xbor-tr>tbody>tr>th, .xtable.xbor-tr>tbody>tr>td, .xtable.xbor-tr-noout>thead>tr>th, .xtable.xbor-tr-noout>thead>tr>td, .xtable.xbor-tr-noout>tbody>tr>th, .xtable.xbor-tr-noout>tbody>tr>td, .xtablein.xbor-tr>table>thead>tr>th, .xtablein.xbor-tr>table>thead>tr>td, .xtablein.xbor-tr>table>tbody>tr>th, .xtablein.xbor-tr>table>tbody>tr>td, .xtablein.xbor-tr-noout>table>thead>tr>th, .xtablein.xbor-tr-noout>table>thead>tr>td, .xtablein.xbor-tr-noout>table>tbody>tr>th, .xtablein.xbor-tr-noout>table>tbody>tr>td, .xtablein.xtableall.xbor-tr table>thead>tr>th, .xtablein.xtableall.xbor-tr table>thead>tr>td, .xtablein.xtableall.xbor-tr table>tbody>tr>th, .xtablein.xtableall.xbor-tr table>tbody>tr>td, .xtablein.xtableall.xbor-tr-noout table>thead>tr>th, .xtablein.xtableall.xbor-tr-noout table>thead>tr>td, .xtablein.xtableall.xbor-tr-noout table>tbody>tr>th, .xtablein.xtableall.xbor-tr-noout table>tbody>tr>td {border:0;}
+.xtable.xbor-tr>thead>tr, .xtable.xbor-tr>tbody>tr, .xtable.xbor-tr-noout>thead>tr, .xtable.xbor-tr-noout>tbody>tr, .xtablein.xbor-tr>table>thead>tr, .xtablein.xbor-tr>table>tbody>tr, .xtablein.xbor-tr-noout>table>thead>tr, .xtablein.xbor-tr-noout>table>tbody>tr, .xtablein.xtableall.xbor-tr table>thead>tr, .xtablein.xtableall.xbor-tr table>tbody>tr, .xtablein.xtableall.xbor-tr-noout table>thead>tr, .xtablein.xtableall.xbor-tr-noout table>tbody>tr {border-top:1px solid #ddd;}
+.xtable.xbor-tr-noout, .xtablein.xbor-tr-noout>table, .xtablein.xtableall.xbor-tr-noout table {border-bottom:0; border-left:0; border-right:0;}
+.xtable.xbor-tr-noout>thead>tr:first-child, .xtable.xbor-tr-noout>tbody>tr:first-child, .xtablein.xbor-tr-noout>table>thead>tr:first-child, .xtablein.xbor-tr-noout>table>tbody>tr:first-child, .xtablein.xtableall.xbor-tr-noout table>thead>tr:first-child, .xtablein.xtableall.xbor-tr-noout table>tbody>tr:first-child {border-top:0;}
+
+/*表格圆角*/
+.xtable.xround, .xtablein.xround>table, .xtablein.xtableall.xround table {border-collapse:separate; border-right:1px solid #ddd; border-bottom:1px solid #ddd;}
+.xtable.xround>thead>tr>th, .xtable.xround>thead>tr>td, .xtable.xround>tbody>tr>th, .xtable.xround>tbody>tr>td,.xtable.xroundin>table>thead>tr>th, .xtablein.xround>table>thead>tr>td, .xtablein.xround>table>tbody>tr>th, .xtablein.xround>table>tbody>tr>td, .xtablein.xtableall.xround table>thead>tr>td, .xtablein.xtableall.xround table>tbody>tr>th, .xtablein.xtableall.xround table>tbody>tr>td {border-right:0; border-bottom:0;}
+.xtable.xround>thead>tr:first-child>th:first-child, .xtable.xround>thead>tr:first-child>td:first-child, .xtable.xround>tbody>tr:first-child>th:first-child, .xtable.xround>tbody>tr:first-child>td:first-child, .xtablein.xround>table>thead>tr:first-child>th:first-child, .xtablein.xround>table>thead>tr:first-child>td:first-child, .xtablein.xround>table>tbody>tr:first-child>th:first-child, .xtablein.xround>table>tbody>tr:first-child>td:first-child, .xtablein.xtableall.xround table>thead>tr:first-child>th:first-child, .xtablein.xtableall.xround table>thead>tr:first-child>td:first-child, .xtablein.xtableall.xround table>tbody>tr:first-child>th:first-child, .xtablein.xtableall.xround table>tbody>tr:first-child>td:first-child {-webkit-border-top-left-radius:5px; border-top-left-radius:5px; -moz-border-radius-topleft:5px;}
+.xtable.xround>thead>tr:first-child>th:last-child, .xtable.xround>thead>tr:first-child>td:last-child, .xtable.xround>tbody>tr:first-child>th:last-child, .xtable.xround>tbody>tr:first-child>td:last-child, .xtablein.xround>table>thead>tr:first-child>th:last-child, .xtablein.xround>table>thead>tr:first-child>td:last-child, .xtablein.xround>table>tbody>tr:first-child>th:last-child, .xtablein.xround>table>tbody>tr:first-child>td:last-child, .xtablein.xtableall.xround table>thead>tr:first-child>th:last-child, .xtablein.xtableall.xround table>thead>tr:first-child>td:last-child, .xtablein.xtableall.xround table>tbody>tr:first-child>th:last-child, .xtablein.xtableall.xround table>tbody>tr:first-child>td:last-child {-webkit-border-top-right-radius:5px; border-top-right-radius:5px; -moz-border-radius-topright:5px;}
+.xtable.xround>thead>tr:last-child>th:first-child, .xtable.xround>thead>tr:last-child>td:first-child, .xtable.xround>tbody>tr:last-child>th:first-child, .xtable.xround>tbody>tr:last-child>td:first-child, .xtablein.xround>table>thead>tr:last-child>th:first-child, .xtablein.xround>table>thead>tr:last-child>td:first-child, .xtablein.xround>table>tbody>tr:last-child>th:first-child, .xtablein.xround>table>tbody>tr:last-child>td:first-child, .xtablein.xtableall.xround table>thead>tr:last-child>th:first-child, .xtablein.xtableall.xround table>thead>tr:last-child>td:first-child, .xtablein.xtableall.xround table>tbody>tr:last-child>th:first-child, .xtablein.xtableall.xround table>tbody>tr:last-child>td:first-child {-webkit-border-bottom-left-radius:5px; border-bottom-left-radius:5px; -moz-border-radius-bottomleft:5px;}
+.xtable.xround>thead>tr:last-child>th:last-child, .xtable.xround>thead>tr:last-child>td:last-child, .xtable.xround>tbody>tr:last-child>th:last-child, .xtable.xround>tbody>tr:last-child>td:last-child, .xtablein.xround>table>thead>tr:last-child>th:last-child, .xtablein.xround>table>thead>tr:last-child>td:last-child, .xtablein.xround>table>tbody>tr:last-child>th:last-child, .xtablein.xround>table>tbody>tr:last-child>td:last-child, .xtablein.xtableall.xround table>thead>tr:last-child>th:last-child, .xtablein.xtableall.xround table>thead>tr:last-child>td:last-child, .xtablein.xtableall.xround table>tbody>tr:last-child>th:last-child, .xtablein.xtableall.xround table>tbody>tr:last-child>td:last-child  {-webkit-border-bottom-right-radius:5px; border-bottom-right-radius:5px; -moz-border-radius-bottomright:5px;}
+
+/*间隔背景色*/
+.xtable.xodd>thead>tr:nth-child(odd), .xtable.xodd>tbody>tr:nth-child(odd), .xtable.xeven>thead>tr:nth-child(even), .xtable.xeven>tbody>tr:nth-child(even), .xtablein.xodd>table>thead>tr:nth-child(odd), .xtablein.xodd>table>tbody>tr:nth-child(odd), .xtablein.xeven>table>thead>tr:nth-child(even), .xtablein.xeven>table>tbody>tr:nth-child(even), .xtablein.xtableall.xodd table>thead>tr:nth-child(odd), .xtablein.xtableall.xodd table>tbody>tr:nth-child(odd), .xtablein.xtableall.xeven table>thead>tr:nth-child(even), .xtablein.xtableall.xeven table>tbody>tr:nth-child(even)
+ {background:#f8f8f8;}
+
+/*鼠标悬停*/
+.xtable.xhover>thead>tr:hover, .xtable.xhover>tbody>tr:hover, .xtablein.xhover>table>thead>tr:hover, .xtablein.xhover>table>tbody>tr:hover, .xtablein.xtableall.xhover table>thead>tr:hover, .xtablein.xtableall.xhover table>tbody>tr:hover {background-color:#fbffe4; color:#222;}
+/*****表格*****/

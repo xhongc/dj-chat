@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block body %}
+  <body class="hold-transition login-page">
+  <div class="login-box">
+    <div class="login-logo">
+      <a href="#"><b>Charles</b>LTE</a>
+    </div>
+    <!-- /.login-logo -->
+    <div class="login-box-body">
+      <p class="login-box-msg">Sign in to start your session</p>
+
+      <form action="/api-token-auth/" method="post">
+        <div class="form-group has-feedback">
+          <input type="text" class="form-control" placeholder="Username" id="id_username">
+          <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+        </div>
+        <div class="form-group has-feedback">
+          <input type="password" class="form-control" placeholder="Password" id="id_password">
+          <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        </div>
+        <div class="row">
+          <div class="col-xs-8">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" checked> Remember Me
+              </label>
+            </div>
+          </div>
+          <!-- /.col -->
+          <div class="col-xs-4">
+            <button type="submit" class="btn btn-primary btn-block btn-flat" id="id_submit">Sign In</button>
+          </div>
+          <!-- /.col -->
+        </div>
+      </form>
+
+
+      <a href="#">I forgot my password</a><br>
+      <a href="#" class="text-center">Register a new membership</a>
+
+    </div>
+    <!-- /.login-box-body -->
+  </div>
+  <!-- /.login-box -->
+
+
+  </body>
+{% endblock %}
+{% block script %}
+  <script>
+      function logIn() {
+          var username = $('#id_username').val();
+          var password = $('#id_password').val();
+          $.ajax({
+              url: '/api-token-auth/',
+              type: 'post',
+              headers: {
+                  "X-CSRFToken": "{{ csrf_token }}"
+              },
+              data: {'username': username, 'password': password},
+              success: function (data) {
+                  localStorage.setItem('token',data.token);
+                  localStorage.setItem('user_id',data.user_id);
+                  window.location.href = '/'
+              },
+              error: function (data) {
+                  xtip.msg(data.statusText);
+              }
+
+          })
+      }
+
+      $('#id_submit').click(function (e) {
+          e.preventDefault();
+          logIn();
+      })
+  </script>
+{% endblock %}
