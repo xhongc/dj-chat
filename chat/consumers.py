@@ -15,7 +15,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room_name = 'chat'
         self.room_group_name = 'chat'
         self.chat_room_model = None
-        self.chats = ChatCache()
 
     async def connect(self):
         room_channel_no = self.scope['url_route']['kwargs']['room_name']
@@ -29,8 +28,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.room_name = room_channel_no
             self.room_group_name = 'chat_%s' % self.room_name
             # 加入成员保存字典 redis缓存中
-            self.chats.append(self.room_group_name, request_user.profile.unicode_id)
-            print('add1', self.chats, id(self.chats))
+            ChatCache().append(self.room_group_name, request_user.profile.unicode_id)
+            print('UID:%s加入房间(%s),剩余:%s' % (
+                self.scope["user"].profile.unicode_id, self.room_group_name,
+                ChatCache().get_cache(self.room_group_name)))
             # Join room group
             await self.channel_layer.group_add(
                 self.room_group_name,
@@ -54,8 +55,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         # Leave room group 缓存中清理
-        self.chats.remove(self.room_group_name, self.scope["user"].profile.unicode_id)
-        print('leave', self.chats)
+        ChatCache().remove(self.room_group_name, self.scope["user"].profile.unicode_id)
+        print('UID:%s离开房间(%s),剩余:%s' % (
+            self.scope["user"].profile.unicode_id, self.room_group_name, ChatCache().get_cache(self.room_group_name)))
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
@@ -105,9 +107,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
             # Send message to room group 如果他人不在房间就单对单发通知
             if self.chat_room_model:
                 menbers_list = self.chat_room_model.get_members_unicode_id()
-                online_list = self.chats.get_cache(self.room_group_name)
+                online_list = ChatCache().get_cache(self.room_group_name)
                 outline_list = set(menbers_list) - online_list
-                print(menbers_list, online_list, outline_list)
+                print('成员人数：%s\n在线人数：%s\n离线人数：%s' % (menbers_list, online_list, outline_list))
                 for ntf in outline_list:
                     await self.channel_layer.group_send(
                         'notification_%s' % (ntf),

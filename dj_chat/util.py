@@ -32,3 +32,4 @@ if __name__ == '__main__':
     print(ca.get_cache('test'))
     ca.remove('test', 'ca-123')
     print(ca.get_cache('test'))
+    print(ca.get_cache('test'))
