@@ -117,6 +117,8 @@ class UpdateChatRoomSerializers(serializers.ModelSerializer):
     def save(self, **kwargs):
         members_id = self.validated_data.get('members')
         member_count = len(set(members_id)) + self.instance.members.count() + self.instance.admins.count()
+        if member_count > self._args[0].max_number:
+            raise Exception('超出最大人数')
         member_list = (UserProfile.objects.get(id=id) for id in members_id)
         self.instance.members.add(*member_list)
         self.instance.save()
