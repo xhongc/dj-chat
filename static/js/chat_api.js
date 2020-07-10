@@ -45,7 +45,29 @@ function getChatRoome() {
         })
     })
 }
-
+function getAllChatRoome() {
+    $('#id_all_chat_romm').empty();
+    $.get('/api/chat_room/?is_all=true').success(function (data) {
+        $.each(data, function (k, v) {
+            var html = '<li class="list-group-item" channel_no="%s" id="%s">\n' +
+                '          <div>\n' +
+                '              <figure class="avatar">\n' +
+                '                  <img src="%s" class="rounded-circle">\n' +
+                '              </figure>\n' +
+                '          </div>\n' +
+                '          <div class="users-list-body">\n' +
+                '              <h5>%s</h5>\n' +
+                '              <p>%s</p>\n' +
+                '              <div class="users-list-action">\n' +
+                '                  <button type="button" class="btn btn-success btn-pulse btn-floating" onClick="joinChatroom(this)" id="id_test"><i class="fa fa-address-book"></i></button>\n' +
+                '              </div>\n' +
+                '          </div>\n' +
+                '      </li>';
+            html = html.format(v.channel_no, v.channel_no, v.img_path, v.room_name, v.room_description);
+            $('#id_all_chat_romm').append(html)
+        })
+    })
+}
 function postFriend() {
     let uid = $('#id_friend_uid').val();
     $.ajax({
@@ -129,4 +151,17 @@ function getPersonalChatLog(channel_no) {
             ChatosExamle.Info.add('---历史记录---', '', '');
         }
     })
+}
+
+function investFriends(channel_no,my_friends_list) {
+    $.ajax({
+        url: '/api/chat_room/%s/?channel_no=%s'.format(channel_no, channel_no),
+        type: 'PUT',
+        data: {'members': JSON.stringify(my_friends_list)},
+        success: function (response) {
+            xtip.msg('邀请成功');
+            $('#inviteFriends').modal('hide');
+            getChatRoomInfo(channel_no)
+        }
+    });
 }

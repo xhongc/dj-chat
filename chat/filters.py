@@ -5,10 +5,11 @@ from chat.models import ChatRoom, ChatLog
 
 class ChatRoomFilter(django_filters.FilterSet):
     channel_no = django_filters.CharFilter()
+    is_all = django_filters.CharFilter()
 
     class Meta:
         model = ChatRoom
-        fields = ['channel_no']
+        fields = ['channel_no','is_all']
 
 
 class ChatLogFilter(django_filters.FilterSet):

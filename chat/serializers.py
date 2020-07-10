@@ -70,6 +70,7 @@ class ListChatLogSerializers(serializers.ModelSerializer):
 class ChatRoomSerializers(serializers.ModelSerializer):
     admins = serializers.CharField(read_only=True)
     channel_no = serializers.CharField(required=False)
+    members = serializers.CharField(required=False)
 
     class Meta:
         model = ChatRoom
@@ -77,8 +78,8 @@ class ChatRoomSerializers(serializers.ModelSerializer):
 
     def save(self, **kwargs):
         request = self._context.get('request')
-        members = self.validated_data.pop('members')
-        self.validated_data['channel_no'] = random.randint(2, 9999)
+        members = self.validated_data.pop('members') if 'members' in self.validated_data else ''
+        self.validated_data['channel_no'] = 'GP_' + str(random.randint(2, 9999))
         ct_room = ChatRoom(**self.validated_data)
         self.validated_data['members'] = members
         ct_room.save()

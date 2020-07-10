@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
-from chat.filters import ChatLogFilter, PersonalChatLogFilter
+from chat.filters import ChatLogFilter, PersonalChatLogFilter, ChatRoomFilter
 from chat.models import ChatRoom, ChatLog
 from chat.serializers import FriendsSerializers, ListFriendsSerializers, ChatRoomSerializers, \
     ListChatLogSerializers, ListChatRoomSerializers, UpdateChatRoomSerializers
@@ -135,18 +135,20 @@ class ChatRoomViewsets(mixins.ListModelMixin,
     """
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
-    # filter_backends = (DjangoFilterBackend,)
-    # filterset_class = ChatRoomFilter
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = ChatRoomFilter
     lookup_field = 'channel_no'
 
     def get_queryset(self):
         channel_no = self.request.query_params.get('channel_no', None)
+        is_all = self.request.query_params.get('is_all', None)
         if channel_no:
             return ChatRoom.objects.filter(channel_no=channel_no)
         else:
-            return ChatRoom.objects.filter(
-                Q(admins=self.request.user.profile) | Q(members=self.request.user.profile)).distinct().order_by(
-                'ordering')
+            filter_q = Q(admins=self.request.user.profile) | Q(members=self.request.user.profile)
+            if is_all == 'true':
+                return ChatRoom.objects.exclude(filter_q).distinct().order_by('ordering')
+            return ChatRoom.objects.filter(filter_q).distinct().order_by('ordering')
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -154,6 +156,17 @@ class ChatRoomViewsets(mixins.ListModelMixin,
         elif self.action == 'update':
             return UpdateChatRoomSerializers
         return ChatRoomSerializers
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)

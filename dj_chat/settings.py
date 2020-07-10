@@ -87,6 +87,7 @@ INSTALLED_APPS = [
     'channels',
     'chat',
     'django_filters',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -209,4 +210,7 @@ LOGGING = {
             'level': 'INFO',
         },
     },
+}
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
