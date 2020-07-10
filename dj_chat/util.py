@@ -11,7 +11,7 @@ class ChatCache(object):
 
     def append(self, chat_group, profile_uid):
         self.chat_cache[chat_group].add(profile_uid)
-        cache.set('chats', self.chat_cache, 60 * 5)
+        cache.set('chats', self.chat_cache)
 
     def remove(self, chat_group, profile_uid):
         self.chat_cache[chat_group].remove(profile_uid)

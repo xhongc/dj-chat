@@ -33,6 +33,14 @@
     .badge:empty {
       display: none;
     }
+
+    .footer {
+      height: 100px;
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
   </style>
 {% endblock %}
 {% block body %}
@@ -650,81 +658,114 @@
           <form action="">
             <input type="text" class="form-control" placeholder="Search favorites">
           </form>
-          <div class="sidebar-body" style="overflow: hidden; outline: none;" tabindex="5">
-            <ul class="list-group list-group-flush users-list">
-              <li class="list-group-item">
-                <div class="users-list-body">
-                  <h5>Jennica Kindred</h5>
-                  <p>I know how important this file is to you. You can trust me ;)</p>
-                  <div class="users-list-action action-toggle">
-                    <div class="dropdown">
-                      <a data-toggle="dropdown" href="#">
-                        <i class="ti-more"></i>
-                      </a>
-                      <div class="dropdown-menu dropdown-menu-right">
-                        <a href="#" class="dropdown-item">View Chat</a>
-                        <a href="#" class="dropdown-item">Forward</a>
-                        <a href="#" class="dropdown-item">Delete</a>
-                      </div>
+          <div id="id_shuoshuo">
+            <li class="list-group-item">
+              <div>
+                <figure class="avatar">
+                  <img src="%s" class="rounded-circle">
+                </figure>
+              </div>
+              <div class="users-list-body">
+                <h5>%s</h5>
+                <p>%s</p>
+                <div class="users-list-action action-toggle">
+                  <div class="dropdown">
+                    <a data-toggle="dropdown" href="http://www.jq22.com/demo/jqueryweblt201908272313/#">
+                      <i class="ti-more"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                      <a href="#" class="dropdown-item">Open</a>
+                      <a href="#"
+                         data-navigation-target="contact-information" class="dropdown-item">Profile</a>
+                      <a href="#" class="dropdown-item">Add to
+                        archive</a>
+                      <a href="#" class="dropdown-item">Delete</a>
                     </div>
                   </div>
                 </div>
-              </li>
-              <li class="list-group-item">
-                <div class="users-list-body">
-                  <h5>Marvin Rohan</h5>
-                  <p>Lorem ipsum dolor sitsdc sdcsdc sdcsdcs</p>
-                  <div class="users-list-action action-toggle">
-                    <div class="dropdown">
-                      <a data-toggle="dropdown" href="#">
-                        <i class="ti-more"></i>
-                      </a>
-                      <div class="dropdown-menu dropdown-menu-right">
-                        <a href="#" class="dropdown-item">View Chat</a>
-                        <a href="#" class="dropdown-item">Forward</a>
-                        <a href="#" class="dropdown-item">Delete</a>
-                      </div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div>
+                <figure class="avatar">
+                  <img src="%s" class="rounded-circle">
+                </figure>
+              </div>
+              <div class="users-list-body">
+                <h5>%s</h5>
+                <p>%s</p>
+                <div class="users-list-action action-toggle">
+                  <div class="dropdown">
+                    <a data-toggle="dropdown" href="http://www.jq22.com/demo/jqueryweblt201908272313/#">
+                      <i class="ti-more"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                      <a href="#" class="dropdown-item">Open</a>
+                      <a href="#"
+                         data-navigation-target="contact-information" class="dropdown-item">Profile</a>
+                      <a href="#" class="dropdown-item">Add to
+                        archive</a>
+                      <a href="#" class="dropdown-item">Delete</a>
                     </div>
                   </div>
                 </div>
-              </li>
-              <li class="list-group-item">
-                <div class="users-list-body">
-                  <h5>Frans Hanscombe</h5>
-                  <p>Lorem ipsum dolor sitsdc sdcsdc sdcsdcs</p>
-                  <div class="users-list-action action-toggle">
-                    <div class="dropdown">
-                      <a data-toggle="dropdown" href="#">
-                        <i class="ti-more"></i>
-                      </a>
-                      <div class="dropdown-menu dropdown-menu-right">
-                        <a href="#" class="dropdown-item">View Chat</a>
-                        <a href="#" class="dropdown-item">Forward</a>
-                        <a href="#" class="dropdown-item">Delete</a>
-                      </div>
+              </div>
+            </li>
+
+            <li class="list-group-item">
+              <div>
+                <figure class="avatar">
+                  <img src="%s" class="rounded-circle">
+                </figure>
+              </div>
+              <div class="users-list-body">
+                <h5>%s</h5>
+                <p>%s</p>
+                <div class="users-list-action action-toggle">
+                  <div class="dropdown">
+                    <a data-toggle="dropdown" href="http://www.jq22.com/demo/jqueryweblt201908272313/#">
+                      <i class="ti-more"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                      <a href="#" class="dropdown-item">Open</a>
+                      <a href="#"
+                         data-navigation-target="contact-information" class="dropdown-item">Profile</a>
+                      <a href="#" class="dropdown-item">Add to
+                        archive</a>
+                      <a href="#" class="dropdown-item">Delete</a>
                     </div>
                   </div>
                 </div>
-              </li>
-              <li class="list-group-item">
-                <div class="users-list-body">
-                  <h5>Karl Hubane</h5>
-                  <p>Lorem ipsum dolor sitsdc sdcsdc sdcsdcs</p>
-                  <div class="users-list-action action-toggle">
-                    <div class="dropdown">
-                      <a data-toggle="dropdown" href="#">
-                        <i class="ti-more"></i>
-                      </a>
-                      <div class="dropdown-menu dropdown-menu-right">
-                        <a href="#" class="dropdown-item">View Chat</a>
-                        <a href="#" class="dropdown-item">Forward</a>
-                        <a href="#" class="dropdown-item">Delete</a>
-                      </div>
+              </div>
+            </li>
+
+            <li class="list-group-item">
+              <div>
+                <figure class="avatar">
+                  <img src="%s" class="rounded-circle">
+                </figure>
+              </div>
+              <div class="users-list-body">
+                <h5>%s</h5>
+                <p>%s</p>
+                <div class="users-list-action action-toggle">
+                  <div class="dropdown">
+                    <a data-toggle="dropdown" href="http://www.jq22.com/demo/jqueryweblt201908272313/#">
+                      <i class="ti-more"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                      <a href="#" class="dropdown-item">Open</a>
+                      <a href="#"
+                         data-navigation-target="contact-information" class="dropdown-item">Profile</a>
+                      <a href="#" class="dropdown-item">Add to
+                        archive</a>
+                      <a href="#" class="dropdown-item">Delete</a>
                     </div>
                   </div>
                 </div>
-              </li>
-            </ul>
+              </div>
+            </li>
+
           </div>
         </div>
 
@@ -878,7 +919,35 @@
         </div>
       </div>
       {#个人聊天框end#}
+      {# 说说框 #}
+      <div class="chat chat-bg shuoshuo" style="display: none">
+        <div class="col-md-6">
+          <div class="ticketBox" data-url="%s" data-id="%s">
+            <div class="row">
+              <div class="col-xs-3">
+                <img src="https://q4.qlogo.cn/g?b=qq&nk=408737515&s=100" class="rounded-circle">
+              </div>
+              <div class="col-xs-6">
+                <div class="ticket-name">
+                  少年
+                  <span>2020-01-02</span>
+                </div>
+              </div>
 
+            </div>
+            <div class="ticket-description">
+              <p><7月9日，据海外网报道，韩联社最新消息，失踪的韩国首尔市长朴元淳被发现已身亡。
+
+据韩国《中央日报》此前报道，朴元淳于9日失联，其女儿在当天下午5点17分报案，并向警方表示，“父亲四五个小时前留下类似遗言的话之后离家，手机也关了。”首尔市政府则表示，朴元淳当天没有上班。他手机信号最后出现的位置，是首尔市城北洞。随后警方出动无人机、警犬等进行搜寻。另据韩国SBS电视台报道，警方在朴元淳官邸发现遗书。<br>
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      {# 说说框end #}
       {#资料抽屉#}
       <div class="sidebar-group">
         <div id="contact-information" class="sidebar">
@@ -1410,6 +1479,10 @@
           var my_friends_list = ['{{ user.id }}'];
           var channel_no = $(this).parent('li').attr('channel_no');
           investFriends(channel_no,my_friends_list)
+      });
+
+      $('#id_shuoshuo').on('click', 'figure,h5,p', function () {
+          $('.shuoshuo').show();
       });
       $(document).ready(function () {
           getChatRoome();
