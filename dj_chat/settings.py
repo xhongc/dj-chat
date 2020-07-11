@@ -61,6 +61,7 @@ CORS_ALLOW_HEADERS = (
 )
 
 # Application definition
+# REDIS 缓存
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
@@ -77,6 +78,15 @@ CACHES = {
         'VERSION': 2,  # 缓存key的版本（默认1）
     },
 }
+# 本地内存缓存
+
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+#         'LOCATION': 'unique-snowflake'
+#         }
+# }
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
