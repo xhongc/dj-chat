@@ -12,9 +12,9 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from chat.filters import ChatLogFilter, PersonalChatLogFilter, ChatRoomFilter
-from chat.models import ChatRoom, ChatLog
+from chat.models import ChatRoom, ChatLog, UserProfile
 from chat.serializers import FriendsSerializers, ListFriendsSerializers, ChatRoomSerializers, \
-    ListChatLogSerializers, ListChatRoomSerializers, UpdateChatRoomSerializers
+    ListChatLogSerializers, ListChatRoomSerializers, UpdateChatRoomSerializers, FriendsSerializers2
 from utils.base_serializer import BasePagination
 
 
@@ -29,6 +29,16 @@ class ChatIndexViewsets(mixins.ListModelMixin, GenericViewSet):
 
     def list(self, request, *args, **kwargs):
         return render(request, template_name='chat/boot_chat.html')
+
+
+class UserProfileViewsets(mixins.ListModelMixin, GenericViewSet):
+    def get_queryset(self):
+        request_user = self.request.user
+        queryset = UserProfile.objects.exclude(friends__user=request_user)
+        return queryset
+    serializer_class = FriendsSerializers2
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
 
 
 class FriendsViewsets(mixins.CreateModelMixin, mixins.ListModelMixin, GenericViewSet):

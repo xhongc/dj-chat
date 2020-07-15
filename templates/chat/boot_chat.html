@@ -153,15 +153,67 @@
             <i class="ti-close"></i>
           </button>
         </div>
-        <div class="modal-body" id="id_all_chat_romm">
-
-        </div>
+        <ul class="modal-body list-group list-group-flush" id="id_all_chat_romm">
+          <li class="list-group-item" channel_no="%s" id="%s">
+          </li>
+        </ul>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" id="id_find_group">Search Group</button>
         </div>
       </div>
     </div>
   </div>
+
+  {#  添加好友#}
+  <div class="modal" id="addFriends" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+       aria-hidden="true" style="background-color: transparent">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="fa fa-users"></i> Add Friends
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <i class="ti-close"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" data-toggle="tab"
+                 href="#search_friend" role="tab" aria-controls="search_friend"
+                 aria-selected="true">Search</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#find_friend"
+                 role="tab" aria-controls="find_friend" aria-selected="false">Find</a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active" id="search_friend" role="tabpanel">
+              <form id="#">
+                <div class="form-group">
+                  <label for="group_name" class="col-form-label">Uid</label>
+                  <input type="text" class="form-control" id="id_friend_uid">
+                </div>
+              </form>
+              <button type="button" class="btn btn-primary" onclick="postFriend()">Add Friends</button>
+            </div>
+            <div class="tab-pane" id="find_friend" role="tabpanel">
+              <button type="button" class="btn btn-primary" onclick="getFriendList()">Serach Friends</button>
+              <ul id="id_friend_list" class="list-group list-group-flush">
+              </ul>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+
+        </div>
+      </div>
+    </div>
+  </div>
+
   {#邀请好友#}
   <div class="modal" id="inviteFriends" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
        aria-hidden="true" style="background-color: transparent">
@@ -186,7 +238,7 @@
     </div>
   </div>
 
-  <div class="modal fade" id="settingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  <div class="modal" id="settingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
        aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
       <div class="modal-content">
@@ -216,7 +268,7 @@
             </li>
           </ul>
           <div class="tab-content">
-            <div class="tab-pane show active" id="account" role="tabpanel">
+            <div class="tab-pane active" id="account" role="tabpanel">
               <div class="form-item custom-control custom-switch">
                 <input type="checkbox" class="custom-control-input" checked="" id="customSwitch1">
                 <label class="custom-control-label" for="customSwitch1">Allow connected contacts</label>
@@ -295,7 +347,7 @@
   </div>
 
 
-  <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  <div class="modal" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
        aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
       <div class="modal-content">
@@ -325,15 +377,15 @@
             </li>
           </ul>
           <div class="tab-content">
-            <div class="tab-pane show active" id="personal" role="tabpanel">
+            <div class="tab-pane active" id="personal" role="tabpanel">
               <form>
                 <div class="form-group">
                   <label for="fullname" class="col-form-label">Fullname</label>
                   <div class="input-group">
                     <div class="input-group-prepend">
-<span class="input-group-text">
-<i class="ti-user"></i>
-</span>
+                      <span class="input-group-text">
+                      <i class="ti-user"></i>
+                      </span>
                     </div>
                     <input type="text" class="form-control" id="fullname">
                   </div>
@@ -552,12 +604,14 @@
             </a>
           </li>
           <li>
-            <a href="#" id="edit_profile">
+            <a href="#" id="edit_profile" data-toggle="modal"
+                   data-target="#editProfileModal">
               <i class="ti-pencil"></i>
             </a>
           </li>
           <li>
-            <a href="#" id="settings">
+            <a href="#" id="settings" data-toggle="modal"
+                   data-target="#settingModal">
               <i class="ti-settings"></i>
             </a>
           </li>
@@ -623,7 +677,7 @@
             <ul class="list-inline">
               <li class="list-inline-item">
                 <a class="btn btn-light" href="#" data-toggle="modal"
-                   id="addFriends_btn">
+                   data-target="#addFriends">
                   <i class="ti-plus btn-icon"></i> Add Friends
                 </a>
               </li>
@@ -662,7 +716,7 @@
             <li class="list-group-item">
               <div>
                 <figure class="avatar">
-                  <img src="%s" class="rounded-circle">
+                  <img src="#" class="rounded-circle">
                 </figure>
               </div>
               <div class="users-list-body">
@@ -688,34 +742,7 @@
             <li class="list-group-item">
               <div>
                 <figure class="avatar">
-                  <img src="%s" class="rounded-circle">
-                </figure>
-              </div>
-              <div class="users-list-body">
-                <h5>%s</h5>
-                <p>%s</p>
-                <div class="users-list-action action-toggle">
-                  <div class="dropdown">
-                    <a data-toggle="dropdown" href="http://www.jq22.com/demo/jqueryweblt201908272313/#">
-                      <i class="ti-more"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                      <a href="#" class="dropdown-item">Open</a>
-                      <a href="#"
-                         data-navigation-target="contact-information" class="dropdown-item">Profile</a>
-                      <a href="#" class="dropdown-item">Add to
-                        archive</a>
-                      <a href="#" class="dropdown-item">Delete</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </li>
-
-            <li class="list-group-item">
-              <div>
-                <figure class="avatar">
-                  <img src="%s" class="rounded-circle">
+                  <img src="#" class="rounded-circle">
                 </figure>
               </div>
               <div class="users-list-body">
@@ -742,7 +769,34 @@
             <li class="list-group-item">
               <div>
                 <figure class="avatar">
-                  <img src="%s" class="rounded-circle">
+                  <img src="#" class="rounded-circle">
+                </figure>
+              </div>
+              <div class="users-list-body">
+                <h5>%s</h5>
+                <p>%s</p>
+                <div class="users-list-action action-toggle">
+                  <div class="dropdown">
+                    <a data-toggle="dropdown" href="http://www.jq22.com/demo/jqueryweblt201908272313/#">
+                      <i class="ti-more"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                      <a href="#" class="dropdown-item">Open</a>
+                      <a href="#"
+                         data-navigation-target="contact-information" class="dropdown-item">Profile</a>
+                      <a href="#" class="dropdown-item">Add to
+                        archive</a>
+                      <a href="#" class="dropdown-item">Delete</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item">
+              <div>
+                <figure class="avatar">
+                  <img src="#" class="rounded-circle">
                 </figure>
               </div>
               <div class="users-list-body">
@@ -1264,12 +1318,12 @@
               }
           }
           ntfSocket.onopen = function (e) {
-              $('#id_online').html('Online')
+              // $('#id_online').html('Online')
           };
           ntfSocket.onmessage = function (e) {
               var data = JSON.parse(e.data);
               var channel_no = data['channel_no'];
-              console.log('aaa', channel_no)
+              console.log('aaa', channel_no);
               var that = $('li[channel_no=%s]'.format(channel_no)).find('#id_badge_ntf');
               var count = parseInt(that.html()) || 0;
               count += 1;
@@ -1491,9 +1545,6 @@
               xtip.msg('创建群组失败')
           })
       });
-      $('#addFriends_btn').click(function () {
-          addFriends()
-      });
       $('#id_group_info').on('click', function () {
           // 执行一些动作...
           console.log('asdsadasd')
@@ -1511,7 +1562,7 @@
           var my_friends_list = $('#id_my_friends_list').val();
           console.log(my_friends_list);
           var channel_no = $('#id_group').attr('channel_no');
-          investFriends(channel_no,my_friends_list);
+          investFriendsToRoom(channel_no,my_friends_list);
 
       });
       var target_map = {
@@ -1529,19 +1580,13 @@
       $('#id_find_group').click(function () {
           getAllChatRoome()
       });
-
-      function joinChatroom(th) {
+      // 搜索群组时进群
+      function joinChatroom(channel_no) {
           var my_friends_list = ['{{ user.id }}'];
-          var channel_no = $(th).parent().parent().parent().attr('id');
-          console.log(channel_no);
+          console.log('搜索群组时进群',channel_no);
 
-          investFriends(channel_no, my_friends_list)
-      };
-      $('#id_join_chat_room').on('click',function () {
-          var my_friends_list = ['{{ user.id }}'];
-          var channel_no = $(this).parent('li').attr('channel_no');
-          investFriends(channel_no,my_friends_list)
-      });
+          investFriendsToRoom(channel_no, my_friends_list)
+      }
 
       $('#id_shuoshuo').on('click', 'figure,h5,p', function () {
           $('.shuoshuo').show();

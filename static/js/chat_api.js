@@ -1,3 +1,4 @@
+// 获取好友列表
 function getFriends() {
     $.get('/api/friends/').success(function (data) {
         $('#id_friends_list').empty();
@@ -45,31 +46,79 @@ function getChatRoome() {
         })
     })
 }
+
+// 搜索群组
 function getAllChatRoome() {
     $('#id_all_chat_romm').empty();
     $.get('/api/chat_room/?is_all=true').success(function (data) {
+        if (data.length ===0){
+            $('#id_all_chat_romm').append('<p>暂无群组</p>')
+        }
         $.each(data, function (k, v) {
             var html = '<li class="list-group-item" channel_no="%s" id="%s">\n' +
-                '          <div>\n' +
+                '            <div style="float:left">\n' +
                 '              <figure class="avatar">\n' +
-                '                  <img src="%s" class="rounded-circle">\n' +
+                '                <img src="%s" class="rounded-circle">\n' +
                 '              </figure>\n' +
-                '          </div>\n' +
-                '          <div class="users-list-body">\n' +
+                '            </div>\n' +
+                '            <div class="users-list-body" style="float:left">\n' +
                 '              <h5>%s</h5>\n' +
                 '              <p>%s</p>\n' +
-                '              <div class="users-list-action">\n' +
-                '                  <button type="button" class="btn btn-success btn-pulse btn-floating" onClick="joinChatroom(this)" id="id_test"><i class="fa fa-address-book"></i></button>\n' +
+                '            </div>\n' +
+                '            <div class="users-list-action" style="float:right">\n' +
+                '                <button type="button" class="btn btn-success btn-pulse btn-floating" onClick="joinChatroom(\'%s\')"\n' +
+                '                        id="id_test"><i class="ti-plus"></i></button>\n' +
                 '              </div>\n' +
-                '          </div>\n' +
-                '      </li>';
-            html = html.format(v.channel_no, v.channel_no, v.img_path, v.room_name, v.room_description);
+                '          </li>';
+            html = html.format(v.channel_no, v.channel_no, v.img_path, v.room_name, v.room_description,v.channel_no);
             $('#id_all_chat_romm').append(html)
         })
     })
 }
+
+function getFriendList() {
+    $('#id_friend_list').empty();
+    $.get('/api/user_profile/').success(function (data) {
+        if (data.length ===0){
+            $('#id_friend_list').append('<p>暂无好友</p>')
+        }
+        $.each(data, function (k, v) {
+            var html = '<li class="list-group-item" channel_no="%s" id="%s">\n' +
+                '                  <div style="float:left">\n' +
+                '                    <figure class="avatar">\n' +
+                '                      <img src="%s" class="rounded-circle">\n' +
+                '                    </figure>\n' +
+                '                  </div>\n' +
+                '                  <div class="ml-lg-3" style="float:left">\n' +
+                '                    <h5>%s</h5>\n' +
+                '                    <p>%s</p>\n' +
+                '                  </div>\n' +
+                '                  <div class="users-list-action" style="float:right">\n' +
+                '                    <button type="button" class="btn btn-success btn-pulse btn-floating" onClick="postUidFriend(%s)">\n' +
+                '                      <i class="ti-plus"></i></button>\n' +
+                '                  </div>\n' +
+                '                </li>';
+            html = html.format(v.unicode_id, v.unicode_id, v.img_path, v.nick_name, v.signature,v.unicode_id);
+            $('#id_friend_list').append(html)
+        })
+    })
+}
+function postUidFriend(uid) {
+    $.ajax({
+        url: '/api/friends/',
+        type: 'post',
+        data: {'uid': uid},
+        success: function () {
+            xtip.msg('添加成功')
+        },
+        error: function (data) {
+            xtip.msg(data.responseText)
+        }
+    })
+}
+
 function postFriend() {
-    let uid = $('#id_friend_uid').val();
+    var uid = $('#id_friend_uid').val();
     $.ajax({
         url: '/api/friends/',
         type: 'post',
@@ -153,7 +202,8 @@ function getPersonalChatLog(channel_no) {
     })
 }
 
-function investFriends(channel_no,my_friends_list) {
+// 邀请好友进群
+function investFriendsToRoom(channel_no, my_friends_list) {
     $.ajax({
         url: '/api/chat_room/%s/?channel_no=%s'.format(channel_no, channel_no),
         type: 'PUT',

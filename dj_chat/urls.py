@@ -22,7 +22,7 @@ from django.views.generic import TemplateView
 from rest_framework.documentation import include_docs_urls
 from rest_framework.routers import DefaultRouter
 
-from chat.views import FriendsViewsets, ChatLogViewsets, ChatRoomViewsets, PersonalChatLogViewsets
+from chat.views import FriendsViewsets, ChatLogViewsets, ChatRoomViewsets, PersonalChatLogViewsets, UserProfileViewsets
 from utils.channelsmiddleware import LoginObtainJSONWebToken
 
 router = DefaultRouter()
@@ -30,6 +30,7 @@ router.register(r'friends', viewset=FriendsViewsets, basename='friends')
 router.register(r'chat_log', viewset=ChatLogViewsets, basename='chat_log')
 router.register(r'personal_chat_log', viewset=PersonalChatLogViewsets, basename='personal_chat_log')
 router.register(r'chat_room', viewset=ChatRoomViewsets, basename='chat_room')
+router.register(r'user_profile', viewset=UserProfileViewsets, basename='user_profile')
 
 urlpatterns = [
     re_path(r'^admin/', admin.site.urls),

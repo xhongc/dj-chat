@@ -73,59 +73,6 @@
             }
         }
     });
-    var uid = "{{ user.profile.unicode_id }}";
-    if (window.location.pathname !== '/bc/') {
-        notificationConnect(uid);
-    }
-
-    function notificationConnect(uid) {
-        if (!window.localStorage.token) {
-            if (window.location.pathname === '/login/') {
-                return false
-            } else {
-                window.location.href = '/login/'
-            }
-
-        } else {
-            if (uid === undefined) {
-                return false
-            } else {
-                ntfSocket = new ReconnectingWebSocket(
-                    'ws://' + window.location.host +
-                    '/ws/notification/' + uid + '/?token=Jwt ' + window.localStorage.token);
-            }
-        }
-        ntfSocket.onopen = function (e) {
-            $('#id_online').html('Online')
-        };
-        ntfSocket.onmessage = function (e) {
-            var data = JSON.parse(e.data);
-            Lobibox.notify(
-                // 'warning', 'info', 'success', 'error'
-                'error',
-                {
-                    title: data['send_user_nick_name'],
-                    size: 'normal',
-                    showClass: 'flipInX',
-                    hideClass: 'zoomOutDown',
-                    msg: data['message'],
-                    icon: false,
-                    delay: 6000,
-                    img: data['img'],
-                    closable: true,
-                    closeOnClick: true,
-                    soundPath: '/src/sounds/',
-
-                }
-            );
-        };
-        ntfSocket.onclose = function (e) {
-        };
-        ntfSocket.onerror = function (e) {
-            ntfSocket.close()
-        };
-        return true
-    }
 
 </script>
 {% block script %} {% endblock %}
