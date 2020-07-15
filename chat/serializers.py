@@ -1,9 +1,38 @@
 import random
 import json
 
+from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from chat.models import UserProfile, ChatLog, ChatRoom
+
+
+class RegisterSerializers(serializers.Serializer):
+    nick_name = serializers.CharField(required=True)
+    username = serializers.CharField(required=True)
+    email = serializers.EmailField(required=False)
+    password = serializers.CharField(required=True)
+    password2 = serializers.CharField(required=True)
+
+    def validate_username(self, attrs):
+        if User.objects.filter(username=attrs).exists():
+            raise serializers.ValidationError('用户名存在')
+        return attrs
+
+    def validate_password2(self, attrs):
+        password = self.initial_data.get('password')
+        if attrs != password:
+            raise serializers.ValidationError('两次输入密码不一致')
+        return attrs
+
+    def save(self, **kwargs):
+        username = self.validated_data.get('username')
+        email = self.validated_data.get('email', '') or ''
+        password = self.validated_data.get('password')
+        nick_name = self.validated_data.get('nick_name')
+        user = User.objects.create_user(username=username, password=password, email=email)
+        user.profile.nick_name = nick_name
+        user.profile.save()
 
 
 class FriendsSerializers(serializers.Serializer):

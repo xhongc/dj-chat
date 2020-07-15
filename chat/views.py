@@ -14,7 +14,7 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from chat.filters import ChatLogFilter, PersonalChatLogFilter, ChatRoomFilter
 from chat.models import ChatRoom, ChatLog, UserProfile
 from chat.serializers import FriendsSerializers, ListFriendsSerializers, ChatRoomSerializers, \
-    ListChatLogSerializers, ListChatRoomSerializers, UpdateChatRoomSerializers, FriendsSerializers2
+    ListChatLogSerializers, ListChatRoomSerializers, UpdateChatRoomSerializers, FriendsSerializers2, RegisterSerializers
 from utils.base_serializer import BasePagination
 
 
@@ -22,6 +22,10 @@ from utils.base_serializer import BasePagination
 def index(request):
     # friends = request.user.profile.friends.all()
     return render(request, 'chat/boot_chat.html', locals())
+
+
+class RegisterViewsets(mixins.CreateModelMixin, GenericViewSet):
+    serializer_class = RegisterSerializers
 
 
 class ChatIndexViewsets(mixins.ListModelMixin, GenericViewSet):
@@ -36,6 +40,7 @@ class UserProfileViewsets(mixins.ListModelMixin, GenericViewSet):
         request_user = self.request.user
         queryset = UserProfile.objects.exclude(friends__user=request_user)
         return queryset
+
     serializer_class = FriendsSerializers2
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)

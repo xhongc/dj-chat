@@ -3,37 +3,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-  <title>Charles</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Charles</title>
 
-  <!-- Bootstrap -->
+    <!-- Bootstrap -->
 
-  <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
 
-  <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon"/>
-  <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon"/>
-  <!-- Theme style -->
+    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon"/>
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon"/>
+    <!-- Theme style -->
 
-  <link rel="stylesheet" href="{% static 'css/AdminLTE.min.css' %}">
-  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/AdminLTE.min.css' %}">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
 
-  <link rel="stylesheet" href="{% static 'css/_all-skins.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/_all-skins.min.css' %}">
 
-  <link rel="stylesheet" href="{% static 'css/xtiper.css' %}">
-  <link rel="stylesheet" href="{% static 'css/xui.css' %}">
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
-  <link rel="stylesheet" href="{% static 'css/layout.css' %}">
-  <link rel="stylesheet" href="{% static 'css/Lobibox.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/xtiper.css' %}">
+    <link rel="stylesheet" href="{% static 'css/xui.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/Lobibox.min.css' %}">
 
 
-  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
 
-  <![endif]-->
+    <![endif]-->
 </head>
 {% block css %} {% endblock %}
 
@@ -47,6 +47,32 @@
 <script src="{% static 'js/re-websocket.min.js' %}"></script>
 
 <script>
+    // 防抖
+    function debouce(func, delay, immediate) {
+        var timer = null;
+        return function () {
+            var context = this;
+            var args = arguments;
+            if (timer) clearTimeout(timer);
+            if (immediate) {
+                //根据距离上次触发操作的时间是否到达delay来决定是否要现在执行函数
+                var doNow = !timer;
+                //每一次都重新设置timer，就是要保证每一次执行的至少delay秒后才可以执行
+                timer = setTimeout(function () {
+                    timer = null;
+                }, delay);
+                //立即执行
+                if (doNow) {
+                    func.apply(context, args);
+                }
+            } else {
+                timer = setTimeout(function () {
+                    func.apply(context, args);
+                }, delay);
+            }
+        }
+    }
+
     String.prototype.format = function () {
         //将arguments转化为数组（ES5中并非严格的数组）
         var args = Array.prototype.slice.call(arguments);
