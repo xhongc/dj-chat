@@ -179,7 +179,7 @@ function getChatLog(channel_no) {
                     ChatosExamle.Message.add(item.content, 'outgoing-message', item.chat_datetime);
                 }
             });
-            ChatosExamle.Info.add('---历史记录---', '', '');
+            ChatosExamle.Info.add('<div>历史记录</div><hr>', '', '');
         }
     })
 }
@@ -197,7 +197,7 @@ function getPersonalChatLog(channel_no) {
                     ChatosExamle.Message.add(item.content, 'outgoing-message', item.chat_datetime);
                 }
             });
-            ChatosExamle.Info.add('---历史记录---', '', '');
+            ChatosExamle.Info.add('<div>历史记录</div><hr>', '', '');
         }
     })
 }

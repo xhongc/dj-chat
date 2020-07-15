@@ -631,7 +631,7 @@
 
         <div id="chats" class="sidebar active">
           <header>
-            <span id="id_online">Hi {{ user.username }}~</span>
+              <span id="id_online">Hi {{ user.profile.nick_name | slice:":5" }}~</span>
             <ul class="list-inline">
               <li class="list-inline-item" data-toggle="tooltip" title="" data-original-title="New Group">
                 <a class="btn btn-light" href="#" data-toggle="modal"
@@ -1356,9 +1356,9 @@
           }
 
           chatSocket.onopen = function (e) {
-              let username = "{{ request.user.username }}";
+              let username = "{{ user.profile.nick_name }}";
               chatSocket.send(JSON.stringify({
-                  'message': username + ' join in',
+                  'message': username + '  加入',
                   'msg_type': 'chat_info'
               }));
           };
@@ -1381,7 +1381,8 @@
                         ChatosExamle.Info.add('稍等加载中...', '', '');
                         ChatosExamle.Info.add(message, '', '');
                   }else {
-                      ChatosExamle.Info.add(message, '', '');
+                      // ChatosExamle.Info.add(message, '', '');
+                      xtip.danmu(message)
                   }
 
               } else {
