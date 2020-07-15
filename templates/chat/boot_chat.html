@@ -1376,10 +1376,14 @@
                       } else {
                           ChatosExamle.Message.add(message, 'outgoing-message', send_time);
                       }
-                  } else {
-
+                  } else if(msg_type === 'chat_html'){
+                        ChatosExamle.Message.delete();
+                        ChatosExamle.Info.add('稍等加载中...', '', '');
+                        ChatosExamle.Info.add(message, '', '');
+                  }else {
                       ChatosExamle.Info.add(message, '', '');
                   }
+
               } else {
                   xtip.msg('不能输入空')
               }

@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 
 from chat.models import ChatLog, ChatRoom
 from dj_chat.util import ChatCache
-from utils.chatrobot import sizhi
+from utils.chatrobot import sizhi, talk_with_me
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -74,7 +74,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # 机器人 加思知回复
         if self.room_name == 'GP_robot' and msg_type == 'chat_message':
             self.chat_room_model = ChatRoom.objects.filter(channel_no=self.room_name).first()
-            robot_msg = sizhi(message)
+            robot_msg, chat_type = talk_with_me(message)
             robot_user, _ = User.objects.get_or_create(username='robot')
             robot_send_time = datetime.now()
             await self.channel_layer.group_send(
@@ -84,11 +84,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     'message': robot_msg,
                     'user_id': 'robot',
                     'send_time': robot_send_time.strftime('%p %H:%M'),
-                    'msg_type': msg_type,
+                    'msg_type': chat_type,
                     'username': self.scope.get('user').username
                 }
             )
-            if message:
+            if message and chat_type == 'chat_message':
                 ChatLog.objects.create(chat_datetime=robot_send_time,
                                        content=message,
                                        msg_type=msg_type,
