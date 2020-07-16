@@ -222,7 +222,6 @@ label {
     box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.08);
     transition: all 0.5s;
     -webkit-transition: all 0.5s;
-    height: 220px;
 }
 
 .ticketBox:hover {

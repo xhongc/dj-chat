@@ -214,6 +214,37 @@
     </div>
   </div>
 
+  {#  添加说说#}
+  <div class="modal" id="addTalks" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+       aria-hidden="true" style="background-color: transparent">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="fa fa-users"></i> Add Talks
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <i class="ti-close"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="id_create_talks_form">
+            <div class="form-group">
+              <label for="description" class="col-form-label">Talk</label>
+              <textarea class="form-control" id="id_talk_content" placeholder="发现身边新鲜事"
+                        style="height: 300px"></textarea>
+            </div>
+          </form>
+          <button type="button" class="btn btn-primary" onclick="postTalk()">Send</button>
+        </div>
+        <div class="modal-footer">
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
   {#邀请好友#}
   <div class="modal" id="inviteFriends" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
        aria-hidden="true" style="background-color: transparent">
@@ -598,20 +629,20 @@
               <i class="ti-user"></i>
             </a>
           </li>
-          <li data-navigation-target="favorites" class="brackets">
+          <li data-navigation-target="talks" class="brackets">
             <a href="#">
               <i class="ti-star"></i>
             </a>
           </li>
           <li>
             <a href="#" id="edit_profile" data-toggle="modal"
-                   data-target="#editProfileModal">
+               data-target="#editProfileModal">
               <i class="ti-pencil"></i>
             </a>
           </li>
           <li>
             <a href="#" id="settings" data-toggle="modal"
-                   data-target="#settingModal">
+               data-target="#settingModal">
               <i class="ti-settings"></i>
             </a>
           </li>
@@ -631,7 +662,7 @@
 
         <div id="chats" class="sidebar active">
           <header>
-              <span id="id_online">Hi {{ user.profile.nick_name | slice:":5" }}~</span>
+            <span id="id_online">Hi {{ user.profile.nick_name | slice:":5" }}~</span>
             <ul class="list-inline">
               <li class="list-inline-item" data-toggle="tooltip" title="" data-original-title="New Group">
                 <a class="btn btn-light" href="#" data-toggle="modal"
@@ -698,10 +729,16 @@
           </div>
         </div>
 
-        <div id="favorites" class="sidebar">
+        <div id="talks" class="sidebar">
           <header>
-            <span>Favorites</span>
+            <span>Talks</span>
             <ul class="list-inline">
+              <li class="list-inline-item">
+                <a class="btn btn-light" href="#" data-toggle="modal"
+                   data-target="#addTalks">
+                  <i class="ti-plus btn-icon"></i> Add Talks
+                </a>
+              </li>
               <li class="list-inline-item d-lg-none d-sm-block">
                 <a href="#" class="btn btn-light sidebar-close">
                   <i class="ti-close"></i>
@@ -710,93 +747,13 @@
             </ul>
           </header>
           <form action="">
-            <input type="text" class="form-control" placeholder="Search favorites">
+            <input type="text" class="form-control" placeholder="Search Talks">
           </form>
-          <div id="id_shuoshuo">
+          <div id="id_talks">
             <li class="list-group-item">
               <div>
                 <figure class="avatar">
-                  <img src="#" class="rounded-circle">
-                </figure>
-              </div>
-              <div class="users-list-body">
-                <h5>%s</h5>
-                <p>%s</p>
-                <div class="users-list-action action-toggle">
-                  <div class="dropdown">
-                    <a data-toggle="dropdown" href="http://www.jq22.com/demo/jqueryweblt201908272313/#">
-                      <i class="ti-more"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                      <a href="#" class="dropdown-item">Open</a>
-                      <a href="#"
-                         data-navigation-target="contact-information" class="dropdown-item">Profile</a>
-                      <a href="#" class="dropdown-item">Add to
-                        archive</a>
-                      <a href="#" class="dropdown-item">Delete</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li class="list-group-item">
-              <div>
-                <figure class="avatar">
-                  <img src="#" class="rounded-circle">
-                </figure>
-              </div>
-              <div class="users-list-body">
-                <h5>%s</h5>
-                <p>%s</p>
-                <div class="users-list-action action-toggle">
-                  <div class="dropdown">
-                    <a data-toggle="dropdown" href="http://www.jq22.com/demo/jqueryweblt201908272313/#">
-                      <i class="ti-more"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                      <a href="#" class="dropdown-item">Open</a>
-                      <a href="#"
-                         data-navigation-target="contact-information" class="dropdown-item">Profile</a>
-                      <a href="#" class="dropdown-item">Add to
-                        archive</a>
-                      <a href="#" class="dropdown-item">Delete</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </li>
-
-            <li class="list-group-item">
-              <div>
-                <figure class="avatar">
-                  <img src="#" class="rounded-circle">
-                </figure>
-              </div>
-              <div class="users-list-body">
-                <h5>%s</h5>
-                <p>%s</p>
-                <div class="users-list-action action-toggle">
-                  <div class="dropdown">
-                    <a data-toggle="dropdown" href="http://www.jq22.com/demo/jqueryweblt201908272313/#">
-                      <i class="ti-more"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                      <a href="#" class="dropdown-item">Open</a>
-                      <a href="#"
-                         data-navigation-target="contact-information" class="dropdown-item">Profile</a>
-                      <a href="#" class="dropdown-item">Add to
-                        archive</a>
-                      <a href="#" class="dropdown-item">Delete</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </li>
-
-            <li class="list-group-item">
-              <div>
-                <figure class="avatar">
-                  <img src="#" class="rounded-circle">
+                  <img src="%s" class="rounded-circle">
                 </figure>
               </div>
               <div class="users-list-body">
@@ -907,159 +864,10 @@
       </div>
       {#群组聊天框end#}
 
-      {#个人聊天框#}
-      <div class="chat chat-bg personal-chatbox" style="display: none">
-        <div class="chat-header">
-          <div class="chat-header-user" data-navigation-target="contact-information" style="cursor: pointer">
-            <figure class="avatar avatar-lg">
-              <img src="#" class="rounded-circle id_room_img">
-            </figure>
-            <div>
-              <h5 class="id_room_name">@</h5>
-              <small class="text-muted">
-                <i class="id_room_description">*</i>
-              </small>
-            </div>
-          </div>
-
-          <div class="chat-header-action">
-            <ul class="list-inline">
-              {#              电话按钮#}
-              <li class="list-inline-item">
-                <a href="#" class="btn btn-success">
-                  <i class="fa fa-phone" aria-hidden="true"></i>
-                </a>
-              </li>
-
-              {#              视频按钮#}
-              <li class="list-inline-item">
-                <a href="#" class="btn btn-secondary">
-                  <i class="fa fa-video-camera" aria-hidden="true"></i>
-                </a>
-              </li>
-              {#新更多#}
-              <li class="list-inline-item">
-                <a href="#"
-                   data-navigation-target="room—member-info" class="btn btn-secondary"
-                   id="id_group_info">
-                  <i class="ti-more"></i>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="chat-body" tabindex="2" style="overflow: hidden; outline: none;">
-
-          <div class="messages">
-          </div>
-        </div>
-        <div class="chat-footer">
-          <form action="">
-            <input type="text" class="form-control" placeholder="chàng suǒ yù yán"
-                   aria-label="Recipient&#39;s username" aria-describedby="button-addon2"
-                   id="personal-chat-message-input">
-            <div class="form-buttons">
-              <button class="btn btn-light btn-floating" type="button">
-                <i class="fa fa-paperclip"></i>
-              </button>
-              <button class="btn btn-light btn-floating" type="button">
-                <i class="fa fa-microphone"></i>
-              </button>
-              <button class="btn btn-primary btn-floating" type="submit" id="personal-chat-message-submit">
-                <i class="fa fa-send"></i>
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-      {#个人聊天框end#}
       {# 说说框 #}
-      <div class="chat chat-bg shuoshuo" style="display: none">
-        <div class="col-md-9">
-          <div class="ticketBox" >
-            <div class="row">
-              <div class="col-xs-3">
-                <img src="https://q4.qlogo.cn/g?b=qq&nk=408737515&s=100" class="rounded-circle">
-              </div>
-              <div class="col-xs-6">
-                <div class="ticket-name">
-                  少年
-                  <span>2020-01-02</span>
-                </div>
-              </div>
+      <div class="chat chat-bg talks" style="display: none">
+        <div class="col-md-9" id="id_talk_log">
 
-            </div>
-            <div class="ticket-description">
-              <p><7月9日，据海外网报道，韩联社最新消息，失踪的韩国首尔市长朴元淳被发现已身亡。
-
-据韩国《中央日报》此前报道，朴元淳于9日失联，其女儿在当天下午5点17分报案，并向警方表示，“父亲四五个小时前留下类似遗言的话之后离家，手机也关了。”首尔市政府则表示，朴元淳当天没有上班。他手机信号最后出现的位置，是首尔市城北洞...<br>
-              </p>
-            </div>
-
-          </div>
-          <div class="ticketBox" >
-            <div class="row">
-              <div class="col-xs-3">
-                <img src="https://q4.qlogo.cn/g?b=qq&nk=408737515&s=100" class="rounded-circle">
-              </div>
-              <div class="col-xs-6">
-                <div class="ticket-name">
-                  少年
-                  <span>2020-01-02</span>
-                </div>
-              </div>
-
-            </div>
-            <div class="ticket-description">
-              <p><7月9日，据海外网报道，韩联社最新消息，失踪的韩国首尔市长朴元淳被发现已身亡。
-
-据韩国《中央日报》此前报道，朴元淳于9日失联，其女儿在当天下午5点17分报案，并向警方表示，“父亲四五个小时前留下类似遗言的话之后离家，手机也关了。”首尔市政府则表示，朴元淳当天没有上班。他手机信号最后出现的位置，是首尔市城北洞...<br>
-              </p>
-            </div>
-
-          </div>
-          <div class="ticketBox" >
-            <div class="row">
-              <div class="col-xs-3">
-                <img src="https://q4.qlogo.cn/g?b=qq&nk=408737515&s=100" class="rounded-circle">
-              </div>
-              <div class="col-xs-6">
-                <div class="ticket-name">
-                  少年
-                  <span>2020-01-02</span>
-                </div>
-              </div>
-
-            </div>
-            <div class="ticket-description">
-              <p><7月9日，据海外网报道，韩联社最新消息，失踪的韩国首尔市长朴元淳被发现已身亡。
-
-据韩国《中央日报》此前报道，朴元淳于9日失联，其女儿在当天下午5点17分报案，并向警方表示，“父亲四五个小时前留下类似遗言的话之后离家，手机也关了。”首尔市政府则表示，朴元淳当天没有上班。他手机信号最后出现的位置，是首尔市城北洞...<br>
-              </p>
-            </div>
-
-          </div>
-          <div class="ticketBox" >
-            <div class="row">
-              <div class="col-xs-3">
-                <img src="https://q4.qlogo.cn/g?b=qq&nk=408737515&s=100" class="rounded-circle">
-              </div>
-              <div class="col-xs-6">
-                <div class="ticket-name">
-                  少年
-                  <span>2020-01-02</span>
-                </div>
-              </div>
-
-            </div>
-            <div class="ticket-description">
-              <p><7月9日，据海外网报道，韩联社最新消息，失踪的韩国首尔市长朴元淳被发现已身亡。
-
-据韩国《中央日报》此前报道，朴元淳于9日失联，其女儿在当天下午5点17分报案，并向警方表示，“父亲四五个小时前留下类似遗言的话之后离家，手机也关了。”首尔市政府则表示，朴元淳当天没有上班。他手机信号最后出现的位置，是首尔市城北洞...<br>
-              </p>
-            </div>
-
-          </div>
         </div>
 
       </div>
@@ -1293,11 +1101,9 @@
           $(this).addClass('open-chat');
           $(this).addClass('disabled');
           $(this).find('#id_badge_ntf').html('');
-          $('.chatbox').hide();
-          $('.personal-chatbox').hide();
           $('#chat-message-submit').attr('channel_no', $(this).attr('channel_no'));
           var channel_no = $(this).attr('channel_no');
-
+          console.log('sidebar-body channel_no'+channel_no);
           if (channel_no.startsWith('GP_')) {
               chatSocket = joinRoom(channel_no);
           } else {
@@ -1327,7 +1133,25 @@
               var that = $('li[channel_no=%s]'.format(channel_no)).find('#id_badge_ntf');
               var count = parseInt(that.html()) || 0;
               count += 1;
-              that.html(count)
+              that.html(count);
+              Lobibox.notify(
+                  // 'warning', 'info', 'success', 'error'
+                  'error',
+                  {
+                      title: data['send_user_nick_name'],
+                      size: 'normal',
+                      showClass: 'flipInX',
+                      hideClass: 'zoomOutDown',
+                      msg: data['message'],
+                      icon: false,
+                      delay: 6000,
+                      img: data['img'],
+                      closable: true,
+                      closeOnClick: true,
+                      soundPath: '/src/sounds/',
+
+                  }
+              );
           };
           ntfSocket.onclose = function (e) {
               $('#id_online').html('Outline');
@@ -1376,11 +1200,11 @@
                       } else {
                           ChatosExamle.Message.add(message, 'outgoing-message', send_time);
                       }
-                  } else if(msg_type === 'chat_html'){
-                        ChatosExamle.Message.delete();
-                        ChatosExamle.Info.add('稍等加载中...', '', '');
-                        ChatosExamle.Info.add(message, '', '');
-                  }else {
+                  } else if (msg_type === 'chat_html') {
+                      ChatosExamle.Message.delete();
+                      ChatosExamle.Info.add('稍等加载中...', '', '');
+                      ChatosExamle.Info.add(message, '', '');
+                  } else {
                       // ChatosExamle.Info.add(message, '', '');
                       xtip.danmu(message)
                   }
@@ -1438,8 +1262,7 @@
           console.log('joinSingle');
           ChatosExamle.Message.delete();
           getPersonalChatLog(channel_no);
-          $('.personal-chatbox').show();
-
+          $('.chatbox').show();
       }
 
       var ChatosExamle = {
@@ -1448,13 +1271,9 @@
                   var chat_body = $('.layout .content .chat .chat-body');
                   if (chat_body.length > 0) {
                       type = type ? type : '';
-                      message = message ? message : 'Lorem ipsum dolor sit amet.';
+                      message = message ? message : '消息不能为空';
                       $('.layout .content .chat .chat-body .messages').append('<div class="message-item ' + type + '"><div class="message-content">' + message + '</div><div class="message-action">' + send_time + (type ? '<i class="ti-check"></i>' : '') + '</div></div>');
-                      chat_body.scrollTop(chat_body.get(0).scrollHeight, -1).niceScroll({
-                          cursorcolor: 'rgba(66, 66, 66, 1)',
-                          cursorwidth: "4px",
-                          cursorborder: '0px'
-                      });
+                      chat_body.scrollTop(chat_body.get(0).scrollHeight, -1)
                   }
               },
               delete: function () {
@@ -1466,29 +1285,14 @@
                   var chat_body = $('.layout .content .chat .chat-body');
                   if (chat_body.length > 0) {
                       type = type ? type : '';
-                      message = message ? message : 'Lorem ipsum dolor sit amet.';
+                      message = message ? message : '消息不能为空';
                       $('.layout .content .chat .chat-body .messages').append('<div class="message-info ' + type + '"><div class="message-content">' + message + '</div><div class="message-action">' + send_time + (type ? '<i class="ti-check"></i>' : '') + '</div></div>');
-                      chat_body.scrollTop(chat_body.get(0).scrollHeight, -1).niceScroll({
-                          cursorcolor: 'rgba(66, 66, 66, 0.20)',
-                          cursorwidth: "4px",
-                          cursorborder: '0px'
-                      });
+                      chat_body.scrollTop(chat_body.get(0).scrollHeight, -1)
                   }
               }
           }
       };
 
-      function addFriends() {
-          xtip.open({
-              type: 'noready',
-              content: '#tip_content2',
-              title: '添加好友',
-              width: '320px',
-              height: '220px',
-              min: true,
-              shade: false,
-          });
-      }
 
       function xTipMsg(content, el_id) {
           xtip.tips(content, el_id, {
@@ -1502,29 +1306,15 @@
           e.preventDefault();
           var messageInputDom = $('#chat-message-input');
           var message = messageInputDom.val();
+          var channel_no = $('#chat-message-submit').attr('channel_no');
+          console.log('chat-message-submit channel_no'+channel_no,chatSocket);
+          if (!channel_no.startsWith('GP_')) {
+              chatSocket = ntfSocket;
+          }
           if (chatSocket != null && chatSocket.readyState === 1) {
               {#自己发的在回车就显示#}
               ChatosExamle.Message.add(message, 'inside-message', '');
               chatSocket.send(JSON.stringify({
-                  'message': message,
-                  'msg_type': 'chat_message',
-                  'send_user_nick_name': "{{ user.profile.nick_name }}"
-              }));
-              messageInputDom.val('');
-          } else {
-              xtip.load('websocket 正在连接中', {'times': 1})
-          }
-
-      });
-      $('#personal-chat-message-submit').click(function (e) {
-          e.preventDefault();
-          var messageInputDom = $('#personal-chat-message-input');
-          var message = messageInputDom.val();
-          var channel_no = $('#chat-message-submit').attr('channel_no');
-          if (ntfSocket != null && ntfSocket.readyState === 1) {
-              {#自己发的在回车就显示#}
-              ChatosExamle.Message.add(message, 'inside-message', '');
-              ntfSocket.send(JSON.stringify({
                   'message': message,
                   'msg_type': 'chat_message',
                   'send_user_nick_name': "{{ user.profile.nick_name }}",
@@ -1567,13 +1357,15 @@
           var my_friends_list = $('#id_my_friends_list').val();
           console.log(my_friends_list);
           var channel_no = $('#id_group').attr('channel_no');
-          investFriendsToRoom(channel_no,my_friends_list);
+          investFriendsToRoom(channel_no, my_friends_list);
 
       });
       var target_map = {
           'friends': getFriends,
           'chats': getChatRoome,
+          'talks': getTalkLog,
       };
+      // chat/frienfs/talk
       $(document).on("click", "[data-navigation-target]", function () {
           var target = $(this).attr('data-navigation-target');
           if ($.inArray(target, Object.keys(target_map)) !== -1) {
@@ -1585,21 +1377,42 @@
       $('#id_find_group').click(function () {
           getAllChatRoome()
       });
+
       // 搜索群组时进群
       function joinChatroom(channel_no) {
           var my_friends_list = ['{{ user.id }}'];
-          console.log('搜索群组时进群',channel_no);
+          console.log('搜索群组时进群', channel_no);
 
           investFriendsToRoom(channel_no, my_friends_list)
       }
 
-      $('#id_shuoshuo').on('click', 'figure,h5,p', function () {
-          $('.shuoshuo').show();
+      $('#id_talks').on('click', 'figure,h5,p', function () {
+          $('.talks').show();
       });
+
+      function postTalk() {
+          var content = $('#id_talk_content').val();
+          $.ajax({
+              url: '/api/talk_log/',
+              type: 'post',
+              data: {'content': content,'profile':'{{user.profile.id}}'},
+              success: function () {
+                  xtip.msg('添加成功');
+                  getTalkLog();
+                  $('#addTalks').modal('hide')
+              },
+              error: function (data) {
+                  xtip.msg(data.responseText)
+              }
+          })
+      }
+
       $(document).ready(function () {
           getChatRoome();
           var uid = "{{ user.profile.unicode_id }}";
           var ntfSocket = notificationConnect(uid);
+          $('.layout .content .chat .chat-body').niceScroll({cursorborderradius: "5px",});
+          $(".talks").niceScroll({cursorcolor:"#e6e9e7"});
 
       });
 

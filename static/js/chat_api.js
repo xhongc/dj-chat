@@ -47,11 +47,70 @@ function getChatRoome() {
     })
 }
 
+function getTalkLog() {
+    $('#id_talks').empty();
+    $('#id_talk_log').empty();
+    $.get('/api/talk_log').success(function (data) {
+        $.each(data, function (k, v) {
+            var html = '<li class="list-group-item">\n' +
+                '              <div>\n' +
+                '                <figure class="avatar">\n' +
+                '                  <img src="%s" class="rounded-circle">\n' +
+                '                </figure>\n' +
+                '              </div>\n' +
+                '              <div class="users-list-body">\n' +
+                '                <h5>%s</h5>\n' +
+                '                <p>%s</p>\n' +
+                '                <div class="users-list-action action-toggle">\n' +
+                '                  <div class="dropdown">\n' +
+                '                    <a data-toggle="dropdown" href="http://www.jq22.com/demo/jqueryweblt201908272313/#">\n' +
+                '                      <i class="ti-more"></i>\n' +
+                '                    </a>\n' +
+                '                    <div class="dropdown-menu dropdown-menu-right">\n' +
+                '                      <a href="#" class="dropdown-item">Open</a>\n' +
+                '                      <a href="#"\n' +
+                '                         data-navigation-target="contact-information" class="dropdown-item">Profile</a>\n' +
+                '                      <a href="#" class="dropdown-item">Add to\n' +
+                '                        archive</a>\n' +
+                '                      <a href="#" class="dropdown-item">Delete</a>\n' +
+                '                    </div>\n' +
+                '                  </div>\n' +
+                '                </div>\n' +
+                '              </div>\n' +
+                '            </li>';
+            html = html.format(v.profile.img_path, v.profile.nick_name, v.content.slice(0, 30));
+            var talk_log_html = '<div class="ticketBox" >\n' +
+                '            <div class="row">\n' +
+                '              <div class="col-xs-3">\n' +
+                '                <img src="%s" class="rounded-circle">\n' +
+                '              </div>\n' +
+                '              <div class="col-xs-6">\n' +
+                '                <div class="ticket-name">\n' +
+                '                  %s\n' +
+                '                  <span>%s</span>\n' +
+                '                </div>\n' +
+                '                <span>点赞数: %s 阅读量: %s</span>\n' +
+                '              </div>\n' +
+                '\n' +
+                '            </div>\n' +
+                '            <div class="ticket-description">\n' +
+                '              <p>%s<br>\n' +
+                '              </p>\n' +
+                '            </div>\n' +
+                '          </div>'
+            talk_log_html = talk_log_html.format(v.profile.img_path, v.profile.nick_name, v.profile.signature, v.star, v.reading, v.content);
+            $('#id_talks').append(html);
+            $('#id_talk_log').append(talk_log_html)
+
+        })
+    })
+}
+
 // 搜索群组
 function getAllChatRoome() {
     $('#id_all_chat_romm').empty();
     $.get('/api/chat_room/?is_all=true').success(function (data) {
-        if (data.length ===0){
+        if (data.length === 0) {
             $('#id_all_chat_romm').append('<p>暂无群组</p>')
         }
         $.each(data, function (k, v) {
@@ -70,7 +129,7 @@ function getAllChatRoome() {
                 '                        id="id_test"><i class="ti-plus"></i></button>\n' +
                 '              </div>\n' +
                 '          </li>';
-            html = html.format(v.channel_no, v.channel_no, v.img_path, v.room_name, v.room_description,v.channel_no);
+            html = html.format(v.channel_no, v.channel_no, v.img_path, v.room_name, v.room_description, v.channel_no);
             $('#id_all_chat_romm').append(html)
         })
     })
@@ -79,7 +138,7 @@ function getAllChatRoome() {
 function getFriendList() {
     $('#id_friend_list').empty();
     $.get('/api/user_profile/').success(function (data) {
-        if (data.length ===0){
+        if (data.length === 0) {
             $('#id_friend_list').append('<p>暂无好友</p>')
         }
         $.each(data, function (k, v) {
@@ -98,11 +157,12 @@ function getFriendList() {
                 '                      <i class="ti-plus"></i></button>\n' +
                 '                  </div>\n' +
                 '                </li>';
-            html = html.format(v.unicode_id, v.unicode_id, v.img_path, v.nick_name, v.signature,v.unicode_id);
+            html = html.format(v.unicode_id, v.unicode_id, v.img_path, v.nick_name, v.signature, v.unicode_id);
             $('#id_friend_list').append(html)
         })
     })
 }
+
 function postUidFriend(uid) {
     $.ajax({
         url: '/api/friends/',

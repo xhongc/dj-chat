@@ -12,9 +12,10 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from chat.filters import ChatLogFilter, PersonalChatLogFilter, ChatRoomFilter
-from chat.models import ChatRoom, ChatLog, UserProfile
+from chat.models import ChatRoom, ChatLog, UserProfile, TalkLog
 from chat.serializers import FriendsSerializers, ListFriendsSerializers, ChatRoomSerializers, \
-    ListChatLogSerializers, ListChatRoomSerializers, UpdateChatRoomSerializers, FriendsSerializers2, RegisterSerializers
+    ListChatLogSerializers, ListChatRoomSerializers, UpdateChatRoomSerializers, FriendsSerializers2, \
+    RegisterSerializers, ListTalkLogSerializers, PostTalkLogSerializers
 from utils.base_serializer import BasePagination
 
 
@@ -196,3 +197,15 @@ class ChatRoomViewsets(mixins.ListModelMixin,
             instance._prefetched_objects_cache = {}
 
         return Response(serializer.data)
+
+
+class TalkLogViewsets(mixins.ListModelMixin, mixins.CreateModelMixin, GenericViewSet):
+    queryset = TalkLog.objects.all()
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return ListTalkLogSerializers
+        else:
+            return PostTalkLogSerializers

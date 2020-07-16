@@ -1,3 +1,4 @@
+from datetime import datetime
 from itertools import chain
 
 from django.contrib.auth.models import User
@@ -83,3 +84,13 @@ class ChatLog(models.Model):
     class Meta:
         verbose_name = "聊天记录"
         verbose_name_plural = verbose_name
+
+
+class TalkLog(models.Model):
+    profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, db_constraint=False, related_name='talk_log',
+                                help_text='说说')
+    content = models.TextField(null=True, blank=True, help_text='说说内容')
+    star = models.IntegerField(default=0)
+    reading = models.IntegerField(default=0)
+    date_created = models.DateTimeField(default=datetime.now)
+    date_modified = models.DateTimeField(auto_now=True)

@@ -20,9 +20,9 @@ django-channels + bootstrap + jquery
 > nginx + daphne + gunicorn + supervisor
 - gunicorn，green unicorn 简称，unix系统的wsgi http服务器
 处理符合wsgi的接口，使得底层处理与上层业务分开，Django仅负责业务层的处理，这里使用主要是官方推荐，uwsgi服务器使用的人也比较多
-- 支持HTTP, HTTP2 和 WebSocket 的asgi的服务器，这里主要是处理WebSocket 的请求
-- 进程管理器，当web项目存在多个进程需要处理时，方便统一管理，如服务器down机重启时自启动等
-- 静态资源处理和请求的分发等，http请求指向gunicorn进程，websocket请求指向daphne进程等
+- daphne 支持HTTP, HTTP2 和 WebSocket 的asgi的服务器，这里主要是处理WebSocket 的请求
+- supervisor 进程管理器，当web项目存在多个进程需要处理时，方便统一管理，如服务器down机重启时自启动等
+- nginx 静态资源处理和请求的分发等，http请求指向gunicorn进程，websocket请求指向daphne进程等
 > tips: gunicorn 和 daphne 开不同的端口[！](https://github.com/xhongc/dj-chat/blob/master/supervisor.conf)
 #### nginx 配置
 ```nginx
@@ -59,5 +59,3 @@ server {
 
 ```
 ## 后续开发计划
-- [ ]  用户注册
-- [ ]  说说功能

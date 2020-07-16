@@ -4,7 +4,7 @@ import json
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from chat.models import UserProfile, ChatLog, ChatRoom
+from chat.models import UserProfile, ChatLog, ChatRoom, TalkLog
 
 
 class RegisterSerializers(serializers.Serializer):
@@ -151,3 +151,17 @@ class UpdateChatRoomSerializers(serializers.ModelSerializer):
         member_list = (UserProfile.objects.get(id=id) for id in members_id)
         self.instance.members.add(*member_list)
         self.instance.save()
+
+
+class ListTalkLogSerializers(serializers.ModelSerializer):
+    profile = FriendsSerializers2()
+
+    class Meta:
+        model = TalkLog
+        fields = '__all__'
+
+
+class PostTalkLogSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = TalkLog
+        fields = '__all__'
