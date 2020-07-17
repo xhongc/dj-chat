@@ -226,7 +226,8 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             )
         elif msg_type == 'chat_message':
             request_user_uid = str(chat_user.profile.unicode_id)
-            ChatLog.objects.create(chat_datetime=datetime.now(),
+            send_time =datetime.now()
+            ChatLog.objects.create(chat_datetime=send_time,
                                    content=message,
                                    msg_type=msg_type,
                                    who_said=chat_user,
@@ -241,9 +242,9 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 {
                     'type': msg_type,
                     'message': message,
-                    'user_id': '',
-                    'send_time': '',
-                    'msg_type': '',
+                    'user_id': str(chat_user.id),
+                    'send_time': send_time.strftime('%p %H:%M'),
+                    'msg_type': msg_type,
                     'channel_no': request_user_uid,
                     'send_user_nick_name': send_user_nick_name,
                 }

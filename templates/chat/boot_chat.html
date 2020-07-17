@@ -1129,11 +1129,13 @@
           ntfSocket.onmessage = function (e) {
               var data = JSON.parse(e.data);
               var channel_no = data['channel_no'];
+
               console.log('aaa', channel_no);
               var that = $('li[channel_no=%s]'.format(channel_no)).find('#id_badge_ntf');
               var count = parseInt(that.html()) || 0;
               count += 1;
               that.html(count);
+              parseChatMsg(data);
               Lobibox.notify(
                   // 'warning', 'info', 'success', 'error'
                   'error',
@@ -1188,11 +1190,24 @@
           };
           chatSocket.onmessage = function (e) {
               var data = JSON.parse(e.data);
+              parseChatMsg(data)
+          };
+          chatSocket.onclose = function (e) {
+              console.log('Socket is closed. Reconnect will be attempted in 1 second.', e);
+          };
+          chatSocket.onerror = function (e) {
+              console.log('Socket is onerror.', e.reason);
+              chatSocket.close()
+          };
+          return true
+      }
+      function parseChatMsg(data) {
               var message = data['message'];
               var msg_type = data['msg_type'];
               var user_id = data['user_id'];
               var send_time = data['send_time'];
               var me = window.localStorage.user_id;
+              console.log(msg_type);
               if (message) {
                   if (msg_type === 'chat_message') {
                       if (user_id === me) {
@@ -1212,17 +1227,7 @@
               } else {
                   xtip.msg('不能输入空')
               }
-          };
-          chatSocket.onclose = function (e) {
-              console.log('Socket is closed. Reconnect will be attempted in 1 second.', e);
-          };
-          chatSocket.onerror = function (e) {
-              console.log('Socket is onerror.', e.reason);
-              chatSocket.close()
-          };
-          return true
       }
-
       function join(channel_no) {
           ChatosExamle.Message.delete();
           var is_connect = wsConnect(channel_no);
