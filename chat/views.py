@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
-from chat.filters import ChatLogFilter, PersonalChatLogFilter, ChatRoomFilter
+from chat.filters import ChatLogFilter, PersonalChatLogFilter, ChatRoomFilter, UserProfileFilter
 from chat.models import ChatRoom, ChatLog, UserProfile, TalkLog
 from chat.serializers import FriendsSerializers, ListFriendsSerializers, ChatRoomSerializers, \
     ListChatLogSerializers, ListChatRoomSerializers, UpdateChatRoomSerializers, FriendsSerializers2, \
@@ -43,6 +43,14 @@ class UserProfileViewsets(mixins.ListModelMixin, GenericViewSet):
         return queryset
 
     serializer_class = FriendsSerializers2
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+
+
+class UserInfoViewsets(mixins.RetrieveModelMixin, GenericViewSet):
+    queryset = UserProfile.objects.all()
+    serializer_class = FriendsSerializers2
+    lookup_field = 'user'
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
 

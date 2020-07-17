@@ -1,6 +1,6 @@
 import django_filters
 
-from chat.models import ChatRoom, ChatLog
+from chat.models import ChatRoom, ChatLog, UserProfile
 
 
 class ChatRoomFilter(django_filters.FilterSet):
@@ -9,7 +9,7 @@ class ChatRoomFilter(django_filters.FilterSet):
 
     class Meta:
         model = ChatRoom
-        fields = ['channel_no','is_all']
+        fields = ['channel_no', 'is_all']
 
 
 class ChatLogFilter(django_filters.FilterSet):
@@ -26,3 +26,11 @@ class PersonalChatLogFilter(django_filters.FilterSet):
     class Meta:
         model = ChatLog
         fields = ['who_said__profile__unicode_id']
+
+
+class UserProfileFilter(django_filters.FilterSet):
+    user__unicode_id = django_filters.CharFilter()
+
+    class Meta:
+        model = UserProfile
+        fields = ['user__unicode_id']

@@ -1103,11 +1103,12 @@
           $(this).find('#id_badge_ntf').html('');
           $('#chat-message-submit').attr('channel_no', $(this).attr('channel_no'));
           var channel_no = $(this).attr('channel_no');
+          var profile_id = $(this).attr('profile_id');
           console.log('sidebar-body channel_no'+channel_no);
           if (channel_no.startsWith('GP_')) {
               chatSocket = joinRoom(channel_no);
           } else {
-              joinSingle(channel_no);
+              joinSingle(channel_no,profile_id);
           }
       });
 
@@ -1128,32 +1129,36 @@
           };
           ntfSocket.onmessage = function (e) {
               var data = JSON.parse(e.data);
+              var msg_type = data['msg_type'];
               var channel_no = data['channel_no'];
-
               console.log('aaa', channel_no);
-              var that = $('li[channel_no=%s]'.format(channel_no)).find('#id_badge_ntf');
-              var count = parseInt(that.html()) || 0;
-              count += 1;
-              that.html(count);
-              parseChatMsg(data);
-              Lobibox.notify(
-                  // 'warning', 'info', 'success', 'error'
-                  'error',
-                  {
-                      title: data['send_user_nick_name'],
-                      size: 'normal',
-                      showClass: 'flipInX',
-                      hideClass: 'zoomOutDown',
-                      msg: data['message'],
-                      icon: false,
-                      delay: 6000,
-                      img: data['img'],
-                      closable: true,
-                      closeOnClick: true,
-                      soundPath: '/src/sounds/',
+              console.log('onmessage',msg_type);
+              if(msg_type ==='push_message'){
+                  var that = $('li[channel_no=%s]'.format(channel_no)).find('#id_badge_ntf');
+                  var count = parseInt(that.html()) || 0;
+                  count += 1;
+                  that.html(count);
+                  Lobibox.notify(
+                      // 'warning', 'info', 'success', 'error'
+                      'error',
+                      {
+                          title: data['send_user_nick_name'],
+                          size: 'normal',
+                          showClass: 'flipInX',
+                          hideClass: 'zoomOutDown',
+                          msg: data['message'],
+                          icon: false,
+                          delay: 6000,
+                          img: data['img'],
+                          closable: true,
+                          closeOnClick: true,
+                          soundPath: '/src/sounds/',
 
-                  }
-              );
+                      }
+                  );
+              }else if (msg_type ==='chat_message'){
+                  parseChatMsg(data);
+              }
           };
           ntfSocket.onclose = function (e) {
               $('#id_online').html('Outline');
@@ -1263,9 +1268,10 @@
           }
       }
 
-      function joinSingle(channel_no) {
+      function joinSingle(channel_no,profile_id) {
           console.log('joinSingle');
           ChatosExamle.Message.delete();
+          getUserInfo(profile_id);
           getPersonalChatLog(channel_no);
           $('.chatbox').show();
       }

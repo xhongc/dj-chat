@@ -1,9 +1,10 @@
 // 获取好友列表
 function getFriends() {
+    $('.talks').hide();
     $.get('/api/friends/').success(function (data) {
         $('#id_friends_list').empty();
         $.each(data, function (k, v) {
-            var html = '<li class="list-group-item" channel_no="%s">\n' +
+            var html = '<li class="list-group-item" channel_no="%s" profile_id="%s">\n' +
                 '                                    <div>\n' +
                 '                                        <figure class="avatar">\n' +
                 '                                            <img src="%s" class="rounded-circle">\n' +
@@ -17,7 +18,7 @@ function getFriends() {
                 '              </div>\n' +
                 '                                    </div>\n' +
                 '                                </li>';
-            html = html.format(v.unicode_id, v.img_path, v.nick_name, v.signature, v.unread_no);
+            html = html.format(v.unicode_id,v.id, v.img_path, v.nick_name, v.signature, v.unread_no);
             $('#id_friends_list').append(html)
         })
     })
@@ -25,6 +26,7 @@ function getFriends() {
 
 function getChatRoome() {
     $('#id_chats').empty();
+    $('.talks').hide();
     $.get('/api/chat_room/').success(function (data) {
         $.each(data, function (k, v) {
             var html = '<li class="list-group-item" channel_no="%s" id="%s">\n' +
@@ -50,6 +52,7 @@ function getChatRoome() {
 function getTalkLog() {
     $('#id_talks').empty();
     $('#id_talk_log').empty();
+    $('.chatbox').hide();
     $.get('/api/talk_log').success(function (data) {
         $.each(data, function (k, v) {
             var html = '<li class="list-group-item">\n' +
@@ -226,6 +229,13 @@ function getChatRoomInfo(channel_no) {
     })
 }
 
+function getUserInfo(profile_id) {
+    $.get('/api/user_info/%s/'.format(profile_id)).success(function (data) {
+        $('.id_room_name').html(data.nick_name);
+        $('.id_room_description').html(data.signature);
+        $('.id_room_img').attr('src', data.img_path);
+    })
+}
 function getChatLog(channel_no) {
     $.get('/api/chat_log/', {'said_to_room__channel_no': channel_no}).success(function (data) {
         data = data.results;

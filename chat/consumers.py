@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 
 from channels.generic.websocket import AsyncWebsocketConsumer
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AnonymousUser
 
 from chat.models import ChatLog, ChatRoom
 from dj_chat.util import ChatCache
@@ -10,40 +10,38 @@ from utils.chatrobot import sizhi, talk_with_me
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
+    """聊天Websocket"""
     def __init__(self, *args, **kwargs):
         super(ChatConsumer, self).__init__(*args, **kwargs)
         self.room_name = 'chat'
         self.room_group_name = 'chat'
         self.chat_room_model = None
+        self.request_user = self.scope.get("user") or AnonymousUser()
 
     async def connect(self):
         room_channel_no = self.scope['url_route']['kwargs']['room_name']
-        request_user = self.scope["user"]
         # 游客拒绝
-        if request_user.is_anonymous:
+        if self.request_user.is_anonymous:
             # Reject the connection
             await self.close()
+        self.room_name = room_channel_no
+        self.room_group_name = 'chat_%s' % self.room_name
         # 必须是我加入的频道
-        elif room_channel_no in request_user.profile.get_my_chat_room():
-            self.room_name = room_channel_no
-            self.room_group_name = 'chat_%s' % self.room_name
+        if room_channel_no in self.request_user.profile.get_my_chat_room():
             # 加入成员保存字典 redis缓存中
-            ChatCache().append(self.room_group_name, request_user.profile.unicode_id)
+            ChatCache().append(self.room_group_name, self.request_user.profile.unicode_id)
+            # 打印信息
             print('UID:%s加入房间(%s),剩余:%s' % (
-                self.scope["user"].profile.unicode_id, self.room_group_name,
+                self.request_user.profile.unicode_id, self.room_group_name,
                 ChatCache().get_cache(self.room_group_name)))
             # Join room group
             await self.channel_layer.group_add(
                 self.room_group_name,
                 self.channel_name
             )
-
             await self.accept()
         # 机器人回复频道
         elif room_channel_no == 'GP_robot':
-            self.room_name = room_channel_no
-            self.room_group_name = 'chat_%s' % self.room_name
-
             # Join room group
             await self.channel_layer.group_add(
                 self.room_group_name,
@@ -55,9 +53,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         # Leave room group 缓存中清理
-        ChatCache().remove(self.room_group_name, self.scope["user"].profile.unicode_id)
+        ChatCache().remove(self.room_group_name, self.request_user.profile.unicode_id)
         print('UID:%s离开房间(%s),剩余:%s' % (
-            self.scope["user"].profile.unicode_id, self.room_group_name, ChatCache().get_cache(self.room_group_name)))
+            self.request_user.profile.unicode_id, self.room_group_name, ChatCache().get_cache(self.room_group_name)))
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
@@ -69,7 +67,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = text_data_json['message']
         msg_type = text_data_json['msg_type']
         send_user_nick_name = text_data_json.get('send_user_nick_name', '') or ''
-        chat_user = self.scope.get('user')
+        chat_user = self.request_user
         send_time = datetime.now()
         # 机器人 加思知回复
         if self.room_name == 'GP_robot' and msg_type == 'chat_message':
@@ -118,7 +116,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                             'message': message,
                             'user_id': str(chat_user.id),
                             'send_time': send_time.strftime('%p %H:%M'),
-                            'msg_type': msg_type,
+                            'msg_type': 'push_message',
                             'channel_no': self.room_name,
                             'send_user_nick_name': send_user_nick_name,
                         }
@@ -221,7 +219,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                     'message': message,
                     'user_id': '',
                     'send_time': '',
-                    'msg_type': '',
+                    'msg_type': msg_type,
                 }
             )
         elif msg_type == 'chat_message':
@@ -254,12 +252,14 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         channel_no = event['channel_no']
         message = event['message']
         send_user_nick_name = event['send_user_nick_name']
+        msg_type = event['msg_type']
         chat_room = ChatRoom.objects.filter(channel_no=channel_no).first()
         await self.send(text_data=json.dumps({
             "channel_no": channel_no,
             'message': message,
             'img': chat_room.img_path,
-            'send_user_nick_name': send_user_nick_name
+            'send_user_nick_name': send_user_nick_name,
+            'msg_type': msg_type,
         }))
 
     # Receive message from room group
