@@ -1,0 +1,34 @@
+version: '3.7'
+
+services:
+  redis:
+    image: redis
+    restart: always
+  dj-chat.wsgi:
+    build: .
+    image: "dj-chat:latest"
+    command: bash -c "gunicorn -w 1 -k gevent -b 127.0.0.1:8000 dj_chat.wsgi:application"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    links:
+      - redis
+  dj-chat.asgi:
+    image: "dj-chat:latest"
+    command: bash -c "daphne -b 127.0.0.1 -p 8001 dj_chat.asgi:application"
+    ports:
+      - "8001:8001"
+    depends_on:
+      - redis
+    links:
+      - redis
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    image: "nginx-chat"
+    container_name: "nginx-chat"
+    depends_on:
+      - dj-chat.asgi
+      - dj-chat.wsgi
