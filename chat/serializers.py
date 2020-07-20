@@ -60,6 +60,14 @@ class FriendsSerializers(serializers.Serializer):
 
 
 class FriendsSerializers2(serializers.ModelSerializer):
+    img_path = serializers.SerializerMethodField()
+
+    def get_img_path(self, obj):
+        img_path = obj.img_path
+        if obj.is_use_qq_img and obj.qq_number:
+            img_path = 'http://q1.qlogo.cn/g?b=qq&nk=%s&s=100' % (obj.qq_number)
+        return img_path
+
     class Meta:
         model = UserProfile
         fields = '__all__'
@@ -86,6 +94,13 @@ class UserInfoSerializer(serializers.ModelSerializer):
 
 class ListFriendsSerializers(serializers.ModelSerializer):
     unread_no = serializers.SerializerMethodField()
+    img_path = serializers.SerializerMethodField()
+
+    def get_img_path(self, obj):
+        img_path = obj.img_path
+        if obj.is_use_qq_img and obj.qq_number:
+            img_path = 'http://q1.qlogo.cn/g?b=qq&nk=%s&s=100' % (obj.qq_number)
+        return img_path
 
     def get_unread_no(self, obj):
         request = self._context.get('request')
