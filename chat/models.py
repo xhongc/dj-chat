@@ -50,6 +50,9 @@ class UserProfile(models.Model):
     friends = models.ManyToManyField('self', related_name='my_friends', blank=True)
     unicode_id = models.IntegerField(default=-1, blank=False, null=False, unique=True, help_text='唯一ID')
     img_path = models.CharField(max_length=255, default='/', help_text='头像地址')
+    city = models.CharField(max_length=64, help_text='城市', null=True, blank=True)
+    qq_number = models.CharField(max_length=16, help_text='qq号码', null=True, blank=True)
+    is_use_qq_img = models.BooleanField(default=False, help_text='是否使用QQ头像')
 
     def __str__(self):
         return self.nick_name + ': ' + str(self.unicode_id)

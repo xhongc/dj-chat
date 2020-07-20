@@ -65,6 +65,25 @@ class FriendsSerializers2(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class UserInfoSerializer(serializers.ModelSerializer):
+    unicode_id = serializers.CharField(read_only=True)
+    img_path = serializers.SerializerMethodField()
+    is_use_qq_img = serializers.BooleanField()
+
+    def get_img_path(self, obj):
+        img_path = obj.img_path
+        if obj.is_use_qq_img and obj.qq_number:
+            img_path = 'http://q1.qlogo.cn/g?b=qq&nk=%s&s=100' % (obj.qq_number)
+        return img_path
+
+    def validate_is_use_qq_img(self, attrs):
+        return bool(attrs)
+
+    class Meta:
+        model = UserProfile
+        exclude = ('friends',)
+
+
 class ListFriendsSerializers(serializers.ModelSerializer):
     unread_no = serializers.SerializerMethodField()
 

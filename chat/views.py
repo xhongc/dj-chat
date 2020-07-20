@@ -15,7 +15,7 @@ from chat.filters import ChatLogFilter, PersonalChatLogFilter, ChatRoomFilter, U
 from chat.models import ChatRoom, ChatLog, UserProfile, TalkLog
 from chat.serializers import FriendsSerializers, ListFriendsSerializers, ChatRoomSerializers, \
     ListChatLogSerializers, ListChatRoomSerializers, UpdateChatRoomSerializers, FriendsSerializers2, \
-    RegisterSerializers, ListTalkLogSerializers, PostTalkLogSerializers
+    RegisterSerializers, ListTalkLogSerializers, PostTalkLogSerializers, UserInfoSerializer
 from utils.base_serializer import BasePagination
 
 
@@ -47,9 +47,9 @@ class UserProfileViewsets(mixins.ListModelMixin, GenericViewSet):
     permission_classes = (IsAuthenticated,)
 
 
-class UserInfoViewsets(mixins.RetrieveModelMixin, GenericViewSet):
+class UserInfoViewsets(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericViewSet):
     queryset = UserProfile.objects.all()
-    serializer_class = FriendsSerializers2
+    serializer_class = UserInfoSerializer
     lookup_field = 'user'
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
