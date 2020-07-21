@@ -1,6 +1,7 @@
 // 获取好友列表
 function getFriends() {
     $('.talks').hide();
+    $('.homebox').hide();
     $.get('/api/friends/').success(function (data) {
         $('#id_friends_list').empty();
         $.each(data, function (k, v) {
@@ -18,7 +19,7 @@ function getFriends() {
                 '              </div>\n' +
                 '                                    </div>\n' +
                 '                                </li>';
-            html = html.format(v.unicode_id,v.id, v.img_path, v.nick_name, v.signature, v.unread_no);
+            html = html.format(v.unicode_id, v.id, v.img_path, v.nick_name, v.signature, v.unread_no);
             $('#id_friends_list').append(html)
         })
     })
@@ -53,6 +54,8 @@ function getTalkLog() {
     $('#id_talks').empty();
     $('#id_talk_log').empty();
     $('.chatbox').hide();
+    $('.homebox').hide();
+
     $.get('/api/talk_log').success(function (data) {
         $.each(data, function (k, v) {
             var html = '<li class="list-group-item">\n' +
@@ -236,6 +239,7 @@ function getUserInfo(profile_id) {
         $('.id_room_img').attr('src', data.img_path);
     })
 }
+
 function getChatLog(channel_no) {
     $.get('/api/chat_log/', {'said_to_room__channel_no': channel_no}).success(function (data) {
         data = data.results;

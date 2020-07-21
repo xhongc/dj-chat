@@ -17,6 +17,9 @@ class ChatRoom(models.Model):
     max_number = models.IntegerField(default=5, help_text='允许最大人数')
     ordering = models.IntegerField(default=99, help_text='置顶权')
 
+    date_created = models.DateTimeField(default=datetime.now)
+    date_modified = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return self.room_name
 
@@ -53,6 +56,9 @@ class UserProfile(models.Model):
     city = models.CharField(max_length=64, help_text='城市', null=True, blank=True)
     qq_number = models.CharField(max_length=16, help_text='qq号码', null=True, blank=True)
     is_use_qq_img = models.BooleanField(default=False, help_text='是否使用QQ头像')
+
+    date_created = models.DateTimeField(default=datetime.now)
+    date_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.nick_name + ': ' + str(self.unicode_id)

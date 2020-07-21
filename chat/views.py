@@ -1,7 +1,9 @@
 from datetime import datetime, timedelta
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.db.models import Q
+from django.http import JsonResponse
 from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins
@@ -16,13 +18,51 @@ from chat.models import ChatRoom, ChatLog, UserProfile, TalkLog
 from chat.serializers import FriendsSerializers, ListFriendsSerializers, ChatRoomSerializers, \
     ListChatLogSerializers, ListChatRoomSerializers, UpdateChatRoomSerializers, FriendsSerializers2, \
     RegisterSerializers, ListTalkLogSerializers, PostTalkLogSerializers, UserInfoSerializer
+from dj_chat.util import ChatCache
+from utils.base_chart import get_period_expression, get_date_range
 from utils.base_serializer import BasePagination
+from collections import OrderedDict
 
 
 @login_required(login_url='/login/')
 def index(request):
-    # friends = request.user.profile.friends.all()
     return render(request, 'chat/boot_chat.html', locals())
+
+
+class StatisticViewsets(mixins.ListModelMixin, GenericViewSet):
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+
+    def list(self, request, *args, **kwargs):
+        total_user = User.objects.count()
+        total_room = ChatRoom.objects.count()
+        total_online = len(ChatCache().get_cache('__online') or {})
+        print(ChatCache().get_cache('__online'))
+        start = datetime(2020, 1, 1)
+        end = datetime(2020, 8, 1)
+        date_range = get_date_range('monthly', start, end)
+        user_profile = User.objects.filter(date_joined__range=(start, end)).annotate(
+            filter_date=get_period_expression('monthly', 'date_joined')).values('id', 'filter_date')
+        res = []
+        init_data = OrderedDict()
+        for date in date_range:
+            init_data[date] = 0
+        print(user_profile.query)
+        for p in user_profile:
+            init_data[p['filter_date']] += 1
+        print(list(user_profile))
+        print(init_data)
+        lei_jia = 0
+        for k, v in init_data.items():
+            structure = {'y': '', 'item1': '', 'item2': ''}
+            structure['y'] = k
+            structure['item1'] = v
+            lei_jia += v
+            structure['item2'] = lei_jia - v
+            res.append(structure)
+        print(res)
+        return JsonResponse({'area': res, 'total_user': total_user, 'total_room': total_room,
+                             'total_online': total_online}, status=200)
 
 
 class RegisterViewsets(mixins.CreateModelMixin, GenericViewSet):

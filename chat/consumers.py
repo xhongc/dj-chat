@@ -11,6 +11,7 @@ from utils.chatrobot import sizhi, talk_with_me
 
 class ChatConsumer(AsyncWebsocketConsumer):
     """聊天Websocket"""
+
     def __init__(self, *args, **kwargs):
         super(ChatConsumer, self).__init__(*args, **kwargs)
         self.room_name = 'chat'
@@ -180,8 +181,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
 
 class NotificationConsumer(AsyncWebsocketConsumer):
+    def __init__(self, *args, **kwargs):
+        super(NotificationConsumer, self).__init__(*args, **kwargs)
+        self.uid = self.scope['url_route']['kwargs']['uid']
+
     async def connect(self):
         uid = self.scope['url_route']['kwargs']['uid']
+        ChatCache().append('__online', uid)
         if self.scope["user"].is_anonymous:
             # Reject the connection
             await self.close()
@@ -199,6 +205,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         # Leave room group
+        ChatCache().remove('__online', self.uid)
         await self.channel_layer.group_discard(
             self.uid_group,
             self.channel_name
@@ -224,7 +231,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             )
         elif msg_type == 'chat_message':
             request_user_uid = str(chat_user.profile.unicode_id)
-            send_time =datetime.now()
+            send_time = datetime.now()
             ChatLog.objects.create(chat_datetime=send_time,
                                    content=message,
                                    msg_type=msg_type,
