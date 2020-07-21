@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from chat.models import ChatRoom, ChatLog, UserProfile
+from chat.models import ChatRoom, ChatLog, UserProfile, History
 
 
 # Register your models here.
@@ -20,3 +20,8 @@ class ChatLogAdmin(admin.ModelAdmin):
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ['user', 'nick_name', 'unicode_id']
+
+
+@admin.register(History)
+class HistoryAdmin(admin.ModelAdmin):
+    list_display = ['ip', 'count', 'date_created']
