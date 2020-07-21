@@ -855,7 +855,7 @@
             <!-- AREA CHART -->
             <div class="box box-primary">
               <div class="box-header with-border">
-                <h3 class="box-title">Area Chart</h3>
+                <h3 class="box-title">总注册人数表</h3>
 
                 <div class="box-tools pull-right">
                   <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -874,7 +874,7 @@
             <!-- DONUT CHART -->
             <div class="box box-danger">
               <div class="box-header with-border">
-                <h3 class="box-title">Donut Chart</h3>
+                <h3 class="box-title">访问人数表</h3>
 
                 <div class="box-tools pull-right">
                   <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -896,7 +896,7 @@
             <!-- LINE CHART -->
             <div class="box box-info">
               <div class="box-header with-border">
-                <h3 class="box-title">Line Chart</h3>
+                <h3 class="box-title">当日新增人数表</h3>
 
                 <div class="box-tools pull-right">
                   <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -915,7 +915,7 @@
             <!-- BAR CHART -->
             <div class="box box-success">
               <div class="box-header with-border">
-                <h3 class="box-title">Bar Chart</h3>
+                <h3 class="box-title">群组创建表</h3>
 
                 <div class="box-tools pull-right">
                   <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -1625,6 +1625,8 @@
                   $('#total_online').html(data.total_online)
                   showArea('revenue-chart', data.area)
                   showLine('line-chart', data.area)
+                  showBar('bar-chart',data.bar)
+                  showDonut('sales-chart',data.donut)
               }
           })
 
@@ -1639,7 +1641,7 @@
               data: data,
               xkey: 'y',
               ykeys: ['item1', 'item2'],
-              labels: ['Item 1', 'Item 2'],
+              labels: ['单新增', '比总量差'],
               lineColors: ['#a0d0e0', '#3c8dbc'],
               hideHover: 'auto'
           });
@@ -1653,7 +1655,7 @@
               data: data,
               xkey: 'y',
               ykeys: ['item1'],
-              labels: ['Item 1'],
+              labels: ['人数'],
               lineColors: ['#3c8dbc'],
               hideHover: 'auto'
           });
@@ -1661,7 +1663,7 @@
       function showDonut(element,data){
           //DONUT CHART
           var donut = new Morris.Donut({
-              element: 'sales-chart',
+              element: element,
               resize: true,
               colors: ["#3c8dbc", "#f56954", "#00a65a"],
               data: data,
@@ -1671,13 +1673,13 @@
       function showBar(element,data){
          //BAR CHART
           var bar = new Morris.Bar({
-              element: 'bar-chart',
+              element: element,
               resize: true,
               data: data,
               barColors: ['#00a65a', '#f56954'],
               xkey: 'y',
               ykeys: ['a', 'b'],
-              labels: ['CPU', 'DISK'],
+              labels: ['单新增', '累计数量'],
               hideHover: 'auto'
           });
       }

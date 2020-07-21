@@ -40,7 +40,8 @@ class StatisticViewsets(mixins.ListModelMixin, GenericViewSet):
         print(ChatCache().get_cache('__online'))
         start = datetime(2020, 1, 1)
         end = datetime(2020, 8, 1)
-        date_range = get_date_range('monthly', start, end)
+        period = 'monthly'
+        date_range = get_date_range(period, start, end)
         user_profile = User.objects.filter(date_joined__range=(start, end)).annotate(
             filter_date=get_period_expression('monthly', 'date_joined')).values('id', 'filter_date')
         res = []
@@ -61,8 +62,33 @@ class StatisticViewsets(mixins.ListModelMixin, GenericViewSet):
             structure['item2'] = lei_jia - v
             res.append(structure)
         print(res)
-        return JsonResponse({'area': res, 'total_user': total_user, 'total_room': total_room,
-                             'total_online': total_online}, status=200)
+        chat_res = []
+        init_data = OrderedDict()
+        for date in date_range:
+            init_data[date] = 0
+        chat_room = ChatRoom.objects.filter(date_created__range=(start, end)).annotate(
+            filter_date=get_period_expression(period, 'date_created')).values('id', 'filter_date')
+        for p in chat_room:
+            init_data[p['filter_date']] += 1
+
+        lei_jia = 0
+        for k, v in init_data.items():
+            structure = {'y': '', 'a': '', 'b': ''}
+            structure['y'] = k
+            structure['a'] = v
+            lei_jia += v
+            structure['b'] = lei_jia
+            chat_res.append(structure)
+        print(chat_res)
+
+        donut = [
+            {'label': "Android Site", 'value': 12},
+            {'label': "PC Site", 'value': 30},
+            {'label': "IOS Site", 'value': 20}
+        ]
+        return JsonResponse(
+            {'area': res, 'bar': chat_res, 'donut': donut, 'total_user': total_user, 'total_room': total_room,
+             'total_online': total_online}, status=200)
 
 
 class RegisterViewsets(mixins.CreateModelMixin, GenericViewSet):
