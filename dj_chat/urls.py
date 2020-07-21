@@ -42,7 +42,6 @@ urlpatterns = [
     re_path(r'^api-token-auth/', LoginObtainJSONWebToken.as_view()),
     path('', include('chat.urls'), name='chat-url'),
     path('login/', TemplateView.as_view(template_name='login.html'), name='login'),
-    path('data_show/', TemplateView.as_view(template_name='data_show.html'), name='data_show'),
     path('register/', TemplateView.as_view(template_name='register.html'), name='register'),
 ]
 
