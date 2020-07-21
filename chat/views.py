@@ -22,6 +22,7 @@ from dj_chat.util import ChatCache
 from utils.base_chart import get_period_expression, get_date_range
 from utils.base_serializer import BasePagination
 from collections import OrderedDict
+from utils.relativedelta import relativedelta
 
 
 @login_required(login_url='/login/')
@@ -33,27 +34,19 @@ class StatisticViewsets(mixins.ListModelMixin, GenericViewSet):
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
 
-    def list(self, request, *args, **kwargs):
-        total_user = User.objects.count()
-        total_room = ChatRoom.objects.count()
-        total_online = len(ChatCache().get_cache('__online') or {})
-        total_history = History.objects.aggregate(total=Sum('count'))['total']
-        print(ChatCache().get_cache('__online'))
-        start = datetime(2020, 1, 1)
-        end = datetime(2020, 8, 1)
+    def get_user_register_table(self):
+        end = datetime.now()
+        start = end - relativedelta(months=12)
         period = 'monthly'
         date_range = get_date_range(period, start, end)
         user_profile = User.objects.filter(date_joined__range=(start, end)).annotate(
-            filter_date=get_period_expression('monthly', 'date_joined')).values('id', 'filter_date')
+            filter_date=get_period_expression(period, 'date_joined')).values('id', 'filter_date')
         res = []
         init_data = OrderedDict()
         for date in date_range:
             init_data[date] = 0
-        print(user_profile.query)
         for p in user_profile:
             init_data[p['filter_date']] += 1
-        print(list(user_profile))
-        print(init_data)
         lei_jia = 0
         for k, v in init_data.items():
             structure = {'y': '', 'item1': '', 'item2': ''}
@@ -62,16 +55,41 @@ class StatisticViewsets(mixins.ListModelMixin, GenericViewSet):
             lei_jia += v
             structure['item2'] = lei_jia - v
             res.append(structure)
-        print(res)
-        chat_res = []
+        return res
+
+    def get_daily_user_register_table(self):
+        end = datetime.now()
+        start = end - relativedelta(days=12)
+        period = 'daily'
+        date_range = get_date_range(period, start, end)
+        user_profile = User.objects.filter(date_joined__range=(start, end)).annotate(
+            filter_date=get_period_expression(period, 'date_joined')).values('id', 'filter_date')
+        res = []
         init_data = OrderedDict()
+        for date in date_range:
+            init_data[date] = 0
+        for p in user_profile:
+            init_data[p['filter_date']] += 1
+        for k, v in init_data.items():
+            structure = {'y': '', 'item1': ''}
+            structure['y'] = k
+            structure['item1'] = v
+            res.append(structure)
+        return res
+
+    def get_chatroom_table(self):
+        end = datetime.now()
+        start = end - relativedelta(months=6)
+        period = 'monthly'
+        date_range = get_date_range(period, start, end)
+        init_data = OrderedDict()
+        res = []
         for date in date_range:
             init_data[date] = 0
         chat_room = ChatRoom.objects.filter(date_created__range=(start, end)).annotate(
             filter_date=get_period_expression(period, 'date_created')).values('id', 'filter_date')
         for p in chat_room:
             init_data[p['filter_date']] += 1
-
         lei_jia = 0
         for k, v in init_data.items():
             structure = {'y': '', 'a': '', 'b': ''}
@@ -79,16 +97,23 @@ class StatisticViewsets(mixins.ListModelMixin, GenericViewSet):
             structure['a'] = v
             lei_jia += v
             structure['b'] = lei_jia
-            chat_res.append(structure)
-        print(chat_res)
+            res.append(structure)
+        return res
 
+    def list(self, request, *args, **kwargs):
+        total_user = User.objects.count()
+        total_room = ChatRoom.objects.count()
+        total_online = len(ChatCache().get_cache('__online') or {})
+        total_history = History.objects.aggregate(total=Sum('count'))['total']
+        user_register_table = self.get_user_register_table()
+        daily_user_register_table = self.get_daily_user_register_table()
+        chatroom_table = self.get_chatroom_table()
         donut = [
-            {'label': "Android Site", 'value': 12},
-            {'label': "PC Site", 'value': 30},
-            {'label': "IOS Site", 'value': 20}
+            {'label': "访问人次", 'value': total_history},
         ]
         return JsonResponse(
-            {'area': res, 'bar': chat_res, 'donut': donut, 'total_user': total_user, 'total_room': total_room,
+            {'area': user_register_table, 'bar': chatroom_table, 'donut': donut, 'line': daily_user_register_table,
+             'total_user': total_user, 'total_room': total_room,
              'total_online': total_online, 'total_history': total_history}, status=200)
 
 
