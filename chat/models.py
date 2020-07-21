@@ -103,3 +103,11 @@ class TalkLog(models.Model):
     reading = models.IntegerField(default=0)
     date_created = models.DateTimeField(default=datetime.now)
     date_modified = models.DateTimeField(auto_now=True)
+
+
+class History(models.Model):
+    ip = models.CharField(max_length=64, null=True, blank=True)
+    city = models.CharField(max_length=64, null=True, blank=True)
+    device = models.CharField(max_length=64, null=True, blank=True)
+    count = models.IntegerField(default=0)
+    date_created = models.DateTimeField(default=datetime.now)

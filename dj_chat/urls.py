@@ -35,6 +35,7 @@ router.register(r'register', viewset=chat_views.RegisterViewsets, basename='regi
 router.register(r'talk_log', viewset=chat_views.TalkLogViewsets, basename='talk_log')
 router.register(r'user_info', viewset=chat_views.UserInfoViewsets, basename='user_info')
 router.register(r'get_statistic', viewset=chat_views.StatisticViewsets, basename='get_statistic')
+router.register(r'history', viewset=chat_views.HistoryViewsets, basename='history')
 
 urlpatterns = [
     re_path(r'^admin/', admin.site.urls),

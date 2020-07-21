@@ -289,3 +289,13 @@ function investFriendsToRoom(channel_no, my_friends_list) {
         }
     });
 }
+
+//记录访问
+function getHistory() {
+    $.ajax({
+        url:'/api/history/',
+        type:'get',
+        success:function () {
+        }
+    })
+}

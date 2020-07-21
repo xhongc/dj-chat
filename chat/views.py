@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.db.models import Q
+from django.db.models import Q, F, Sum
 from django.http import JsonResponse
 from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
@@ -14,7 +14,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from chat.filters import ChatLogFilter, PersonalChatLogFilter, ChatRoomFilter, UserProfileFilter
-from chat.models import ChatRoom, ChatLog, UserProfile, TalkLog
+from chat.models import ChatRoom, ChatLog, UserProfile, TalkLog, History
 from chat.serializers import FriendsSerializers, ListFriendsSerializers, ChatRoomSerializers, \
     ListChatLogSerializers, ListChatRoomSerializers, UpdateChatRoomSerializers, FriendsSerializers2, \
     RegisterSerializers, ListTalkLogSerializers, PostTalkLogSerializers, UserInfoSerializer
@@ -37,6 +37,7 @@ class StatisticViewsets(mixins.ListModelMixin, GenericViewSet):
         total_user = User.objects.count()
         total_room = ChatRoom.objects.count()
         total_online = len(ChatCache().get_cache('__online') or {})
+        total_history = History.objects.aggregate(total=Sum('count'))['total']
         print(ChatCache().get_cache('__online'))
         start = datetime(2020, 1, 1)
         end = datetime(2020, 8, 1)
@@ -88,7 +89,7 @@ class StatisticViewsets(mixins.ListModelMixin, GenericViewSet):
         ]
         return JsonResponse(
             {'area': res, 'bar': chat_res, 'donut': donut, 'total_user': total_user, 'total_room': total_room,
-             'total_online': total_online}, status=200)
+             'total_online': total_online, 'total_history': total_history}, status=200)
 
 
 class RegisterViewsets(mixins.CreateModelMixin, GenericViewSet):
@@ -283,3 +284,15 @@ class TalkLogViewsets(mixins.ListModelMixin, mixins.CreateModelMixin, GenericVie
             return ListTalkLogSerializers
         else:
             return PostTalkLogSerializers
+
+
+class HistoryViewsets(mixins.ListModelMixin, GenericViewSet):
+    def list(self, request, *args, **kwargs):
+        if request.META.get('HTTP_X_FORWARDED_FOR', None):
+            ip = request.META['HTTP_X_FORWARDED_FOR']
+        else:
+            ip = request.META['REMOTE_ADDR']
+        his, _ = History.objects.update_or_create(ip=ip)
+        his.count = his.count + 1
+        his.save()
+        return JsonResponse({}, status=200)

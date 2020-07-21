@@ -757,7 +757,7 @@
             <li class="list-group-item">
               <div>
                 <figure class="avatar">
-                  <img src="%s" class="rounded-circle">
+                  <img src="#" class="rounded-circle">
                 </figure>
               </div>
               <div class="users-list-body">
@@ -838,7 +838,7 @@
             <!-- small box -->
             <div class="small-box bg-red">
               <div class="inner">
-                <h3>-</h3>
+                <h3 id="total_history">-</h3>
 
                 <p>站点访问人次</p>
               </div>
@@ -1623,6 +1623,7 @@
                   $('#total_user').html(data.total_user)
                   $('#total_room').html(data.total_room)
                   $('#total_online').html(data.total_online)
+                  $('#total_history').html(data.total_history)
                   showArea('revenue-chart', data.area)
                   showLine('line-chart', data.area)
                   showBar('bar-chart',data.bar)
@@ -1685,6 +1686,7 @@
       }
 
       $(document).ready(function () {
+          getHistory();
           getChatRoome();
           var uid = "{{ user.profile.unicode_id }}";
           var ntfSocket = notificationConnect(uid);
