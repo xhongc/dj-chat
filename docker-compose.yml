@@ -7,28 +7,38 @@ services:
   dj-chat.wsgi:
     build: .
     image: "dj-chat:latest"
-    command: bash -c "gunicorn -w 1 -k gevent -b 127.0.0.1:8000 dj_chat.wsgi:application"
+    container_name: "dj-chat-g-unicorn"
+    command: bash -c "gunicorn -w 1 -k gevent -b 0.0.0.0:8000 dj_chat.wsgi:application"
     ports:
       - "8000:8000"
     depends_on:
       - redis
     links:
       - redis
+    expose:
+      - "8000"
   dj-chat.asgi:
     image: "dj-chat:latest"
-    command: bash -c "daphne -b 127.0.0.1 -p 8001 dj_chat.asgi:application"
+    container_name: "dj-chat-daphne"
+    command: bash -c "daphne -b 0.0.0.0 -p 8001 dj_chat.asgi:application"
     ports:
       - "8001:8001"
     depends_on:
       - redis
     links:
       - redis
+    expose:
+      - "8001"
   nginx:
     build:
       context: .
-      dockerfile: nginx/Dockerfile
+      dockerfile: ./nginx/Dockerfile
     image: "nginx-chat"
     container_name: "nginx-chat"
     depends_on:
       - dj-chat.asgi
       - dj-chat.wsgi
+    volumes:
+      - ./static:/home/ubuntu/static
+    ports:
+    - "80:80"

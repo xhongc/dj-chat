@@ -65,7 +65,7 @@ CORS_ALLOW_HEADERS = (
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/0",
+        "LOCATION": "redis://redis:6379/0",
         'TIMEOUT': 1800,  # 缓存超时时间（默认300，None表示永不过期，0表示立即过期）
         "OPTIONS": {
             "MAX_ENTRIES": 300,  # 最大缓存个数（默认300）
@@ -183,7 +183,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+            "hosts": [('redis', 6379)],
         },
     },
 }
