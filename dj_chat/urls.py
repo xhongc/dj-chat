@@ -45,6 +45,7 @@ urlpatterns = [
     path('', include('chat.urls'), name='chat-url'),
     path('login/', TemplateView.as_view(template_name='login.html'), name='login'),
     path('register/', TemplateView.as_view(template_name='register.html'), name='register'),
+    path('robots.txt', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
 ]
 
 if settings.DEBUG:
