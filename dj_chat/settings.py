@@ -226,3 +226,5 @@ LOGGING = {
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
+MOREN_TOUXIANG = 'https://s1.ax1x.com/2020/07/23/ULgnPg.png'
+QUNZU_TOUXIANG = 'https://s1.ax1x.com/2020/07/23/ULRdD1.png'

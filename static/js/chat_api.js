@@ -126,7 +126,7 @@ function getAllChatRoome() {
                 '                <img src="%s" class="rounded-circle">\n' +
                 '              </figure>\n' +
                 '            </div>\n' +
-                '            <div class="users-list-body" style="float:left">\n' +
+                '            <div class="ml-lg-3" style="float:left">\n' +
                 '              <h5>%s</h5>\n' +
                 '              <p>%s</p>\n' +
                 '            </div>\n' +
@@ -140,7 +140,7 @@ function getAllChatRoome() {
         })
     })
 }
-
+//搜索添加好友
 function getFriendList() {
     $('#id_friend_list').empty();
     $.get('/api/user_profile/').success(function (data) {

@@ -4,13 +4,14 @@ from itertools import chain
 from django.contrib.auth.models import User
 from django.db import models
 
-
 # Create your models here.
+from dj_chat.settings import MOREN_TOUXIANG, QUNZU_TOUXIANG
+
 
 class ChatRoom(models.Model):
     room_name = models.CharField(max_length=64, null=False, blank=False, help_text='房间名称')
     room_description = models.CharField(max_length=255, default='这里还没什么描述', help_text='房间描述')
-    img_path = models.CharField(max_length=255, default='/', help_text='头像地址')
+    img_path = models.CharField(max_length=255, default=QUNZU_TOUXIANG, help_text='头像地址')
     channel_no = models.CharField(max_length=8, null=False, blank=False, unique=True, help_text='房间频道号')
     admins = models.ManyToManyField('UserProfile', related_name='chat_admins', help_text='房间管理')
     members = models.ManyToManyField('UserProfile', related_name='chat_member', help_text='房间成员')
@@ -52,7 +53,7 @@ class UserProfile(models.Model):
     signature = models.CharField(max_length=255, null=True, blank=True, help_text='个性签名')
     friends = models.ManyToManyField('self', related_name='my_friends', blank=True)
     unicode_id = models.IntegerField(default=-1, blank=False, null=False, unique=True, help_text='唯一ID')
-    img_path = models.CharField(max_length=255, default='/', help_text='头像地址')
+    img_path = models.CharField(max_length=255, default=MOREN_TOUXIANG, help_text='头像地址')
     city = models.CharField(max_length=64, help_text='城市', null=True, blank=True)
     qq_number = models.CharField(max_length=16, help_text='qq号码', null=True, blank=True)
     is_use_qq_img = models.BooleanField(default=False, help_text='是否使用QQ头像')
@@ -66,6 +67,14 @@ class UserProfile(models.Model):
     class Meta:
         verbose_name = "用户信息"
         verbose_name_plural = verbose_name
+
+    def get_img_path(self):
+        img_path = self.img_path
+        if self.is_use_qq_img and self.qq_number:
+            img_path = 'http://q1.qlogo.cn/g?b=qq&nk=%s&s=100' % (self.qq_number)
+        elif img_path == '/':
+            img_path = MOREN_TOUXIANG
+        return img_path
 
     def get_my_chat_room(self):
         """

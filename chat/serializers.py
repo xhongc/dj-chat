@@ -1,5 +1,5 @@
-import random
 import json
+import random
 
 from django.contrib.auth.models import User
 from rest_framework import serializers
@@ -63,10 +63,8 @@ class FriendsSerializers2(serializers.ModelSerializer):
     img_path = serializers.SerializerMethodField()
 
     def get_img_path(self, obj):
-        img_path = obj.img_path
-        if obj.is_use_qq_img and obj.qq_number:
-            img_path = 'http://q1.qlogo.cn/g?b=qq&nk=%s&s=100' % (obj.qq_number)
-        return img_path
+        print(obj.get_img_path())
+        return obj.get_img_path()
 
     class Meta:
         model = UserProfile
@@ -79,10 +77,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
     is_use_qq_img = serializers.BooleanField()
 
     def get_img_path(self, obj):
-        img_path = obj.img_path
-        if obj.is_use_qq_img and obj.qq_number:
-            img_path = 'http://q1.qlogo.cn/g?b=qq&nk=%s&s=100' % (obj.qq_number)
-        return img_path
+        return obj.get_img_path()
 
     def validate_is_use_qq_img(self, attrs):
         return bool(attrs)
