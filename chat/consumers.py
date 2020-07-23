@@ -87,7 +87,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     'username': self.scope.get('user').username
                 }
             )
-            if message and chat_type == 'chat_message':
+            if message:
                 ChatLog.objects.create(chat_datetime=robot_send_time,
                                        content=message,
                                        msg_type=msg_type,
