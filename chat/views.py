@@ -1,5 +1,8 @@
+import re
+import time
 from datetime import datetime, timedelta
 
+import requests
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q, F, Sum
@@ -314,10 +317,12 @@ class TalkLogViewsets(mixins.ListModelMixin, mixins.CreateModelMixin, GenericVie
 class HistoryViewsets(mixins.ListModelMixin, GenericViewSet):
     def list(self, request, *args, **kwargs):
         if request.META.get('HTTP_X_FORWARDED_FOR', None):
-            ip = request.META['HTTP_X_FORWARDED_FOR']
+            real_ip = request.META['HTTP_X_FORWARDED_FOR']
+            regip = real_ip.split(",")[0]
         else:
-            ip = request.META['REMOTE_ADDR']
-        his, _ = History.objects.update_or_create(ip=ip)
+            regip = request.META.get('REMOTE_ADDR', '127.0.0.2')
+
+        his, _ = History.objects.update_or_create(ip=regip)
         his.count = his.count + 1
         his.save()
         return JsonResponse({}, status=200)
