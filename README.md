@@ -58,4 +58,12 @@ server {
 }
 
 ```
+## Docker 部署
+```shell
+docker-compose build
+docker-compose up -d
+```
+详细流程跳转到[Docker部署应用 Django+daphne+Gunicorn+Nginx+Redis](https://xhongc.github.io/docker-django-daphne-gunicorn-nginx.html)
 ## 后续开发计划
+...
+
