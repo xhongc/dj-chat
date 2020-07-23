@@ -205,7 +205,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         # Leave room group
-        ChatCache().remove('__online', self.uid)
+        # ChatCache().remove('__online', self.uid)
         await self.channel_layer.group_discard(
             self.uid_group,
             self.channel_name
