@@ -318,7 +318,7 @@ class HistoryViewsets(mixins.ListModelMixin, GenericViewSet):
     def list(self, request, *args, **kwargs):
         if request.META.get('HTTP_X_FORWARDED_FOR', None):
             real_ip = request.META['HTTP_X_FORWARDED_FOR']
-            regip = real_ip.split(",")[0]
+            regip = real_ip.split(",")[-1]
         else:
             regip = request.META.get('REMOTE_ADDR', '127.0.0.2')
 
