@@ -3,7 +3,7 @@
 <br>
 django-channels + bootstrap + jquery 
 
-项目地址参考：http://106.55.162.109/ 账号：admin 密码：xhongc
+项目地址参考：http://chat.xuebai.wang/ 账号：admin 密码：xhongc
 ## 界面截图
 ![](https://s1.ax1x.com/2020/07/11/Ul8LZ9.png)
 ![](https://s1.ax1x.com/2020/07/11/UlYYKU.png)
