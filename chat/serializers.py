@@ -63,7 +63,6 @@ class FriendsSerializers2(serializers.ModelSerializer):
     img_path = serializers.SerializerMethodField()
 
     def get_img_path(self, obj):
-        print(obj.get_img_path())
         return obj.get_img_path()
 
     class Meta:

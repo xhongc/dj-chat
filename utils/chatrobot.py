@@ -8,8 +8,22 @@ BTC_HTML = """<iframe   src="https://cn.widgets.investing.com/top-cryptocurrenci
 GP_HTML = """<iframe   src="https://cn.widgets.investing.com/live-indices?theme=darkTheme&pairs=959206,179,166,178,27,170,1118193" width="1000px" height="460px"   frameborder="1/0"  name="iframe名称"     scrolling="yes/no/auto">   
 </iframe>"""
 HELP_HTML = """回复命令<br>1. /btc  可查看比特币市值<br>2. /gp 可查股票指数<br>3./ghs 神秘代码"""
+ROBOTS_DICT = {}
 
 
+class RobotManager:
+    def __init__(self):
+        self.functions = ROBOTS_DICT
+
+    def register(self, func):
+        self.functions[func.__name__] = func
+        self.functions['/' + func.__name__] = func
+
+
+rt = RobotManager()
+
+
+@rt.register
 def ghs():
     headers = {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36'
@@ -23,20 +37,26 @@ def ghs():
     return '呵呵，你说什么我听不懂'
 
 
+@rt.register
+def btc():
+    return BTC_HTML
+
+
+@rt.register
+def gp():
+    return GP_HTML
+
+
+@rt.register
+def help():
+    return HELP_HTML
+
+
 def talk_with_me(content):
-    if content.startswith('/'):
-        return i_talk(content), 'chat_html'
+    if content in ROBOTS_DICT:
+        return ROBOTS_DICT[content](), 'chat_html'
     else:
         return sizhi(content), 'chat_message'
-
-
-def i_talk(content):
-    content = content[1:].strip()
-    reply = REPLY.get(content, '未找到该命令') or '未找到该命令'
-    if isinstance(reply, str):
-        return reply
-    elif callable(reply):
-        return reply()
 
 
 def sizhi(content):
@@ -58,11 +78,5 @@ def sizhi(content):
         return '咱也不知道'
 
 
-REPLY = {
-    'btc': BTC_HTML,
-    'help': HELP_HTML,
-    'gp': GP_HTML,
-    'ghs': ghs,
-}
 if __name__ == '__main__':
-    print(i_talk('/btc'))
+    print(ROBOTS_DICT)
