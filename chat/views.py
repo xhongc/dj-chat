@@ -1,3 +1,4 @@
+import mimetypes
 import re
 import time
 from datetime import datetime, timedelta
@@ -326,3 +327,137 @@ class HistoryViewsets(mixins.ListModelMixin, GenericViewSet):
         his.count = his.count + 1
         his.save()
         return JsonResponse({}, status=200)
+
+
+import queue
+import threading
+import cv2 as cv
+import subprocess as sp
+
+
+class Live(object):
+    def __init__(self):
+        self.frame_queue = queue.Queue()
+        self.command = ""
+        # 自行设置
+        self.rtmpUrl = "http://localhost:8001/live/home"
+        self.camera_path = 0
+
+    def read_frame(self):
+        print("开启推流")
+        cap = cv.VideoCapture(0)
+        print('asda')
+        # Get video information
+        fps = int(cap.get(cv.CAP_PROP_FPS))
+        width = int(cap.get(cv.CAP_PROP_FRAME_WIDTH))
+        height = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
+
+        # ffmpeg command
+        self.command = ['ffmpeg',
+                        '-y',
+                        '-f', 'rawvideo',
+                        '-vcodec', 'rawvideo',
+                        '-pix_fmt', 'bgr24',
+                        '-s', "{}x{}".format(width, height),
+                        '-r', str(fps),
+                        '-i', '-',
+                        '-c:v', 'libx264',
+                        '-pix_fmt', 'yuv420p',
+                        '-preset', 'ultrafast',
+                        '-f', 'flv',
+                        self.rtmpUrl]
+
+        # read webcamera
+        while (cap.isOpened()):
+            ret, frame = cap.read()
+
+            if not ret:
+                print("Opening camera is failed")
+                # 说实话这里的break应该替换为：
+                # cap = cv.VideoCapture(self.camera_path)
+                # 因为我这俩天遇到的项目里出现断流的毛病
+                # 特别是拉取rtmp流的时候！！！！
+                break
+
+            # put frame into queue
+            self.frame_queue.put(frame)
+
+    def push_frame(self):
+        # 防止多线程时 command 未被设置
+        while True:
+            if len(self.command) > 0:
+                # 管道配置
+                p = sp.Popen(self.command, stdin=sp.PIPE)
+                break
+
+        while True:
+            if self.frame_queue.empty() != True:
+                frame = self.frame_queue.get()
+                # process frame
+                # 你处理图片的代码
+                # write to pipe
+                p.stdin.write(frame.tostring())
+
+    def run(self):
+        threads = [
+            threading.Thread(target=Live.read_frame, args=(self,)),
+            threading.Thread(target=Live.push_frame, args=(self,))
+        ]
+        [thread.setDaemon(True) for thread in threads]
+        [thread.start() for thread in threads]
+
+
+def play_video(request):
+    # 推流
+    live = Live()
+    live.run()
+    return render(request, 'chat/video.html', {'error_message': "ii"})
+
+
+import re
+import os
+from wsgiref.util import FileWrapper
+from django.http import StreamingHttpResponse
+
+
+def file_iterator(file_name, chunk_size=8192, offset=0, length=None):
+    with open(file_name, "rb") as f:
+        f.seek(offset, os.SEEK_SET)
+        remaining = length
+        while True:
+            bytes_length = chunk_size if remaining is None else min(remaining, chunk_size)
+            data = f.read(bytes_length)
+            if not data:
+                break
+            if remaining:
+                remaining -= len(data)
+            yield data
+
+
+def stream_video(request):
+    """将视频文件以流媒体的方式响应"""
+    # range_header = request.META.get('HTTP_RANGE', '').strip()
+    range_header = 'bytes=32768-2821080/2821081'.strip()
+    range_re = re.compile(r'bytes\s*=\s*(\d+)\s*-\s*(\d*)', re.I)
+    range_match = range_re.match(range_header)
+    path = r'C:\Users\xhongc\Desktop\fly.mp4'
+    size = os.path.getsize(path)
+    content_type, encoding = mimetypes.guess_type(path)
+    content_type = content_type or 'application/octet-stream'
+    if range_match:
+        first_byte, last_byte = range_match.groups()
+        first_byte = int(first_byte) if first_byte else 0
+        last_byte = first_byte + 1024 * 1024 * 8  # 8M 每片,响应体最大体积
+        if last_byte >= size:
+            last_byte = size - 1
+        length = last_byte - first_byte + 1
+        resp = StreamingHttpResponse(file_iterator(path, offset=first_byte, length=length), status=206,
+                                     content_type=content_type)
+        resp['Content-Length'] = str(length)
+        resp['Content-Range'] = 'bytes %s-%s/%s' % (first_byte, last_byte, size)
+    else:
+        # 不是以视频流方式的获取时，以生成器方式返回整个文件，节省内存
+        resp = StreamingHttpResponse(FileWrapper(open(path, 'rb')), content_type=content_type)
+        resp['Content-Length'] = str(size)
+    resp['Accept-Ranges'] = 'bytes'
+    return resp
