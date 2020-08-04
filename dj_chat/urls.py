@@ -38,7 +38,8 @@ router.register(r'get_statistic', viewset=chat_views.StatisticViewsets, basename
 router.register(r'history', viewset=chat_views.HistoryViewsets, basename='history')
 
 urlpatterns = [
-    re_path(r'^admin/', admin.site.urls),
+    re_path(r'^chao/', admin.site.urls),
+    re_path(r'^admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
     re_path('^api/', include(router.urls)),
     re_path(r'^docs/', include_docs_urls(title='API & Dog', description='API文档', public=True)),
     re_path(r'^api-token-auth/', LoginObtainJSONWebToken.as_view()),

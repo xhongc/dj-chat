@@ -99,7 +99,8 @@ INSTALLED_APPS = [
     'channels',
     'chat',
     'django_filters',
-    'rest_framework'
+    'rest_framework',
+    'admin_honeypot',
 ]
 
 MIDDLEWARE = [
