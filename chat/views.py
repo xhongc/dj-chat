@@ -340,7 +340,7 @@ class Live(object):
         self.frame_queue = queue.Queue()
         self.command = ""
         # 自行设置
-        self.rtmpUrl = "http://localhost:8001/live/home"
+        self.rtmpUrl = "rtmp://127.0.0.1:9000/myapp/home"
         self.camera_path = 0
 
     def read_frame(self):
@@ -353,7 +353,7 @@ class Live(object):
         height = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
 
         # ffmpeg command
-        self.command = ['ffmpeg',
+        self.command = ['/Users/xiehongchao/PythonProject/ffmpeg-20200729-cbb6ba2-macos64-static/bin/ffmpeg',
                         '-y',
                         '-f', 'rawvideo',
                         '-vcodec', 'rawvideo',
@@ -396,7 +396,10 @@ class Live(object):
                 # process frame
                 # 你处理图片的代码
                 # write to pipe
-                p.stdin.write(frame.tostring())
+                try:
+                    p.stdin.write(frame.tostring())
+                except:
+                    pass
 
     def run(self):
         threads = [

@@ -140,6 +140,7 @@ function getAllChatRoome() {
         })
     })
 }
+
 //搜索添加好友
 function getFriendList() {
     $('#id_friend_list').empty();
@@ -148,22 +149,23 @@ function getFriendList() {
             $('#id_friend_list').append('<p>暂无好友</p>')
         }
         $.each(data, function (k, v) {
-            var html = '<li class="list-group-item" channel_no="%s" id="%s">\n' +
-                '                  <div style="float:left">\n' +
-                '                    <figure class="avatar">\n' +
-                '                      <img src="%s" class="rounded-circle">\n' +
-                '                    </figure>\n' +
-                '                  </div>\n' +
-                '                  <div class="ml-lg-3" style="float:left">\n' +
-                '                    <h5>%s</h5>\n' +
-                '                    <p>%s</p>\n' +
-                '                  </div>\n' +
-                '                  <div class="users-list-action" style="float:right">\n' +
-                '                    <button type="button" class="btn btn-success btn-pulse btn-floating" onClick="postUidFriend(%s)">\n' +
-                '                      <i class="ti-plus"></i></button>\n' +
-                '                  </div>\n' +
-                '                </li>';
-            html = html.format(v.unicode_id, v.unicode_id, v.img_path, v.nick_name, v.signature, v.unicode_id);
+            var html = `
+            <li class="list-group-item" channel_no="${v.unicode_id}" id="${v.unicode_id}">
+              <div style="float:left">
+                <figure class="avatar">
+                  <img src="${v.img_path}" class="rounded-circle">
+                </figure>
+              </div>
+              <div class="ml-lg-3" style="float:left">
+                <h5>${v.nick_name}</h5>
+                <p>${v.signature}</p>
+              </div>
+              <div class="users-list-action" style="float:right">
+                <button type="button" class="btn btn-success btn-pulse btn-floating" onClick="postUidFriend(${v.unicode_id})">
+                  <i class="ti-plus"></i></button>
+              </div>
+            </li>
+            `
             $('#id_friend_list').append(html)
         })
     })
@@ -293,9 +295,9 @@ function investFriendsToRoom(channel_no, my_friends_list) {
 //记录访问
 function getHistory() {
     $.ajax({
-        url:'/api/history/',
-        type:'get',
-        success:function () {
+        url: '/api/history/',
+        type: 'get',
+        success: function () {
         }
     })
 }

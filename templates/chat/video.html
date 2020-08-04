@@ -1,38 +1,117 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en" dir="ltr">#}
+{#  <head>#}
+{#    <meta charset="utf-8">#}
+{#    <title>video.js</title>#}
+{#    <link href="https://unpkg.com/video.js@6.11.0/dist/video-js.min.css" rel="stylesheet">#}
+{#    <script src="https://unpkg.com/video.js@6.11.0/dist/video.min.js"></script>#}
+{#    <script src="https://unpkg.com/videojs-flash/dist/videojs-flash.js"></script>#}
+{#    <script src="https://unpkg.com/videojs-contrib-hls/dist/videojs-contrib-hls.js"></script>#}
+{#  </head>#}
+{#  <body>#}
+{#    <video id="my-player" class="video-js" controls>#}
+{#        <source src="rtmp://127.0.0.1:1935/abcs/home" type="rtmp/flv">#}
+{#        <p class="vjs-no-js">#}
+{#          not support#}
+{#        </p>#}
+{#    </video>#}
+{#    <script type="text/javascript">#}
+{#      var player = videojs('my-player',{#}
+{#        width:400,#}
+{#        heigh:200#}
+{#      });#}
+{#    </script>#}
+{#  </body>#}
+{#</html>#}
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset=“ UTF-8 ” >
-    <title >使用video.js实现rtmp流的直播播放 </title >
-    {% load static %}
-    <!--引入播放器样式-->
-     <link href ="http://vjs.zencdn.net/5.19/video-js.min.css" rel="stylesheet">
-    <！ - 引入播放器js  - >
-    <script src ="http://vjs.zencdn.net/5.19/video.min.js"></script >
-    <script src ="https://cdn.jsdelivr.net/npm/videojs-flash@2/dist/videojs-flash.min.js"></script >
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <title>flv.js demo</title>
+    <style>
+        .mainContainer {
+            display: block;
+            width: 1024px;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
-</head >
+        .urlInput {
+            display: block;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 8px;
+            margin-bottom: 8px;
+        }
+
+        .centeredVideo {
+            display: block;
+            width: 100%;
+            height: 576px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: auto;
+        }
+
+        .controls {
+            display: block;
+            width: 100%;
+            text-align: left;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
 <body>
-<!--vjs-big-play-centered 播放按钮居中-->
-<!--poster默认的显示界面，就是还没点播放，给你显示的界面-->
-<!--controls 规定浏览器应该为视频提供播放控件-->
-<!--preload="auto" 是否提前加载-->
-<!--autoplay 自动播放-->
-<!--loop=true 自动循环-->
-<!--data-setup='{"example_option":true}' 可以把一些属性写到这个里面来，如data-setup={"autoplay":true}-->
-<video id="my-player" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto" autoplay="autoplay"
-       poster="//vjs.zencdn.net/v/oceans.png" width="500" height="400" data-setup='{}'>
-    <!--src: 规定媒体文件的 URL  type:规定媒体资源的类型-->
-    <source src='rtmp://localhost:1935/live/home' type='rtmp/flv'/>
-</video>
+    <div class="mainContainer">
+        <video id="videoElement" class="centeredVideo" controls autoplay width="1024" height="576">Your browser is too old which doesn't support HTML5 video.</video>
+    </div>
+    <br>
+    <div class="controls">
+        <!--<button onclick="flv_load()">加载</button>-->
+        <button onclick="flv_start()">开始</button>
+        <button onclick="flv_pause()">暂停</button>
+        <button onclick="flv_destroy()">停止</button>
+        <input style="width:100px" type="text" name="seekpoint" />
+        <button onclick="flv_seekto()">跳转</button>
+    </div>
+    <script src="https://cdn.bootcdn.net/ajax/libs/flv.js/1.5.0/flv.min.js"></script>
+    <script>
+        var player = document.getElementById('videoElement');
+        if (flvjs.isSupported()) {
+            var flvPlayer = flvjs.createPlayer({
+                type: 'flv',
+                "isLive": true,//<====加个这个
+                url: 'http://127.0.0.1:8080/live?port=9000&app=myapp&stream=home',//<==自行修改
 
-<script type="text/javascript">
-// 设置flash路径,用于在videojs发现浏览器不支持HTML5播放器的时候自动唤起flash播放器
-    videojs.options.flash.swf = 'https://cdn.bootcss.com/videojs-swf/5.4.1/video-js.swf';
-    var player = videojs('my-player'); //my-player为页面video元素的id
-    player.play(); //播放
-//    1. 播放   player.play()
-//    2. 停止   player.pause()
-//    3. 暂停   player.pause()
-</script>
+            });
+            flvPlayer.attachMediaElement(videoElement);
+            flvPlayer.load(); //加载
+            flv_start();
+        }
+
+        function flv_start() {
+            player.play();
+        }
+
+        function flv_pause() {
+            player.pause();
+        }
+
+        function flv_destroy() {
+            player.pause();
+            player.unload();
+            player.detachMediaElement();
+            player.destroy();
+            player = null;
+        }
+
+        function flv_seekto() {
+            player.currentTime = parseFloat(document.getElementsByName('seekpoint')[0].value);
+        }
+    </script>
 </body>
+
 </html>
