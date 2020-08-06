@@ -1,0 +1,2 @@
+class MusicRobot():
+    pass

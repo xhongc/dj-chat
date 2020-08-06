@@ -66,5 +66,7 @@ docker-compose up -d
 ```
 详细流程跳转到[Docker部署应用 Django+daphne+Gunicorn+Nginx+Redis](https://xhongc.github.io/docker-django-daphne-gunicorn-nginx.html)
 ## 后续开发计划
-...
+- [ ] 开发音乐机器人（多人同步听歌）
+- [ ] 开发视频机器人（多人视频）
+- [ ] react 重构前端
 
