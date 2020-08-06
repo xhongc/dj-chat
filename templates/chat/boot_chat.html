@@ -3,6 +3,8 @@
 {% block css %}
   <link rel="stylesheet" href="{% static '/css/soho.min.css' %}">
   <link rel="stylesheet" href="{% static 'data-show/css/morris.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.js" integrity="sha512-RWosNnDNw8FxHibJqdFRySIswOUgYhFxnmYO3fp+BgCU7gfo4z0oS7mYFBvaa8qu+axY39BmQOrhW3Tp70XbaQ==" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.css" integrity="sha512-CIYsJUa3pr1eoXlZFroEI0mq0UIMUqNouNinjpCkSWo3Bx5NRlQ0OuC6DtEB/bDqUWnzXc1gs2X/g52l36N5iw==" crossorigin="anonymous" />
 
   <style>
     .message-info {
@@ -1236,7 +1238,6 @@
     {#          </div>#}
     {#      </li>#}
   </div>
-
   </body>
 {% endblock %}
 {% block script %}
@@ -1693,7 +1694,6 @@
           showData();
           $('.layout .content .chat .chat-body').niceScroll({cursorborderradius: "5px",});
           $(".talks").niceScroll({cursorcolor: "#e6e9e7"});
-
       });
 
   </script>

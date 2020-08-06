@@ -245,9 +245,10 @@ class NetEaseServer(object):
 
 
 def start():
-    ne = NetEase()
-    # ne.songs_search(keyword='霓虹甜心', limit=1)
-    print(ne.songs_detail('1452182536').get('songs', [{}])[0].get('id', None))
+    # 1452182536
+    nes = NetEase()
+    a = nes.songs_lyric('1452182536')
+    print(a)
 
 
 if __name__ == '__main__':
