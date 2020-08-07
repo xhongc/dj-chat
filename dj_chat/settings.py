@@ -64,20 +64,39 @@ CORS_ALLOW_HEADERS = (
 
 REDIS_SERVER = os.environ.get('REDIS_SERVER', '127.0.0.1')
 # REDIS 缓存
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": "redis://%s:6379/0" % REDIS_SERVER,
+#         'TIMEOUT': 1800,  # 缓存超时时间（默认300，None表示永不过期，0表示立即过期）
+#         "OPTIONS": {
+#             "MAX_ENTRIES": 300,  # 最大缓存个数（默认300）
+#             "CULL_FREQUENCY": 3,  # 缓存到达最大个数之后，剔除缓存个数的比例，即：1/CULL_FREQUENCY（默认3）
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient",  # redis客户端
+#             "CONNECTION_POOL_KWARGS": {"max_connections": 100},  # redis最大连接池配置
+#             "PASSWORD": "",  # redis密码
+#         },
+#         'KEY_PREFIX': '',  # 缓存key的前缀（默认空）
+#         'VERSION': 2,  # 缓存key的版本（默认1）
+#     },
+# }
+# django-redis-cache
 CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://%s:6379/0" % REDIS_SERVER,
-        'TIMEOUT': 1800,  # 缓存超时时间（默认300，None表示永不过期，0表示立即过期）
-        "OPTIONS": {
-            "MAX_ENTRIES": 300,  # 最大缓存个数（默认300）
-            "CULL_FREQUENCY": 3,  # 缓存到达最大个数之后，剔除缓存个数的比例，即：1/CULL_FREQUENCY（默认3）
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",  # redis客户端
-            "CONNECTION_POOL_KWARGS": {"max_connections": 100},  # redis最大连接池配置
-            "PASSWORD": "",  # redis密码
+    'default': {
+        'BACKEND': 'redis_cache.RedisCache',
+        'LOCATION': "redis://%s:6379" % REDIS_SERVER,
+        'OPTIONS': {
+            'DB': 1,
+            'PASSWORD': '',
+            'PARSER_CLASS': 'redis.connection.HiredisParser',
+            'CONNECTION_POOL_CLASS': 'redis.BlockingConnectionPool',
+            'CONNECTION_POOL_CLASS_KWARGS': {
+                'max_connections': 50,
+                'timeout': 20,
+            },
+            'MAX_CONNECTIONS': 1000,
+            'PICKLE_VERSION': -1,
         },
-        'KEY_PREFIX': '',  # 缓存key的前缀（默认空）
-        'VERSION': 2,  # 缓存key的版本（默认1）
     },
 }
 # 本地内存缓存

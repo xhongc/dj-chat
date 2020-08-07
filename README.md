@@ -67,6 +67,14 @@ docker-compose up -d
 详细流程跳转到[Docker部署应用 Django+daphne+Gunicorn+Nginx+Redis](https://xhongc.github.io/docker-django-daphne-gunicorn-nginx.html)
 ## 后续开发计划
 - [ ] 开发音乐机器人（多人同步听歌）
+1. 储存歌曲信息到redis
+2. 有人进来初始化歌单
+3. 禁止调节歌曲进度，和切歌
+4. 有人进来websocket询问其他人进度，初始化歌单
+5. 错误是重新获取一次链接，否则抛弃
+6. 重复歌曲不加入，点歌命令。切歌命令
+7. 没歌曲提示 和帮助提示
+8. 玩家在线离线头像变灰
 - [ ] 开发视频机器人（多人视频）
 - [ ] react 重构前端
 

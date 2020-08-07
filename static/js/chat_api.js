@@ -201,7 +201,6 @@ function postFriend() {
 }
 
 function getChatRoomInfo(channel_no) {
-    MusicPlayerInit('#music_list')
     $.get('/api/chat_room/', {'channel_no': channel_no}).success(function (data) {
         $('.id_room_name').html(data[0].room_name);
         $('.id_room_description').html(data[0].room_description);

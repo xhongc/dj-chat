@@ -1,1701 +1,1725 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 {% block css %}
-  <link rel="stylesheet" href="{% static '/css/soho.min.css' %}">
-  <link rel="stylesheet" href="{% static 'data-show/css/morris.css' %}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.css" integrity="sha512-CIYsJUa3pr1eoXlZFroEI0mq0UIMUqNouNinjpCkSWo3Bx5NRlQ0OuC6DtEB/bDqUWnzXc1gs2X/g52l36N5iw==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="{% static '/css/soho.min.css' %}">
+    <link rel="stylesheet" href="{% static 'data-show/css/morris.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.css"
+          integrity="sha512-CIYsJUa3pr1eoXlZFroEI0mq0UIMUqNouNinjpCkSWo3Bx5NRlQ0OuC6DtEB/bDqUWnzXc1gs2X/g52l36N5iw=="
+          crossorigin="anonymous"/>
 
-  <style>
-    .message-info {
-      width: 100%;
-      text-align: center;
-    }
+    <style>
+        .message-info {
+            width: 100%;
+            text-align: center;
+        }
 
-    .main {
-      text-align: center; /*让div内部文字居中*/
-      background-color: #fff;
-      border-radius: 20px;
-      width: 600px;
-      height: 350px;
-      margin: auto;
-      position: absolute;
-      top: 50%;
-      left: 0;
-      right: 0;
-      bottom: 0;
-    }
+        .main {
+            text-align: center; /*让div内部文字居中*/
+            background-color: #fff;
+            border-radius: 20px;
+            width: 600px;
+            height: 350px;
+            margin: auto;
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
 
-    .chat-bg {
-      background-color: #86bfa50d;
-    }
+        .chat-bg {
+            background-color: #86bfa50d;
+        }
 
-    .modal-backdrop {
-      opacity: 0.5 !important;
-    }
+        .modal-backdrop {
+            opacity: 0.5 !important;
+        }
 
-    .badge:empty {
-      display: none;
-    }
+        .badge:empty {
+            display: none;
+        }
 
-    .footer {
-      height: 100px;
-      width: 100%;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-    }
-  </style>
+        .footer {
+            height: 100px;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+    </style>
 {% endblock %}
 {% block body %}
 
-  <body style="" class="modal-open">
+    <body style="" class="modal-open">
 
 
-  <div class="modal fade" id="disconnected" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-       aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
-      <div class="modal-content">
-        <div class="modal-body">
-          <div class="connection-error">
-            <h4 class="text-center">Application disconnected...</h4>
-            <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
-                 xmlns:xlink="http://www.w3.org/1999/xlink"
-                 x="0px" y="0px" width="862.899px" height="862.9px" viewBox="0 0 862.899 862.9"
-                 style="enable-background:new 0 0 862.899 862.9;" xml:space="preserve">
+    <div class="modal fade" id="disconnected" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="connection-error">
+                        <h4 class="text-center">Application disconnected...</h4>
+                        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"
+                             x="0px" y="0px" width="862.899px" height="862.9px" viewBox="0 0 862.899 862.9"
+                             style="enable-background:new 0 0 862.899 862.9;" xml:space="preserve">
 <g>
 <g>
 <circle cx="385.6" cy="656.1" r="79.8"></circle>
-  <path d="M561.7,401c-15.801-10.3-32.601-19.2-50.2-26.6c-39.9-16.9-82.3-25.5-126-25.5c-44.601,0-87.9,8.9-128.6,26.6
+    <path d="M561.7,401c-15.801-10.3-32.601-19.2-50.2-26.6c-39.9-16.9-82.3-25.5-126-25.5c-44.601,0-87.9,8.9-128.6,26.6
                                     c-39.3,17-74.3,41.3-104.1,72.2L253.5,545c34.899-36.1,81.8-56,132-56c49,0,95.1,19.1,129.8,53.8l25.4-25.399L493,469.7L561.7,401
                                     z"></path>
-  <path d="M385.6,267.1c107.601,0,208.9,41.7,285.3,117.4l98.5-99.5c-50-49.5-108.1-88.4-172.699-115.6
+    <path d="M385.6,267.1c107.601,0,208.9,41.7,285.3,117.4l98.5-99.5c-50-49.5-108.1-88.4-172.699-115.6
                                     c-66.9-28.1-138-42.4-211.101-42.4c-73.6,0-145,14.4-212.3,42.9c-65,27.5-123.3,66.8-173.3,116.9l99,99
                                     C175.5,309.299,277.3,267.1,385.6,267.1z"></path>
-  <polygon points="616.8,402.5 549.7,469.599 639.2,559.099 549.7,648.599 616.8,715.7 706.3,626.2 795.8,715.7 862.899,648.599
+    <polygon points="616.8,402.5 549.7,469.599 639.2,559.099 549.7,648.599 616.8,715.7 706.3,626.2 795.8,715.7 862.899,648.599
                                     773.399,559.099 862.899,469.599 795.8,402.5 706.3,492 		"></polygon>
 </g>
 </g>
 </svg>
-          </div>
-        </div>
-        <div class="modal-footer justify-content-center">
-          <button type="button" class="btn btn-primary btn-lg">Reconnect</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  {#  添加创建群组#}
-  <div class="modal" id="newGroup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-       aria-hidden="true" style="background-color: transparent">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">
-            <i class="fa fa-users"></i> New Group
-          </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <i class="ti-close"></i>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form id="id_create_group_form">
-            <div class="form-group">
-              <label for="group_name" class="col-form-label">Group name</label>
-              <input type="text" class="form-control" id="group_name">
-            </div>
-            <div class="form-group">
-              <label for="description" class="col-form-label">Description</label>
-              <textarea class="form-control" id="description"></textarea>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" id="id_create_group">Create Group</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  {#    搜索群组#}
-  <div class="modal" id="findGroup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-       aria-hidden="true" style="background-color: transparent">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">
-            <i class="fa fa-users"></i> Search Group
-          </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <i class="ti-close"></i>
-          </button>
-        </div>
-        <ul class="modal-body list-group list-group-flush" id="id_all_chat_romm">
-          <li class="list-group-item" channel_no="%s" id="%s">
-          </li>
-        </ul>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" id="id_find_group">Search Group</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  {#  添加好友#}
-  <div class="modal" id="addFriends" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-       aria-hidden="true" style="background-color: transparent">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">
-            <i class="fa fa-users"></i> Add Friends
-          </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <i class="ti-close"></i>
-          </button>
-        </div>
-        <div class="modal-body">
-          <ul class="nav nav-tabs" role="tablist">
-            <li class="nav-item">
-              <a class="nav-link active" data-toggle="tab"
-                 href="#search_friend" role="tab" aria-controls="search_friend"
-                 aria-selected="true">Search</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="tab" href="#find_friend"
-                 role="tab" aria-controls="find_friend" aria-selected="false">Find</a>
-            </li>
-          </ul>
-          <div class="tab-content">
-            <div class="tab-pane active" id="search_friend" role="tabpanel">
-              <form id="#">
-                <div class="form-group">
-                  <label for="group_name" class="col-form-label">Uid</label>
-                  <input type="text" class="form-control" id="id_friend_uid">
+                    </div>
                 </div>
-              </form>
-              <button type="button" class="btn btn-primary" onclick="postFriend()">Add Friends</button>
-            </div>
-            <div class="tab-pane" id="find_friend" role="tabpanel">
-              <button type="button" class="btn btn-primary" onclick="getFriendList()">Serach Friends
-              </button>
-              <ul id="id_friend_list" class="list-group list-group-flush">
-              </ul>
-            </div>
-          </div>
-
-        </div>
-        <div class="modal-footer">
-
-        </div>
-      </div>
-    </div>
-  </div>
-
-  {#  添加说说#}
-  <div class="modal" id="addTalks" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-       aria-hidden="true" style="background-color: transparent">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">
-            <i class="fa fa-users"></i> Add Talks
-          </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <i class="ti-close"></i>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form id="id_create_talks_form">
-            <div class="form-group">
-              <label for="description" class="col-form-label">Talk</label>
-              <textarea class="form-control" id="id_talk_content" placeholder="发现身边新鲜事"
-                        style="height: 300px"></textarea>
-            </div>
-          </form>
-          <button type="button" class="btn btn-primary" onclick="postTalk()">Send</button>
-        </div>
-        <div class="modal-footer">
-
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  {#邀请好友#}
-  <div class="modal" id="inviteFriends" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-       aria-hidden="true" style="background-color: transparent">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">
-            <i class="fa fa-users"></i> Invite Friends
-          </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <i class="ti-close"></i>
-          </button>
-        </div>
-        <div class="modal-body">
-          <select multiple class="form-control" id="id_my_friends_list">
-          </select>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" id="id_invite_friends">Invite</button>
-        </div>
-      </div>
-    </div>
-  </div>
-{#  设置#}
-  <div class="modal" id="settingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-       aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">
-            <i class="ti-settings"></i> Settings
-          </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <i class="ti-close"></i>
-          </button>
-        </div>
-        <div class="modal-body">
-          <ul class="nav nav-tabs" role="tablist">
-            <li class="nav-item">
-              <a class="nav-link active" data-toggle="tab"
-                 href="#account" role="tab" aria-controls="account"
-                 aria-selected="true">Account</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="tab"
-                 href="#notification"
-                 role="tab" aria-controls="notification" aria-selected="false">Notification</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="tab" href="#contact"
-                 role="tab" aria-controls="contact" aria-selected="false">Security</a>
-            </li>
-          </ul>
-          <div class="tab-content">
-            <div class="tab-pane active" id="account" role="tabpanel">
-              <div class="form-item custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" checked="" id="customSwitch1">
-                <label class="custom-control-label" for="customSwitch1">Allow connected contacts</label>
-              </div>
-              <div class="form-item custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" checked="" id="customSwitch2">
-                <label class="custom-control-label" for="customSwitch2">Confirm message requests</label>
-              </div>
-              <div class="form-item custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" checked="" id="customSwitch3">
-                <label class="custom-control-label" for="customSwitch3">Profile privacy</label>
-              </div>
-              <div class="form-item custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" id="customSwitch4">
-                <label class="custom-control-label" for="customSwitch4">Developer mode options</label>
-              </div>
-              <div class="form-item custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" checked="" id="customSwitch5">
-                <label class="custom-control-label" for="customSwitch5">Two-step security
-                  verification</label>
-              </div>
-            </div>
-            <div class="tab-pane" id="notification" role="tabpanel">
-              <div class="form-item custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" checked="" id="customSwitch6">
-                <label class="custom-control-label" for="customSwitch6">Allow mobile
-                  notifications</label>
-              </div>
-              <div class="form-item custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" id="customSwitch7">
-                <label class="custom-control-label" for="customSwitch7">Notifications from your
-                  friends</label>
-              </div>
-              <div class="form-item custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" id="customSwitch8">
-                <label class="custom-control-label" for="customSwitch8">Send notifications by
-                  email</label>
-              </div>
-            </div>
-            <div class="tab-pane" id="contact" role="tabpanel">
-              <div class="form-item custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" id="customSwitch9">
-                <label class="custom-control-label" for="customSwitch9">Suggest changing passwords every
-                  month.</label>
-              </div>
-              <div class="form-item custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" checked="" id="customSwitch10">
-                <label class="custom-control-label" for="customSwitch10">Let me know about suspicious
-                  entries to your
-                  account</label>
-              </div>
-              <div class="form-item">
-                <p>
-                  <a data-toggle="collapse" href="#collapseExample"
-                     role="button" aria-expanded="false" aria-controls="collapseExample">
-                    <span class="ti-plus btn-icon"></span> Security Questions
-                  </a>
-                </p>
-                <div class="collapse" id="collapseExample">
-                  <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Question 1">
-                  </div>
-                  <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Question 2">
-                  </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary btn-lg">Reconnect</button>
                 </div>
-              </div>
             </div>
-          </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary">Save</button>
-        </div>
-      </div>
     </div>
-  </div>
 
-{#个人信息#}
-  <div class="modal" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-       aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">
-            <i class="ti-pencil"></i> 个人信息
-          </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <i class="ti-close"></i>
-          </button>
+    {#  添加创建群组#}
+    <div class="modal" id="newGroup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true" style="background-color: transparent">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fa fa-users"></i> New Group
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="ti-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="id_create_group_form">
+                        <div class="form-group">
+                            <label for="group_name" class="col-form-label">Group name</label>
+                            <input type="text" class="form-control" id="group_name">
+                        </div>
+                        <div class="form-group">
+                            <label for="description" class="col-form-label">Description</label>
+                            <textarea class="form-control" id="description"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="id_create_group">Create Group</button>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-          <ul class="nav nav-tabs" role="tablist">
-            <li class="nav-item">
-              <a class="nav-link active" data-toggle="tab"
-                 href="#personal" role="tab" aria-controls="personal"
-                 aria-selected="true">Personal</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="tab" href="#about"
-                 role="tab" aria-controls="about" aria-selected="false">About</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="tab"
-                 href="#social-links"
-                 role="tab" aria-controls="social-links" aria-selected="false">Social Links</a>
-            </li>
-          </ul>
-          <div class="tab-content">
-            <div class="tab-pane active" id="personal" role="tabpanel">
-              <form>
-                <div class="form-group">
-                  <label for="Uid" class="col-form-label">Uid：</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
+    </div>
+    {#    搜索群组#}
+    <div class="modal" id="findGroup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true" style="background-color: transparent">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fa fa-users"></i> Search Group
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="ti-close"></i>
+                    </button>
+                </div>
+                <ul class="modal-body list-group list-group-flush" id="id_all_chat_romm">
+                    <li class="list-group-item" channel_no="%s" id="%s">
+                    </li>
+                </ul>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="id_find_group">Search Group</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {#  添加好友#}
+    <div class="modal" id="addFriends" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true" style="background-color: transparent">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fa fa-users"></i> Add Friends
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="ti-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab"
+                               href="#search_friend" role="tab" aria-controls="search_friend"
+                               aria-selected="true">Search</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#find_friend"
+                               role="tab" aria-controls="find_friend" aria-selected="false">Find</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="search_friend" role="tabpanel">
+                            <form id="#">
+                                <div class="form-group">
+                                    <label for="group_name" class="col-form-label">Uid</label>
+                                    <input type="text" class="form-control" id="id_friend_uid">
+                                </div>
+                            </form>
+                            <button type="button" class="btn btn-primary" onclick="postFriend()">Add Friends</button>
+                        </div>
+                        <div class="tab-pane" id="find_friend" role="tabpanel">
+                            <button type="button" class="btn btn-primary" onclick="getFriendList()">Serach Friends
+                            </button>
+                            <ul id="id_friend_list" class="list-group list-group-flush">
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {#  添加说说#}
+    <div class="modal" id="addTalks" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true" style="background-color: transparent">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fa fa-users"></i> Add Talks
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="ti-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="id_create_talks_form">
+                        <div class="form-group">
+                            <label for="description" class="col-form-label">Talk</label>
+                            <textarea class="form-control" id="id_talk_content" placeholder="发现身边新鲜事"
+                                      style="height: 300px"></textarea>
+                        </div>
+                    </form>
+                    <button type="button" class="btn btn-primary" onclick="postTalk()">Send</button>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {#邀请好友#}
+    <div class="modal" id="inviteFriends" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true" style="background-color: transparent">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fa fa-users"></i> Invite Friends
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="ti-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <select multiple class="form-control" id="id_my_friends_list">
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="id_invite_friends">Invite</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {#  设置#}
+    <div class="modal" id="settingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="ti-settings"></i> Settings
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="ti-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab"
+                               href="#account" role="tab" aria-controls="account"
+                               aria-selected="true">Account</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab"
+                               href="#notification"
+                               role="tab" aria-controls="notification" aria-selected="false">Notification</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#contact"
+                               role="tab" aria-controls="contact" aria-selected="false">Security</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="account" role="tabpanel">
+                            <div class="form-item custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" checked="" id="customSwitch1">
+                                <label class="custom-control-label" for="customSwitch1">Allow connected contacts</label>
+                            </div>
+                            <div class="form-item custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" checked="" id="customSwitch2">
+                                <label class="custom-control-label" for="customSwitch2">Confirm message requests</label>
+                            </div>
+                            <div class="form-item custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" checked="" id="customSwitch3">
+                                <label class="custom-control-label" for="customSwitch3">Profile privacy</label>
+                            </div>
+                            <div class="form-item custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="customSwitch4">
+                                <label class="custom-control-label" for="customSwitch4">Developer mode options</label>
+                            </div>
+                            <div class="form-item custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" checked="" id="customSwitch5">
+                                <label class="custom-control-label" for="customSwitch5">Two-step security
+                                    verification</label>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="notification" role="tabpanel">
+                            <div class="form-item custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" checked="" id="customSwitch6">
+                                <label class="custom-control-label" for="customSwitch6">Allow mobile
+                                    notifications</label>
+                            </div>
+                            <div class="form-item custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="customSwitch7">
+                                <label class="custom-control-label" for="customSwitch7">Notifications from your
+                                    friends</label>
+                            </div>
+                            <div class="form-item custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="customSwitch8">
+                                <label class="custom-control-label" for="customSwitch8">Send notifications by
+                                    email</label>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="contact" role="tabpanel">
+                            <div class="form-item custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="customSwitch9">
+                                <label class="custom-control-label" for="customSwitch9">Suggest changing passwords every
+                                    month.</label>
+                            </div>
+                            <div class="form-item custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" checked="" id="customSwitch10">
+                                <label class="custom-control-label" for="customSwitch10">Let me know about suspicious
+                                    entries to your
+                                    account</label>
+                            </div>
+                            <div class="form-item">
+                                <p>
+                                    <a data-toggle="collapse" href="#collapseExample"
+                                       role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <span class="ti-plus btn-icon"></span> Security Questions
+                                    </a>
+                                </p>
+                                <div class="collapse" id="collapseExample">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="Question 1">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="Question 2">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {#个人信息#}
+    <div class="modal" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="ti-pencil"></i> 个人信息
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="ti-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab"
+                               href="#personal" role="tab" aria-controls="personal"
+                               aria-selected="true">Personal</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#about"
+                               role="tab" aria-controls="about" aria-selected="false">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab"
+                               href="#social-links"
+                               role="tab" aria-controls="social-links" aria-selected="false">Social Links</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="personal" role="tabpanel">
+                            <form>
+                                <div class="form-group">
+                                    <label for="Uid" class="col-form-label">Uid：</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
 <span class="input-group-text">
 <i class="ti-mobile"></i>
 </span>
-                    </div>
-                    <input type="text" class="form-control" id="Uid"
-                           readonly>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="fullname" class="col-form-label">昵称：</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
+                                        </div>
+                                        <input type="text" class="form-control" id="Uid"
+                                               readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="fullname" class="col-form-label">昵称：</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
                       <span class="input-group-text">
                       <i class="ti-user"></i>
                       </span>
-                    </div>
-                    <input type="text" class="form-control" id="fullname">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-form-label">头像：</label>
-                  <div class="d-flex align-items-center">
-                    <div>
-                      <figure class="avatar mr-3 item-rtl">
-                        <img src="#" class="rounded-circle" id="id_img">
-                      </figure>
-                    </div>
-                    <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="customFile">
-                      <label class="custom-file-label" for="customFile">Choose file</label>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="city" class="col-form-label">城市：</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
+                                        </div>
+                                        <input type="text" class="form-control" id="fullname">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label">头像：</label>
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <figure class="avatar mr-3 item-rtl">
+                                                <img src="#" class="rounded-circle" id="id_img">
+                                            </figure>
+                                        </div>
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="customFile">
+                                            <label class="custom-file-label" for="customFile">Choose file</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="city" class="col-form-label">城市：</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
 <span class="input-group-text">
 <i class="ti-map-alt"></i>
 </span>
-                    </div>
-                    <input type="text" class="form-control" id="city">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="qq" class="col-form-label">QQ：</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
+                                        </div>
+                                        <input type="text" class="form-control" id="city">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="qq" class="col-form-label">QQ：</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
 <span class="input-group-text">
 <i class="ti-link"></i>
 </span>
-                    </div>
-                    <input type="text" class="form-control" id="qq">
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div class="tab-pane" id="about" role="tabpanel">
-              <form action="">
-                <div class="form-group">
-                  <label for="about-text" class="col-form-label">个性签名：</label>
-                  <textarea class="form-control" id="about-text"></textarea>
-                </div>
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" checked="" id="is_use_qq_img">
-                  <label class="custom-control-label" for="is_use_qq_img">使用QQ头像</label>
-                </div>
-              </form>
-            </div>
-            <div class="tab-pane" id="social-links" role="tabpanel">
-              <form action="">
-                <div class="form-group">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
+                                        </div>
+                                        <input type="text" class="form-control" id="qq">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="tab-pane" id="about" role="tabpanel">
+                            <form action="">
+                                <div class="form-group">
+                                    <label for="about-text" class="col-form-label">个性签名：</label>
+                                    <textarea class="form-control" id="about-text"></textarea>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" checked="" id="is_use_qq_img">
+                                    <label class="custom-control-label" for="is_use_qq_img">使用QQ头像</label>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="tab-pane" id="social-links" role="tabpanel">
+                            <form action="">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
 <span class="input-group-text bg-facebook">
 <i class="ti-facebook"></i>
 </span>
-                    </div>
-                    <input type="text" class="form-control" placeholder="Username">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="Username">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
 <span class="input-group-text bg-twitter">
 <i class="ti-twitter"></i>
 </span>
-                    </div>
-                    <input type="text" class="form-control" placeholder="Username">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="Username">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
 <span class="input-group-text bg-instagram">
 <i class="ti-instagram"></i>
 </span>
-                    </div>
-                    <input type="text" class="form-control" placeholder="Username">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="Username">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
 <span class="input-group-text bg-linkedin">
 <i class="ti-linkedin"></i>
 </span>
-                    </div>
-                    <input type="text" class="form-control" placeholder="Username">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="Username">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
 <span class="input-group-text bg-dribbble">
 <i class="ti-dribbble"></i>
 </span>
-                    </div>
-                    <input type="text" class="form-control" placeholder="Username">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="Username">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
 <span class="input-group-text bg-youtube">
 <i class="ti-youtube"></i>
 </span>
-                    </div>
-                    <input type="text" class="form-control" placeholder="Username">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="Username">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
 <span class="input-group-text bg-google">
 <i class="ti-google"></i>
 </span>
-                    </div>
-                    <input type="text" class="form-control" placeholder="Username">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="Username">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
 <span class="input-group-text bg-whatsapp">
 <i class="fa fa-whatsapp"></i>
 </span>
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="Username">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <input type="text" class="form-control" placeholder="Username">
-                  </div>
                 </div>
-              </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="id_save_profile">Save</button>
+                </div>
             </div>
-          </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" id="id_save_profile">Save</button>
-        </div>
-      </div>
     </div>
-  </div>
 
 
-  <div class="layout">
+    <div class="layout">
 
-    <nav class="navigation">
-      <div class="nav-group">
-        <ul>
-          <li>
-            <a class="logo" href="/">
-              <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
-                   xmlns:xlink="http://www.w3.org/1999/xlink"
-                   x="0px" y="0px" width="33.004px" height="33.003px" viewBox="0 0 33.004 33.003"
-                   style="enable-background:new 0 0 33.004 33.003;" xml:space="preserve">
+        <nav class="navigation">
+            <div class="nav-group">
+                <ul>
+                    <li>
+                        <a class="logo" href="/">
+                            <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                                 x="0px" y="0px" width="33.004px" height="33.003px" viewBox="0 0 33.004 33.003"
+                                 style="enable-background:new 0 0 33.004 33.003;" xml:space="preserve">
 <g>
 <path d="M4.393,4.788c-5.857,5.857-5.858,15.354,0,21.213c4.875,4.875,12.271,5.688,17.994,2.447l10.617,4.161l-4.857-9.998
                                     c3.133-5.697,2.289-12.996-2.539-17.824C19.748-1.072,10.25-1.07,4.393,4.788z M25.317,22.149l0.261,0.512l1.092,2.142l0.006,0.01
                                     l1.717,3.536l-3.748-1.47l-0.037-0.015l-2.352-0.883l-0.582-0.219c-4.773,3.076-11.221,2.526-15.394-1.646
                                     C1.469,19.305,1.469,11.481,6.277,6.672c4.81-4.809,12.634-4.809,17.443,0.001C27.919,10.872,28.451,17.368,25.317,22.149z"></path>
-  <g>
+    <g>
 <circle cx="9.835" cy="16.043" r="1.833"></circle>
-    <circle cx="15.502" cy="16.043" r="1.833"></circle>
-    <circle cx="21.168" cy="16.043" r="1.833"></circle>
+        <circle cx="15.502" cy="16.043" r="1.833"></circle>
+        <circle cx="21.168" cy="16.043" r="1.833"></circle>
 </g>
 </g>
-                <g></g>
-                <g></g>
-                <g></g>
-                <g></g>
-                <g></g>
-                <g></g>
-                <g></g>
-                <g></g>
-                <g></g>
-                <g></g>
-                <g></g>
-                <g></g>
-                <g></g>
-                <g></g>
-                <g></g>
+                                <g></g>
+                                <g></g>
+                                <g></g>
+                                <g></g>
+                                <g></g>
+                                <g></g>
+                                <g></g>
+                                <g></g>
+                                <g></g>
+                                <g></g>
+                                <g></g>
+                                <g></g>
+                                <g></g>
+                                <g></g>
+                                <g></g>
 </svg>
-            </a>
-          </li>
-          <li>
-            <a data-navigation-target="chats" class="active" href="#">
-              <i class="ti-comment-alt"></i>
-            </a>
-          </li>
-          <li>
-            <a data-navigation-target="friends" href="#"
-               class="">
-              <i class="ti-user"></i>
-            </a>
-          </li>
-          <li data-navigation-target="talks" class="brackets">
-            <a href="#">
-              <i class="ti-star"></i>
-            </a>
-          </li>
-          <li>
-            <a href="#" id="edit_profile" data-toggle="modal"
-               data-target="#editProfileModal">
-              <i class="ti-pencil"></i>
-            </a>
-          </li>
-          <li>
-            <a href="#" id="settings" data-toggle="modal"
-               data-target="#settingModal">
-              <i class="ti-settings"></i>
-            </a>
-          </li>
-          <li>
-            <a href="/login/" id="id_login">
-              <i class="ti-power-off"></i>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+                        </a>
+                    </li>
+                    <li>
+                        <a data-navigation-target="chats" class="active" href="#">
+                            <i class="ti-comment-alt"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a data-navigation-target="friends" href="#"
+                           class="">
+                            <i class="ti-user"></i>
+                        </a>
+                    </li>
+                    <li data-navigation-target="talks" class="brackets">
+                        <a href="#">
+                            <i class="ti-star"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" id="edit_profile" data-toggle="modal"
+                           data-target="#editProfileModal">
+                            <i class="ti-pencil"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" id="settings" data-toggle="modal"
+                           data-target="#settingModal">
+                            <i class="ti-settings"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/login/" id="id_login">
+                            <i class="ti-power-off"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
 
 
-    <div class="content">
+        <div class="content">
 
-      <div class="sidebar-group">
+            <div class="sidebar-group">
 
-        <div id="chats" class="sidebar active">
-          <header>
-            <span id="id_online">Hi {{ user.profile.nick_name | slice:":5" }}~</span>
-            <ul class="list-inline">
-              <li class="list-inline-item" data-toggle="tooltip" title="" data-original-title="New Group">
-                <a class="btn btn-light" href="#" data-toggle="modal"
-                   data-target="#newGroup">
-                  <i class="fa fa-users"></i>
-                </a>
-              </li>
-              <li class="list-inline-item" data-toggle="tooltip" title=""
-                  data-original-title="Find Group">
-                <a class="btn btn-light" href="#" data-toggle="modal"
-                   data-target="#findGroup">
-                  <i class="fa fa-users"></i>
-                </a>
-              </li>
-              <li class="list-inline-item d-lg-none d-sm-block">
-                <a href="#" class="btn btn-light sidebar-close">
-                  <i class="ti-close"></i>
-                </a>
-              </li>
-            </ul>
-          </header>
-          <form action="">
-            <input type="text" class="form-control" placeholder="Search chat">
-          </form>
-          <div class="sidebar-body" tabindex="3" style="overflow: hidden; outline: none;">
-            <ul class="list-group list-group-flush" id="id_chats">
+                <div id="chats" class="sidebar active">
+                    <header>
+                        <span id="id_online">Hi {{ user.profile.nick_name | slice:":5" }}~</span>
+                        <ul class="list-inline">
+                            <li class="list-inline-item" data-toggle="tooltip" title="" data-original-title="New Group">
+                                <a class="btn btn-light" href="#" data-toggle="modal"
+                                   data-target="#newGroup">
+                                    <i class="fa fa-users"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item" data-toggle="tooltip" title=""
+                                data-original-title="Find Group">
+                                <a class="btn btn-light" href="#" data-toggle="modal"
+                                   data-target="#findGroup">
+                                    <i class="fa fa-users"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item d-lg-none d-sm-block">
+                                <a href="#" class="btn btn-light sidebar-close">
+                                    <i class="ti-close"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </header>
+                    <form action="">
+                        <input type="text" class="form-control" placeholder="Search chat">
+                    </form>
+                    <div class="sidebar-body" tabindex="3" style="overflow: hidden; outline: none;">
+                        <ul class="list-group list-group-flush" id="id_chats">
 
-            </ul>
-          </div>
-        </div>
-
-        <div id="tip_content2">
-          <!-- <div class="loginbox">
-          <strong>添加好友（uid）</strong><br><br>
-          <div><input type="text" class="xinput xful" placeholder="UID" id="id_friend_uid" /></div>
-          <div><button class="xbutton xful xblue" id="add_friend" onclick="postFriend()" >添加</button></div>
-          </div>
-          </div> -->
-        </div>
-
-        <div id="friends" class="sidebar">
-          <header>
-            <span>Friends</span>
-            <ul class="list-inline">
-              <li class="list-inline-item">
-                <a class="btn btn-light" href="#" data-toggle="modal"
-                   data-target="#addFriends">
-                  <i class="ti-plus btn-icon"></i> Add Friends
-                </a>
-              </li>
-              <li class="list-inline-item d-lg-none d-sm-block">
-                <a href="#" class="btn btn-light sidebar-close">
-                  <i class="ti-close"></i>
-                </a>
-              </li>
-            </ul>
-          </header>
-          <form action="">
-            <input type="text" class="form-control" placeholder="Search chat">
-          </form>
-          <div class="sidebar-body" style="overflow: hidden; outline: none;" tabindex="4">
-            <ul class="list-group list-group-flush" id="id_friends_list">
-
-            </ul>
-          </div>
-        </div>
-
-        <div id="talks" class="sidebar">
-          <header>
-            <span>Talks</span>
-            <ul class="list-inline">
-              <li class="list-inline-item">
-                <a class="btn btn-light" href="#" data-toggle="modal"
-                   data-target="#addTalks">
-                  <i class="ti-plus btn-icon"></i> Add Talks
-                </a>
-              </li>
-              <li class="list-inline-item d-lg-none d-sm-block">
-                <a href="#" class="btn btn-light sidebar-close">
-                  <i class="ti-close"></i>
-                </a>
-              </li>
-            </ul>
-          </header>
-          <form action="">
-            <input type="text" class="form-control" placeholder="Search Talks">
-          </form>
-          <div id="id_talks">
-            <li class="list-group-item">
-              <div>
-                <figure class="avatar">
-                  <img src="#" class="rounded-circle">
-                </figure>
-              </div>
-              <div class="users-list-body">
-                <h5>%s</h5>
-                <p>%s</p>
-                <div class="users-list-action action-toggle">
-                  <div class="dropdown">
-                    <a data-toggle="dropdown"
-                       href="http://www.jq22.com/demo/jqueryweblt201908272313/#">
-                      <i class="ti-more"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                      <a href="#" class="dropdown-item">Open</a>
-                      <a href="#"
-                         data-navigation-target="contact-information" class="dropdown-item">Profile</a>
-                      <a href="#" class="dropdown-item">Add to
-                        archive</a>
-                      <a href="#" class="dropdown-item">Delete</a>
+                        </ul>
                     </div>
-                  </div>
                 </div>
-              </div>
-            </li>
 
-          </div>
-        </div>
-
-      </div>
-      {#            可视化#}
-      <div class="chat chat-bg homebox">
-        <div class="row">
-          <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-aqua">
-              <div class="inner">
-                <h3 id="total_user">-</h3>
-
-                <p>总注册人数</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-bag"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-green">
-              <div class="inner">
-                <h3 id="total_online">-</h3>
-
-                <p>当前在线人数</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-stats-bars"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-yellow">
-              <div class="inner">
-                <h3 id="total_room">-</h3>
-
-                <p>总群组数</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-person-add"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-red">
-              <div class="inner">
-                <h3 id="total_history">-</h3>
-
-                <p>站点访问人次</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-pie-graph"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <!-- AREA CHART -->
-            <div class="box box-primary">
-              <div class="box-header with-border">
-                <h3 class="box-title">总注册人数表</h3>
-
-                <div class="box-tools pull-right">
-                  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
-                  </button>
+                <div id="tip_content2">
+                    <!-- <div class="loginbox">
+                    <strong>添加好友（uid）</strong><br><br>
+                    <div><input type="text" class="xinput xful" placeholder="UID" id="id_friend_uid" /></div>
+                    <div><button class="xbutton xful xblue" id="add_friend" onclick="postFriend()" >添加</button></div>
+                    </div>
+                    </div> -->
                 </div>
-              </div>
-              <div class="box-body chart-responsive">
-                <div class="chart" id="revenue-chart" style="height: 300px;"></div>
-              </div>
-              <!-- /.box-body -->
-            </div>
-            <!-- /.box -->
 
-            <!-- DONUT CHART -->
-            <div class="box box-danger">
-              <div class="box-header with-border">
-                <h3 class="box-title">访问人数表</h3>
+                <div id="friends" class="sidebar">
+                    <header>
+                        <span>Friends</span>
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <a class="btn btn-light" href="#" data-toggle="modal"
+                                   data-target="#addFriends">
+                                    <i class="ti-plus btn-icon"></i> Add Friends
+                                </a>
+                            </li>
+                            <li class="list-inline-item d-lg-none d-sm-block">
+                                <a href="#" class="btn btn-light sidebar-close">
+                                    <i class="ti-close"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </header>
+                    <form action="">
+                        <input type="text" class="form-control" placeholder="Search chat">
+                    </form>
+                    <div class="sidebar-body" style="overflow: hidden; outline: none;" tabindex="4">
+                        <ul class="list-group list-group-flush" id="id_friends_list">
 
-                <div class="box-tools pull-right">
-                  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
-                  </button>
+                        </ul>
+                    </div>
                 </div>
-              </div>
-              <div class="box-body chart-responsive">
-                <div class="chart" id="sales-chart" style="height: 300px; position: relative;"></div>
-              </div>
-              <!-- /.box-body -->
-            </div>
-            <!-- /.box -->
 
-          </div>
-          <!-- /.col (LEFT) -->
-          <div class="col-md-6">
-            <!-- LINE CHART -->
-            <div class="box box-info">
-              <div class="box-header with-border">
-                <h3 class="box-title">当日新增人数表</h3>
+                <div id="talks" class="sidebar">
+                    <header>
+                        <span>Talks</span>
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <a class="btn btn-light" href="#" data-toggle="modal"
+                                   data-target="#addTalks">
+                                    <i class="ti-plus btn-icon"></i> Add Talks
+                                </a>
+                            </li>
+                            <li class="list-inline-item d-lg-none d-sm-block">
+                                <a href="#" class="btn btn-light sidebar-close">
+                                    <i class="ti-close"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </header>
+                    <form action="">
+                        <input type="text" class="form-control" placeholder="Search Talks">
+                    </form>
+                    <div id="id_talks">
+                        <li class="list-group-item">
+                            <div>
+                                <figure class="avatar">
+                                    <img src="#" class="rounded-circle">
+                                </figure>
+                            </div>
+                            <div class="users-list-body">
+                                <h5>%s</h5>
+                                <p>%s</p>
+                                <div class="users-list-action action-toggle">
+                                    <div class="dropdown">
+                                        <a data-toggle="dropdown"
+                                           href="http://www.jq22.com/demo/jqueryweblt201908272313/#">
+                                            <i class="ti-more"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a href="#" class="dropdown-item">Open</a>
+                                            <a href="#"
+                                               data-navigation-target="contact-information" class="dropdown-item">Profile</a>
+                                            <a href="#" class="dropdown-item">Add to
+                                                archive</a>
+                                            <a href="#" class="dropdown-item">Delete</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
 
-                <div class="box-tools pull-right">
-                  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
-                  </button>
+                    </div>
                 </div>
-              </div>
-              <div class="box-body chart-responsive">
-                <div class="chart" id="line-chart" style="height: 300px;"></div>
-              </div>
-              <!-- /.box-body -->
+
             </div>
-            <!-- /.box -->
+            {#            可视化#}
+            <div class="chat chat-bg homebox">
+                <div class="row">
+                    <div class="col-lg-3 col-xs-6">
+                        <!-- small box -->
+                        <div class="small-box bg-aqua">
+                            <div class="inner">
+                                <h3 id="total_user">-</h3>
 
-            <!-- BAR CHART -->
-            <div class="box box-success">
-              <div class="box-header with-border">
-                <h3 class="box-title">群组创建表</h3>
+                                <p>总注册人数</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-xs-6">
+                        <!-- small box -->
+                        <div class="small-box bg-green">
+                            <div class="inner">
+                                <h3 id="total_online">-</h3>
 
-                <div class="box-tools pull-right">
-                  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
-                  </button>
+                                <p>当前在线人数</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-stats-bars"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-xs-6">
+                        <!-- small box -->
+                        <div class="small-box bg-yellow">
+                            <div class="inner">
+                                <h3 id="total_room">-</h3>
+
+                                <p>总群组数</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-person-add"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-xs-6">
+                        <!-- small box -->
+                        <div class="small-box bg-red">
+                            <div class="inner">
+                                <h3 id="total_history">-</h3>
+
+                                <p>站点访问人次</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-pie-graph"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
                 </div>
-              </div>
-              <div class="box-body chart-responsive">
-                <div class="chart" id="bar-chart" style="height: 300px;"></div>
-              </div>
-              <!-- /.box-body -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <!-- AREA CHART -->
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">总注册人数表</h3>
+
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                            class="fa fa-minus"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i
+                                            class="fa fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="box-body chart-responsive">
+                                <div class="chart" id="revenue-chart" style="height: 300px;"></div>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+
+                        <!-- DONUT CHART -->
+                        <div class="box box-danger">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">访问人数表</h3>
+
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                            class="fa fa-minus"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i
+                                            class="fa fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="box-body chart-responsive">
+                                <div class="chart" id="sales-chart" style="height: 300px; position: relative;"></div>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+
+                    </div>
+                    <!-- /.col (LEFT) -->
+                    <div class="col-md-6">
+                        <!-- LINE CHART -->
+                        <div class="box box-info">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">当日新增人数表</h3>
+
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                            class="fa fa-minus"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i
+                                            class="fa fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="box-body chart-responsive">
+                                <div class="chart" id="line-chart" style="height: 300px;"></div>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+
+                        <!-- BAR CHART -->
+                        <div class="box box-success">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">群组创建表</h3>
+
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                            class="fa fa-minus"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i
+                                            class="fa fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="box-body chart-responsive">
+                                <div class="chart" id="bar-chart" style="height: 300px;"></div>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+
+                    </div>
+                    <!-- /.col (RIGHT) -->
+                </div>
+                <!-- /.row -->
             </div>
-            <!-- /.box -->
+            {#群组聊天框#}
+            <div class="chat chat-bg chatbox" style="display: none">
+                <div class="chat-header">
+                    <div class="chat-header-user" data-navigation-target="contact-information" style="cursor: pointer">
+                        <figure class="avatar avatar-lg">
+                            <img src="#" class="rounded-circle id_room_img">
+                        </figure>
+                        <div>
+                            <h5 class="id_room_name">@</h5>
+                            <small class="text-muted">
+                                <i class="id_room_description">*</i>
+                            </small>
+                        </div>
+                    </div>
 
-          </div>
-          <!-- /.col (RIGHT) -->
-        </div>
-        <!-- /.row -->
-      </div>
-      {#群组聊天框#}
-      <div class="chat chat-bg chatbox" style="display: none">
-        <div class="chat-header">
-          <div class="chat-header-user" data-navigation-target="contact-information" style="cursor: pointer">
-            <figure class="avatar avatar-lg">
-              <img src="#" class="rounded-circle id_room_img">
-            </figure>
-            <div>
-              <h5 class="id_room_name">@</h5>
-              <small class="text-muted">
-                <i class="id_room_description">*</i>
-              </small>
+                    <div class="chat-header-action">
+                        <ul class="list-inline">
+                            {#              电话按钮#}
+                            <li class="list-inline-item">
+                                <a href="#" class="btn btn-success" data-navigation-target="music-info">
+                                    <i class="fa fa-phone" aria-hidden="true"></i>
+                                </a>
+                            </li>
+
+                            {#              视频按钮#}
+                            <li class="list-inline-item">
+                                <a href="#" class="btn btn-secondary">
+                                    <i class="fa fa-video-camera" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                            {#新更多#}
+                            <li class="list-inline-item">
+                                <a href="#"
+                                   data-navigation-target="room—member-info" class="btn btn-secondary"
+                                   id="id_group_info">
+                                    <i class="ti-more"></i>
+                                </a>
+                            </li>
+                            {#              更多#}
+                            {#              <li class="list-inline-item">#}
+                            {#                <a href="#" class="btn btn-secondary"#}
+                            {#                   data-toggle="dropdown">#}
+                            {#                  <i class="ti-more"></i>#}
+                            {#                </a>#}
+                            {#                <div class="dropdown-menu dropdown-menu-left">#}
+                            {#                  <a href="#"#}
+                            {#                     data-navigation-target="contact-information" class="dropdown-item">Profile</a>#}
+                            {#                  <a href="#" class="dropdown-item">Add to archive</a>#}
+                            {#                  <a href="#" class="dropdown-item">Delete</a>#}
+                            {#                  <div class="dropdown-divider"></div>#}
+                            {#                  <a href="#" class="dropdown-item">Block</a>#}
+                            {#                </div>#}
+                            {#              </li>#}
+                        </ul>
+                    </div>
+                </div>
+                <div class="chat-body" tabindex="2" style="overflow: hidden; outline: none;">
+
+                    <div class="messages">
+                    </div>
+                </div>
+                <div class="chat-footer">
+                    <form action="">
+                        <input type="text" class="form-control" placeholder="chàng suǒ yù yán"
+                               aria-label="Recipient&#39;s username" aria-describedby="button-addon2"
+                               id="chat-message-input">
+                        <div class="form-buttons">
+                            <button class="btn btn-light btn-floating" type="button">
+                                <i class="fa fa-paperclip"></i>
+                            </button>
+                            <button class="btn btn-light btn-floating" type="button">
+                                <i class="fa fa-microphone"></i>
+                            </button>
+                            <button class="btn btn-primary btn-floating" type="submit" id="chat-message-submit">
+                                <i class="fa fa-send"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-          </div>
+            {#群组聊天框end#}
 
-          <div class="chat-header-action">
-            <ul class="list-inline">
-              {#              电话按钮#}
-              <li class="list-inline-item">
-                <a href="#" class="btn btn-success" data-navigation-target="music-info">
-                  <i class="fa fa-phone" aria-hidden="true"></i>
-                </a>
-              </li>
+            {# 说说框 #}
+            <div class="chat chat-bg talks" style="display: none">
+                <div class="col-md-9" id="id_talk_log">
 
-              {#              视频按钮#}
-              <li class="list-inline-item">
-                <a href="#" class="btn btn-secondary">
-                  <i class="fa fa-video-camera" aria-hidden="true"></i>
-                </a>
-              </li>
-              {#新更多#}
-              <li class="list-inline-item">
-                <a href="#"
-                   data-navigation-target="room—member-info" class="btn btn-secondary"
-                   id="id_group_info">
-                  <i class="ti-more"></i>
-                </a>
-              </li>
-              {#              更多#}
-              {#              <li class="list-inline-item">#}
-              {#                <a href="#" class="btn btn-secondary"#}
-              {#                   data-toggle="dropdown">#}
-              {#                  <i class="ti-more"></i>#}
-              {#                </a>#}
-              {#                <div class="dropdown-menu dropdown-menu-left">#}
-              {#                  <a href="#"#}
-              {#                     data-navigation-target="contact-information" class="dropdown-item">Profile</a>#}
-              {#                  <a href="#" class="dropdown-item">Add to archive</a>#}
-              {#                  <a href="#" class="dropdown-item">Delete</a>#}
-              {#                  <div class="dropdown-divider"></div>#}
-              {#                  <a href="#" class="dropdown-item">Block</a>#}
-              {#                </div>#}
-              {#              </li>#}
-            </ul>
-          </div>
-        </div>
-        <div class="chat-body" tabindex="2" style="overflow: hidden; outline: none;">
+                </div>
 
-          <div class="messages">
-          </div>
-        </div>
-        <div class="chat-footer">
-          <form action="">
-            <input type="text" class="form-control" placeholder="chàng suǒ yù yán"
-                   aria-label="Recipient&#39;s username" aria-describedby="button-addon2"
-                   id="chat-message-input">
-            <div class="form-buttons">
-              <button class="btn btn-light btn-floating" type="button">
-                <i class="fa fa-paperclip"></i>
-              </button>
-              <button class="btn btn-light btn-floating" type="button">
-                <i class="fa fa-microphone"></i>
-              </button>
-              <button class="btn btn-primary btn-floating" type="submit" id="chat-message-submit">
-                <i class="fa fa-send"></i>
-              </button>
             </div>
-          </form>
-        </div>
-      </div>
-      {#群组聊天框end#}
 
-      {# 说说框 #}
-      <div class="chat chat-bg talks" style="display: none">
-        <div class="col-md-9" id="id_talk_log">
-
-        </div>
-
-      </div>
-
-      {# 说说框end #}
-      {#资料抽屉#}
-      <div class="sidebar-group">
-        <div id="contact-information" class="sidebar">
-          <header>
-            <span>About</span>
-            <ul class="list-inline">
-              <li class="list-inline-item">
-                <a href="#" class="btn btn-light sidebar-close">
-                  <i class="ti-close"></i>
-                </a>
-              </li>
-            </ul>
-          </header>
-          <div class="sidebar-body" style="overflow: hidden; outline: none;" tabindex="6">
-            <div class="pl-4 pr-4 text-center">
-              <figure class="avatar avatar-state-danger avatar-xl mb-4">
-                <img src="#" class="rounded-circle id_room_img">
-              </figure>
-              <h5 class="text-primary id_room_name">Frans Hanscombe</h5>
-              <p class="text-muted id_room_description">Last seen: Today</p>
-            </div>
-            <hr>
-            <div class="pl-4 pr-4">
-              <h6>About</h6>
-              <p class="text-muted id_room_description"></p>
-            </div>
-            <hr>
-            <div class="pl-4 pr-4">
-              <h6>Uid</h6>
-              <p class="text-muted id_channel_no">(555) 555 55 55</p>
-            </div>
-            <hr>
-            <div class="pl-4 pr-4">
-              <h6>Media</h6>
-              <div class="files">
-                <ul class="list-inline" style="overflow: hidden; outline: none;" tabindex="1">
-                  <li class="list-inline-item">
-                    <a href="{% static 'images/chat/yeswecode.jpg' %}">
-                      <figure class="avatar avatar-lg">
+            {# 说说框end #}
+            {#资料抽屉#}
+            <div class="sidebar-group">
+                <div id="contact-information" class="sidebar">
+                    <header>
+                        <span>About</span>
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <a href="#" class="btn btn-light sidebar-close">
+                                    <i class="ti-close"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </header>
+                    <div class="sidebar-body" style="overflow: hidden; outline: none;" tabindex="6">
+                        <div class="pl-4 pr-4 text-center">
+                            <figure class="avatar avatar-state-danger avatar-xl mb-4">
+                                <img src="#" class="rounded-circle id_room_img">
+                            </figure>
+                            <h5 class="text-primary id_room_name">Frans Hanscombe</h5>
+                            <p class="text-muted id_room_description">Last seen: Today</p>
+                        </div>
+                        <hr>
+                        <div class="pl-4 pr-4">
+                            <h6>About</h6>
+                            <p class="text-muted id_room_description"></p>
+                        </div>
+                        <hr>
+                        <div class="pl-4 pr-4">
+                            <h6>Uid</h6>
+                            <p class="text-muted id_channel_no">(555) 555 55 55</p>
+                        </div>
+                        <hr>
+                        <div class="pl-4 pr-4">
+                            <h6>Media</h6>
+                            <div class="files">
+                                <ul class="list-inline" style="overflow: hidden; outline: none;" tabindex="1">
+                                    <li class="list-inline-item">
+                                        <a href="{% static 'images/chat/yeswecode.jpg' %}">
+                                            <figure class="avatar avatar-lg">
                         <span class="avatar-title bg-warning">
                         <i class="fa fa-file-pdf-o"></i>
                         </span>
-                      </figure>
-                    </a>
-                  </li>
-                  <li class="list-inline-item">
-                    <a href="#">
-                      <figure class="avatar avatar-lg">
+                                            </figure>
+                                        </a>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <a href="#">
+                                            <figure class="avatar avatar-lg">
                         <span class="avatar-title bg-success">
                         <i class="fa fa-file-excel-o"></i>
                         </span>
-                      </figure>
-                    </a>
-                  </li>
-                  <li class="list-inline-item">
-                    <a href="#">
-                      <figure class="avatar avatar-lg">
+                                            </figure>
+                                        </a>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <a href="#">
+                                            <figure class="avatar avatar-lg">
                         <span class="avatar-title bg-info">
                         <i class="fa fa-file-text-o"></i>
                         </span>
-                      </figure>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <hr>
-            <div class="pl-4 pr-4">
-              <h6>City</h6>
-              <p class="text-muted">Fuzhou / China</p>
-            </div>
-            <hr>
-            <div class="pl-4 pr-4">
-              <h6>Website</h6>
-              <p>
-                <a href="#">www.xhongc.com</a>
-              </p>
-            </div>
-            <hr>
-            <div class="pl-4 pr-4">
-              <h6>Social Links</h6>
-              <ul class="list-inline social-links">
-                <li class="list-inline-item">
-                  <a href="#"
-                     class="btn btn-sm btn-floating btn-facebook">
-                    <i class="fa fa-facebook"></i>
-                  </a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="#"
-                     class="btn btn-sm btn-floating btn-twitter">
-                    <i class="fa fa-twitter"></i>
-                  </a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="#"
-                     class="btn btn-sm btn-floating btn-dribbble">
-                    <i class="fa fa-dribbble"></i>
-                  </a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="#"
-                     class="btn btn-sm btn-floating btn-whatsapp">
-                    <i class="fa fa-whatsapp"></i>
-                  </a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="#"
-                     class="btn btn-sm btn-floating btn-linkedin">
-                    <i class="fa fa-linkedin"></i>
-                  </a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="#"
-                     class="btn btn-sm btn-floating btn-google">
-                    <i class="fa fa-google"></i>
-                  </a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="#"
-                     class="btn btn-sm btn-floating btn-behance">
-                    <i class="fa fa-behance"></i>
-                  </a>
-                </li>
-                <li class="list-inline-item">
-                  <a href="#"
-                     class="btn btn-sm btn-floating btn-instagram">
-                    <i class="fa fa-instagram"></i>
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <hr>
-            <div class="pl-4 pr-4">
-              <div class="form-group">
-                <div class="form-item custom-control custom-switch">
-                  <input type="checkbox" class="custom-control-input" id="customSwitch11">
-                  <label class="custom-control-label" for="customSwitch11">Block</label>
+                                            </figure>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="pl-4 pr-4">
+                            <h6>City</h6>
+                            <p class="text-muted">Fuzhou / China</p>
+                        </div>
+                        <hr>
+                        <div class="pl-4 pr-4">
+                            <h6>Website</h6>
+                            <p>
+                                <a href="#">www.xhongc.com</a>
+                            </p>
+                        </div>
+                        <hr>
+                        <div class="pl-4 pr-4">
+                            <h6>Social Links</h6>
+                            <ul class="list-inline social-links">
+                                <li class="list-inline-item">
+                                    <a href="#"
+                                       class="btn btn-sm btn-floating btn-facebook">
+                                        <i class="fa fa-facebook"></i>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#"
+                                       class="btn btn-sm btn-floating btn-twitter">
+                                        <i class="fa fa-twitter"></i>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#"
+                                       class="btn btn-sm btn-floating btn-dribbble">
+                                        <i class="fa fa-dribbble"></i>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#"
+                                       class="btn btn-sm btn-floating btn-whatsapp">
+                                        <i class="fa fa-whatsapp"></i>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#"
+                                       class="btn btn-sm btn-floating btn-linkedin">
+                                        <i class="fa fa-linkedin"></i>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#"
+                                       class="btn btn-sm btn-floating btn-google">
+                                        <i class="fa fa-google"></i>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#"
+                                       class="btn btn-sm btn-floating btn-behance">
+                                        <i class="fa fa-behance"></i>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#"
+                                       class="btn btn-sm btn-floating btn-instagram">
+                                        <i class="fa fa-instagram"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <hr>
+                        <div class="pl-4 pr-4">
+                            <div class="form-group">
+                                <div class="form-item custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch11">
+                                    <label class="custom-control-label" for="customSwitch11">Block</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-item custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" checked="" id="customSwitch12">
+                                    <label class="custom-control-label" for="customSwitch12">Mute</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-item custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch13">
+                                    <label class="custom-control-label" for="customSwitch13">Get notification</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-              <div class="form-group">
-                <div class="form-item custom-control custom-switch">
-                  <input type="checkbox" class="custom-control-input" checked="" id="customSwitch12">
-                  <label class="custom-control-label" for="customSwitch12">Mute</label>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="form-item custom-control custom-switch">
-                  <input type="checkbox" class="custom-control-input" id="customSwitch13">
-                  <label class="custom-control-label" for="customSwitch13">Get notification</label>
-                </div>
-              </div>
             </div>
-          </div>
-        </div>
-      </div>
-      {#资料抽屉#}
-      {#  music#}
-      <div class="sidebar-group" id="id_music">
-        <div id="music-info" class="sidebar">
-          <header>
-            <span>Music</span>
-            <ul class="list-inline">
-              <li class="list-inline-item">
-                <a href="#" class="btn btn-light sidebar-close">
-                  <i class="ti-close"></i>
-                </a>
-              </li>
-            </ul>
-          </header>
-          <div class="#" style="overflow: hidden; outline: none;" tabindex="6" id="music_list">
-            <div class="pl-4 pr-4 text-center">
-              <figure class="avatar avatar-state-danger avatar-xl mb-4">
-                <img src="#" class="rounded-circle" id="id_admin_img_path">
-              </figure>
-              <h5 class="text-primary" id="id_admin_name">Admin</h5>
-              <p class="text-muted" id="id_admin_signature">I am admin</p>
+            {#资料抽屉#}
+            {#  music#}
+            <div class="sidebar-group" id="id_music">
+                <div id="music-info" class="sidebar">
+                    <header>
+                        <span>Music</span>
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <a href="#" class="btn btn-light sidebar-close">
+                                    <i class="ti-close"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </header>
+                    <div class="#" style="overflow: hidden; outline: none;" tabindex="6" id="music_list">
+                        <div class="pl-4 pr-4 text-center">
+                            <figure class="avatar avatar-state-danger avatar-xl mb-4">
+                                <img src="#" class="rounded-circle" id="id_admin_img_path">
+                            </figure>
+                            <h5 class="text-primary" id="id_admin_name">Admin</h5>
+                            <p class="text-muted" id="id_admin_signature">I am admin</p>
+                        </div>
+                        <hr>
+                    </div>
+                </div>
             </div>
-            <hr>
-          </div>
-        </div>
-      </div>
 
 
-      {#群成员抽屉#}
-      <div class="sidebar-group" id="id_group">
-        <div id="room—member-info" class="sidebar">
-          <header>
-            <span>Members</span>
-            <ul class="list-inline">
-              <li class="list-inline-item">
-                <a href="#" class="btn btn-light sidebar-close">
-                  <i class="ti-close"></i>
-                </a>
-              </li>
-            </ul>
-          </header>
-          <div class="#" style="overflow: hidden; outline: none;" tabindex="6">
-            <div class="pl-4 pr-4 text-center">
-              <figure class="avatar avatar-state-danger avatar-xl mb-4">
-                <img src="#" class="rounded-circle" id="id_admin_img_path">
-              </figure>
-              <h5 class="text-primary" id="id_admin_name">Admin</h5>
-              <p class="text-muted" id="id_admin_signature">I am admin</p>
-            </div>
-            <hr>
-            <div class="pl-4 pr-4" style="overflow: hidden;">
-              <div>
-                <h6 style="float:left" id="id_member_count">群成员 (2/100)</h6>
-                <h6 style="float:right;cursor: pointer" data-toggle="modal"
-                    data-target="#inviteFriends">邀请好友</h6>
-              </div>
-            </div>
-            <div id="id_member_list">
-            </div>
+            {#群成员抽屉#}
+            <div class="sidebar-group" id="id_group">
+                <div id="room—member-info" class="sidebar">
+                    <header>
+                        <span>Members</span>
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <a href="#" class="btn btn-light sidebar-close">
+                                    <i class="ti-close"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </header>
+                    <div class="#" style="overflow: hidden; outline: none;" tabindex="6">
+                        <div class="pl-4 pr-4 text-center">
+                            <figure class="avatar avatar-state-danger avatar-xl mb-4">
+                                <img src="#" class="rounded-circle" id="id_admin_img_path">
+                            </figure>
+                            <h5 class="text-primary" id="id_admin_name">Admin</h5>
+                            <p class="text-muted" id="id_admin_signature">I am admin</p>
+                        </div>
+                        <hr>
+                        <div class="pl-4 pr-4" style="overflow: hidden;">
+                            <div>
+                                <h6 style="float:left" id="id_member_count">群成员 (2/100)</h6>
+                                <h6 style="float:right;cursor: pointer" data-toggle="modal"
+                                    data-target="#inviteFriends">邀请好友</h6>
+                            </div>
+                        </div>
+                        <div id="id_member_list">
+                        </div>
 
-          </div>
+                    </div>
+                </div>
+            </div>
+            {#群成员抽屉#}
         </div>
-      </div>
-      {#群成员抽屉#}
+        {#  <li class="list-group-item" channel_no="%s" id="%s">#}
+        {#          <div>#}
+        {#              <figure class="avatar">#}
+        {#                  <img src="%s" class="rounded-circle">#}
+        {#              </figure>#}
+        {#          </div>#}
+        {#          <div class="users-list-body">#}
+        {#              <h5>%s</h5>#}
+        {#              <p>%s</p>#}
+        {#              <div class="users-list-action">#}
+        {#                  <span class="badge badge-danger" id="id_badge_ntf">1</span>#}
+        {#              </div>#}
+        {#          </div>#}
+        {#      </li>#}
     </div>
-    {#  <li class="list-group-item" channel_no="%s" id="%s">#}
-    {#          <div>#}
-    {#              <figure class="avatar">#}
-    {#                  <img src="%s" class="rounded-circle">#}
-    {#              </figure>#}
-    {#          </div>#}
-    {#          <div class="users-list-body">#}
-    {#              <h5>%s</h5>#}
-    {#              <p>%s</p>#}
-    {#              <div class="users-list-action">#}
-    {#                  <span class="badge badge-danger" id="id_badge_ntf">1</span>#}
-    {#              </div>#}
-    {#          </div>#}
-    {#      </li>#}
-  </div>
-  </body>
+    </body>
 {% endblock %}
 {% block script %}
-  <script src="{% static 'js/chat_api.js' %}"></script>
-  <script src="{% static 'js/music.js' %}"></script>
-  <script src="{% static 'js/soho.min.js' %}"></script>
-  <script src="{% static 'js/jquery.nicescroll.min.js' %}"></script>
-  <script src="{% static 'js/popper.min.js' %}"></script>
-  <script src="{% static 'js/bootstrap.min.js' %}"></script>
-  <script src="{% static 'data-show/js/morris.min.js' %}"></script>
-  <script src="{% static 'data-show/js/raphael.min.js' %}"></script>
-  <script src="{% static 'data-show/js/adminlte.min.js' %}"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.js" integrity="sha512-RWosNnDNw8FxHibJqdFRySIswOUgYhFxnmYO3fp+BgCU7gfo4z0oS7mYFBvaa8qu+axY39BmQOrhW3Tp70XbaQ==" crossorigin="anonymous"></script>
+    <script src="{% static 'js/chat_api.js' %}"></script>
+    <script src="{% static 'js/music.js' %}"></script>
+    <script src="{% static 'js/soho.min.js' %}"></script>
+    <script src="{% static 'js/jquery.nicescroll.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'data-show/js/morris.min.js' %}"></script>
+    <script src="{% static 'data-show/js/raphael.min.js' %}"></script>
+    <script src="{% static 'data-show/js/adminlte.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.js"
+            integrity="sha512-RWosNnDNw8FxHibJqdFRySIswOUgYhFxnmYO3fp+BgCU7gfo4z0oS7mYFBvaa8qu+axY39BmQOrhW3Tp70XbaQ=="
+            crossorigin="anonymous"></script>
 
 
-  <script>
-      var chatSocket = null;
-      var ntfSocket = null;
-      $('.sidebar-body').on('click', 'li', function () {
-          $('.homebox').hide();
-          $(this).siblings('li').removeClass('open-chat');
-          $(this).siblings('li').removeClass('disabled');
-          $(this).addClass('open-chat');
-          $(this).addClass('disabled');
-          $(this).find('#id_badge_ntf').html('');
-          $('#chat-message-submit').attr('channel_no', $(this).attr('channel_no'));
-          var channel_no = $(this).attr('channel_no');
-          var profile_id = $(this).attr('profile_id');
-          console.log('sidebar-body channel_no' + channel_no);
-          if (channel_no.startsWith('GP_')) {
-              chatSocket = joinRoom(channel_no);
-          } else {
-              joinSingle(channel_no, profile_id);
-          }
-      });
+    <script>
+        var chatSocket = null;
+        var ntfSocket = null;
+        $('.sidebar-body').on('click', 'li', function () {
+            $('.homebox').hide();
+            $(this).siblings('li').removeClass('open-chat');
+            $(this).siblings('li').removeClass('disabled');
+            $(this).addClass('open-chat');
+            $(this).addClass('disabled');
+            $(this).find('#id_badge_ntf').html('');
+            $('#chat-message-submit').attr('channel_no', $(this).attr('channel_no'));
+            var channel_no = $(this).attr('channel_no');
+            var profile_id = $(this).attr('profile_id');
+            console.log('sidebar-body channel_no' + channel_no);
+            if (isNaN(channel_no)) {
+                chatSocket = joinRoom(channel_no);
+            } else {
+                joinSingle(channel_no, profile_id);
+            }
+        });
 
-      function notificationConnect(uid) {
-          if (!window.localStorage.token) {
-              window.location.href = '/login/'
-          } else {
-              if (uid === undefined) {
-                  return false
-              } else {
-                  ntfSocket = new ReconnectingWebSocket(
-                      'ws://' + window.location.host +
-                      '/ws/notification/' + uid + '/?token=Jwt ' + window.localStorage.token);
-              }
-          }
-          ntfSocket.onopen = function (e) {
-              // $('#id_online').html('Online')
-          };
-          ntfSocket.onmessage = function (e) {
-              var data = JSON.parse(e.data);
-              var msg_type = data['msg_type'];
-              var channel_no = data['channel_no'];
-              console.log('aaa', channel_no);
-              console.log('onmessage', msg_type);
-              if (msg_type === 'push_message') {
-                  var that = $('li[channel_no=%s]'.format(channel_no)).find('#id_badge_ntf');
-                  var count = parseInt(that.html()) || 0;
-                  count += 1;
-                  that.html(count);
-                  Lobibox.notify(
-                      // 'warning', 'info', 'success', 'error'
-                      'error',
-                      {
-                          title: data['send_user_nick_name'],
-                          size: 'normal',
-                          showClass: 'flipInX',
-                          hideClass: 'zoomOutDown',
-                          msg: data['message'],
-                          icon: false,
-                          delay: 6000,
-                          img: data['img'],
-                          closable: true,
-                          closeOnClick: true,
-                          soundPath: '/src/sounds/',
+        function notificationConnect(uid) {
+            if (!window.localStorage.token) {
+                window.location.href = '/login/'
+            } else {
+                if (uid === undefined) {
+                    return false
+                } else {
+                    ntfSocket = new ReconnectingWebSocket(
+                        'ws://' + window.location.host +
+                        '/ws/notification/' + uid + '/?token=Jwt ' + window.localStorage.token);
+                }
+            }
+            ntfSocket.onopen = function (e) {
+                // $('#id_online').html('Online')
+            };
+            ntfSocket.onmessage = function (e) {
+                var data = JSON.parse(e.data);
+                var msg_type = data['msg_type'];
+                var channel_no = data['channel_no'];
+                console.log('aaa', channel_no);
+                console.log('onmessage', msg_type);
+                if (msg_type === 'push_message') {
+                    var that = $('li[channel_no=%s]'.format(channel_no)).find('#id_badge_ntf');
+                    var count = parseInt(that.html()) || 0;
+                    count += 1;
+                    that.html(count);
+                    Lobibox.notify(
+                        // 'warning', 'info', 'success', 'error'
+                        'error',
+                        {
+                            title: data['send_user_nick_name'],
+                            size: 'normal',
+                            showClass: 'flipInX',
+                            hideClass: 'zoomOutDown',
+                            msg: data['message'],
+                            icon: false,
+                            delay: 6000,
+                            img: data['img'],
+                            closable: true,
+                            closeOnClick: true,
+                            soundPath: '/src/sounds/',
 
-                      }
-                  );
-              } else if (msg_type === 'chat_message') {
-                  parseChatMsg(data);
-              }
-          };
-          ntfSocket.onclose = function (e) {
-              $('#id_online').html('Outline');
-              console.log('Socket is closed. Reconnect will be attempted in 1 second.', e);
-          };
-          ntfSocket.onerror = function (e) {
-              $('#id_online').html('Outline');
-              console.log('Socket is onerror.', e.reason);
-              ntfSocket.close()
-          };
-          return ntfSocket
-      }
+                        }
+                    );
+                } else if (msg_type === 'chat_message') {
+                    parseChatMsg(data);
+                }
+            };
+            ntfSocket.onclose = function (e) {
+                $('#id_online').html('Outline');
+                console.log('Socket is closed. Reconnect will be attempted in 1 second.', e);
+            };
+            ntfSocket.onerror = function (e) {
+                $('#id_online').html('Outline');
+                console.log('Socket is onerror.', e.reason);
+                ntfSocket.close()
+            };
+            return ntfSocket
+        }
 
-      function wsConnect(channel_no) {
-          if (!window.localStorage.token) {
-              window.location.href = '/login/'
-          } else {
-              if (channel_no === undefined) {
-                  console.log('asds', channel_no);
-                  return false
-              } else {
-                  chatSocket = new ReconnectingWebSocket(
-                      'ws://' + window.location.host +
-                      '/ws/chat/' + channel_no + '/?token=Jwt ' + window.localStorage.token);
-              }
-          }
+        function wsConnect(channel_no) {
+            if (!window.localStorage.token) {
+                window.location.href = '/login/'
+            } else {
+                if (channel_no === undefined) {
+                    return false
+                } else {
+                    chatSocket = new ReconnectingWebSocket(
+                        'ws://' + window.location.host +
+                        '/ws/chat/' + channel_no + '/?token=Jwt ' + window.localStorage.token);
+                }
+            }
 
-          chatSocket.onopen = function (e) {
-              let username = "{{ user.profile.nick_name }}";
-              chatSocket.send(JSON.stringify({
-                  'message': username + '  加入',
-                  'msg_type': 'chat_info'
-              }));
-          };
-          chatSocket.onmessage = function (e) {
-              var data = JSON.parse(e.data);
-              parseChatMsg(data)
-          };
-          chatSocket.onclose = function (e) {
-              console.log('Socket is closed. Reconnect will be attempted in 1 second.', e);
-          };
-          chatSocket.onerror = function (e) {
-              console.log('Socket is onerror.', e.reason);
-              chatSocket.close()
-          };
-          return true
-      }
+            chatSocket.onopen = function (e) {
+                let username = "{{ user.profile.nick_name }}";
+                chatSocket.send(JSON.stringify({
+                    'message': username + '  加入',
+                    'msg_type': 'chat_info'
+                }));
+            };
+            chatSocket.onmessage = function (e) {
+                var data = JSON.parse(e.data);
+                parseChatMsg(data)
+            };
+            chatSocket.onclose = function (e) {
+                console.log('Socket is closed. Reconnect will be attempted in 1 second.', e);
+            };
+            chatSocket.onerror = function (e) {
+                console.log('Socket is onerror.', e.reason);
+                chatSocket.close()
+            };
+            return true
+        }
 
-      function parseChatMsg(data) {
-          var message = data['message'];
-          var msg_type = data['msg_type'];
-          var user_id = data['user_id'];
-          var send_time = data['send_time'];
-          var me = window.localStorage.user_id;
-          console.log(msg_type);
-          if (message) {
-              if (msg_type === 'chat_message') {
-                  if (user_id === me) {
-                      {#ChatosExamle.Message.add(message, 'inside-message', send_time);#}
-                  } else {
-                      ChatosExamle.Message.add(message, 'outgoing-message', send_time);
-                  }
-              } else if (msg_type === 'chat_html') {
-                  ChatosExamle.Message.delete();
-                  ChatosExamle.Info.add('稍等加载中...', '', '');
-                  ChatosExamle.Info.add(message, '', '');
-              } else {
-                  // ChatosExamle.Info.add(message, '', '');
-                  xtip.danmu(message)
-              }
+        //渲染返回的数据
+        function parseChatMsg(data) {
+            var message = data['message'];
+            var msg_type = data['msg_type'];
+            var user_id = data['user_id'];
+            var send_time = data['send_time'];
+            var me = window.localStorage.user_id;
+            console.log(msg_type);
+            if (message) {
+                if (msg_type === 'chat_message') {
+                    if (user_id === me) {
+                        {#ChatosExamle.Message.add(message, 'inside-message', send_time);#}
+                    } else {
+                        ChatosExamle.Message.add(message, 'outgoing-message', send_time);
+                    }
+                } else if (msg_type === 'chat_html') {
+                    ChatosExamle.Message.delete();
+                    ChatosExamle.Info.add('稍等加载中...', '', '');
+                    ChatosExamle.Info.add(message, '', '');
+                } else if (msg_type === 'chat_music'){
+                    if(!window.ap){
+                        console.log('init ap')
+                        window.ap =MusicPlayerInit('#music_list')
+                    }
 
-          } else {
-              xtip.msg('不能输入空')
-          }
-      }
+                    addMusicList(ap, message)
+                } else {
+                    // ChatosExamle.Info.add(message, '', '');
+                    xtip.danmu(message)
+                }
+            } else {
+                xtip.msg('不能输入空')
+            }
+        }
 
-      function join(channel_no) {
-          ChatosExamle.Message.delete();
-          var is_connect = wsConnect(channel_no);
-          console.log('is_connect' + is_connect)
-          if (is_connect) {
-              getChatRoomInfo(channel_no);
-              getChatLog(channel_no);
-              $('.chatbox').show();
-              return chatSocket
-          }
+        function join(channel_no) {
+            ChatosExamle.Message.delete();
+            var is_connect = wsConnect(channel_no);
+            console.log('is_connect' + is_connect)
+            if (is_connect) {
+                getChatRoomInfo(channel_no);
+                getChatLog(channel_no);
+                $('.chatbox').show();
+                return chatSocket
+            }
 
-      }
+        }
 
-      function joinRoom(channel_no) {
-          console.log('join ' + channel_no + chatSocket);
-          if (chatSocket == null) {
-              return join(channel_no)
-          } else {
-              switch (chatSocket.readyState) {
-                  case 0: //CONNECTING
-                      xtip.msg('切换过于频繁,稍后再试！');
-                      return chatSocket;
-                  case 1: //OPEN
-                      chatSocket.close();
-                      return join(channel_no);
-                  case 2:
-                      xtip.msg('正在关闭！');
-                      return chatSocket;
-                  case 3: // closed
-                      join(channel_no);
-                      return chatSocket;
-              }
-          }
-      }
+        function joinRoom(channel_no) {
+            console.log('join ' + channel_no + chatSocket);
+            if (chatSocket == null) {
+                return join(channel_no)
+            } else {
+                switch (chatSocket.readyState) {
+                    case 0: //CONNECTING
+                        xtip.msg('切换过于频繁,稍后再试！');
+                        return chatSocket;
+                    case 1: //OPEN
+                        chatSocket.close();
+                        return join(channel_no);
+                    case 2:
+                        xtip.msg('正在关闭！');
+                        return chatSocket;
+                    case 3: // closed
+                        join(channel_no);
+                        return chatSocket;
+                }
+            }
+        }
 
-      function joinSingle(channel_no, profile_id) {
-          console.log('joinSingle');
-          ChatosExamle.Message.delete();
-          getUserInfo(profile_id);
-          getPersonalChatLog(channel_no);
-          $('.chatbox').show();
-      }
+        function joinSingle(channel_no, profile_id) {
+            console.log('joinSingle');
+            ChatosExamle.Message.delete();
+            getUserInfo(profile_id);
+            getPersonalChatLog(channel_no);
+            $('.chatbox').show();
+        }
 
-      var ChatosExamle = {
-          Message: {
-              add: function (message, type, send_time) {
-                  var chat_body = $('.layout .content .chat .chat-body');
-                  if (chat_body.length > 0) {
-                      type = type ? type : '';
-                      message = message ? message : '消息不能为空';
-                      $('.layout .content .chat .chat-body .messages').append('<div class="message-item ' + type + '"><div class="message-content">' + message + '</div><div class="message-action">' + send_time + (type ? '<i class="ti-check"></i>' : '') + '</div></div>');
-                      chat_body.scrollTop(chat_body.get(0).scrollHeight, -1)
-                  }
-              },
-              delete: function () {
-                  $('.layout .content .chat .chat-body .messages').empty()
-              }
-          },
-          Info: {
-              add: function (message, type, send_time) {
-                  var chat_body = $('.layout .content .chat .chat-body');
-                  if (chat_body.length > 0) {
-                      type = type ? type : '';
-                      message = message ? message : '消息不能为空';
-                      $('.layout .content .chat .chat-body .messages').append('<div class="message-info ' + type + '"><div class="message-content">' + message + '</div><div class="message-action">' + send_time + (type ? '<i class="ti-check"></i>' : '') + '</div></div>');
-                      chat_body.scrollTop(chat_body.get(0).scrollHeight, -1)
-                  }
-              }
-          }
-      };
+        var ChatosExamle = {
+            Message: {
+                add: function (message, type, send_time) {
+                    var chat_body = $('.layout .content .chat .chat-body');
+                    if (chat_body.length > 0) {
+                        type = type ? type : '';
+                        message = message ? message : '消息不能为空';
+                        $('.layout .content .chat .chat-body .messages').append('<div class="message-item ' + type + '"><div class="message-content">' + message + '</div><div class="message-action">' + send_time + (type ? '<i class="ti-check"></i>' : '') + '</div></div>');
+                        chat_body.scrollTop(chat_body.get(0).scrollHeight, -1)
+                    }
+                },
+                delete: function () {
+                    $('.layout .content .chat .chat-body .messages').empty()
+                }
+            },
+            Info: {
+                add: function (message, type, send_time) {
+                    var chat_body = $('.layout .content .chat .chat-body');
+                    if (chat_body.length > 0) {
+                        type = type ? type : '';
+                        message = message ? message : '消息不能为空';
+                        $('.layout .content .chat .chat-body .messages').append('<div class="message-info ' + type + '"><div class="message-content">' + message + '</div><div class="message-action">' + send_time + (type ? '<i class="ti-check"></i>' : '') + '</div></div>');
+                        chat_body.scrollTop(chat_body.get(0).scrollHeight, -1)
+                    }
+                }
+            }
+        };
 
 
-      function xTipMsg(content, el_id) {
-          xtip.tips(content, el_id, {
-              bgcolor: '#e6e9e7',
-              times: 2,
-              pos: 'r',
-          });
-      }
+        function xTipMsg(content, el_id) {
+            xtip.tips(content, el_id, {
+                bgcolor: '#e6e9e7',
+                times: 2,
+                pos: 'r',
+            });
+        }
 
-      $('#chat-message-submit').click(function (e) {
-          e.preventDefault();
-          var messageInputDom = $('#chat-message-input');
-          var message = messageInputDom.val();
-          var channel_no = $('#chat-message-submit').attr('channel_no');
-          console.log('chat-message-submit channel_no' + channel_no, chatSocket);
-          if (!channel_no.startsWith('GP_')) {
-              chatSocket = ntfSocket;
-          }
-          if (chatSocket != null && chatSocket.readyState === 1) {
-              {#自己发的在回车就显示#}
-              ChatosExamle.Message.add(message, 'inside-message', '');
-              chatSocket.send(JSON.stringify({
-                  'message': message,
-                  'msg_type': 'chat_message',
-                  'send_user_nick_name': "{{ user.profile.nick_name }}",
-                  'send_to_user_uid': channel_no,
-              }));
-              messageInputDom.val('');
-          } else {
-              xtip.load('websocket 正在连接中', {'times': 1})
-          }
+        $('#chat-message-submit').click(function (e) {
+            e.preventDefault();
+            var messageInputDom = $('#chat-message-input');
+            var message = messageInputDom.val();
+            var channel_no = $('#chat-message-submit').attr('channel_no');
+            var msg_type = 'chat_message';
+            console.log('chat-message-submit channel_no' + channel_no, chatSocket);
+            if (!isNaN(channel_no)) {
+                chatSocket = ntfSocket;
+            }
+            if (channel_no.startsWith('MC_')) {
+                msg_type = 'chat_music'
+            }
+            if (chatSocket != null && chatSocket.readyState === 1) {
+                {#自己发的在回车就显示#}
+                ChatosExamle.Message.add(message, 'inside-message', '');
+                chatSocket.send(JSON.stringify({
+                    'message': message,
+                    'msg_type': msg_type,
+                    'send_user_nick_name': "{{ user.profile.nick_name }}",
+                    'send_to_user_uid': channel_no,
+                }));
+                messageInputDom.val('');
+            } else {
+                xtip.load('websocket 正在连接中或刷新页面试试。', {'times': 1})
+            }
 
-      });
+        });
 
-      $('#id_create_group').click(function () {
-          var room_name = $('#group_name').val();
-          var room_description = $('#description').val();
-          $.post('/api/chat_room/', {
-              'room_name': room_name,
-              'room_description': room_description
-          }).success(function () {
-              xtip.msg('创建群组成功');
-              $('#newGroup').modal('hide')
-          }).fail(function () {
-              xtip.msg('创建群组失败')
-          })
-      });
-      $('#id_group_info').on('click', function () {
-          // 执行一些动作...
-          console.log('asdsadasd')
-      });
-      $('#inviteFriends').on('show.bs.modal', function (e) {
-          $('#id_my_friends_list').empty();
-          var channel_no = $('#id_group').attr('channel_no');
-          $.get('/api/friends/', {'channel_no': channel_no}).success(function (data) {
-              $.each(data, function (k, v) {
-                  $('#id_my_friends_list').append('<option value="%s">%s</option>\n'.format(v.id, v.nick_name || ''))
-              })
-          })
-      });
-      // edit_profile
-      $('#editProfileModal').on('show.bs.modal', function () {
-          var profile_id = "{{ user.profile.id }}"
-          $.get('/api/user_info/%s/'.format(profile_id)).success(function (data) {
-              $('#fullname').val(data.nick_name);
-              $('#id_img').attr('src', data.img_path);
-              $('#Uid').val(data.unicode_id);
-              $('#about-text').val(data.signature);
-              $('#city').val(data.city);
-              $('#qq').val(data.qq_number);
-              $('#is_use_qq_img').attr("checked", data.is_use_qq_img)
+        $('#id_create_group').click(function () {
+            var room_name = $('#group_name').val();
+            var room_description = $('#description').val();
+            $.post('/api/chat_room/', {
+                'room_name': room_name,
+                'room_description': room_description
+            }).success(function () {
+                xtip.msg('创建群组成功');
+                $('#newGroup').modal('hide')
+            }).fail(function () {
+                xtip.msg('创建群组失败')
+            })
+        });
+        $('#id_group_info').on('click', function () {
+            // 执行一些动作...
+            console.log('asdsadasd')
+        });
+        $('#inviteFriends').on('show.bs.modal', function (e) {
+            $('#id_my_friends_list').empty();
+            var channel_no = $('#id_group').attr('channel_no');
+            $.get('/api/friends/', {'channel_no': channel_no}).success(function (data) {
+                $.each(data, function (k, v) {
+                    $('#id_my_friends_list').append('<option value="%s">%s</option>\n'.format(v.id, v.nick_name || ''))
+                })
+            })
+        });
+        // edit_profile
+        $('#editProfileModal').on('show.bs.modal', function () {
+            var profile_id = "{{ user.profile.id }}"
+            $.get('/api/user_info/%s/'.format(profile_id)).success(function (data) {
+                $('#fullname').val(data.nick_name);
+                $('#id_img').attr('src', data.img_path);
+                $('#Uid').val(data.unicode_id);
+                $('#about-text').val(data.signature);
+                $('#city').val(data.city);
+                $('#qq').val(data.qq_number);
+                $('#is_use_qq_img').attr("checked", data.is_use_qq_img)
 
-          })
-      })
-      $('#id_save_profile').on('click', function () {
-          var profile_id = "{{ user.profile.id }}"
-          var data = {
-              'user': profile_id,
-              'nick_name': $('#fullname').val(),
-              'signature': $('#about-text').val(),
-              'city': $('#city').val(),
-              'qq_number': $('#qq').val(),
-              'is_use_qq_img': $('#is_use_qq_img').prop('checked')
-          }
-          $.ajax({
-              url: '/api/user_info/%s/'.format(profile_id),
-              type: 'PUT',
-              data: data,
-              success: function () {
-                  $('#editProfileModal').modal('hide')
-                  xtip.msg('保存成功')
-              },
-              error: function (data) {
-                  xtip.msg(data.responseText)
-              }
-          })
-      })
-      $('#id_invite_friends').click(function () {
-          var my_friends_list = $('#id_my_friends_list').val();
-          console.log(my_friends_list);
-          var channel_no = $('#id_group').attr('channel_no');
-          investFriendsToRoom(channel_no, my_friends_list);
-      });
-      var target_map = {
-          'friends': getFriends,
-          'chats': getChatRoome,
-          'talks': getTalkLog,
-      };
-      // chat/frienfs/talk
-      $(document).on("click", "[data-navigation-target]", function () {
-          var target = $(this).attr('data-navigation-target');
-          if ($.inArray(target, Object.keys(target_map)) !== -1) {
-              target_map[target]()
-          }
+            })
+        })
+        $('#id_save_profile').on('click', function () {
+            var profile_id = "{{ user.profile.id }}"
+            var data = {
+                'user': profile_id,
+                'nick_name': $('#fullname').val(),
+                'signature': $('#about-text').val(),
+                'city': $('#city').val(),
+                'qq_number': $('#qq').val(),
+                'is_use_qq_img': $('#is_use_qq_img').prop('checked')
+            }
+            $.ajax({
+                url: '/api/user_info/%s/'.format(profile_id),
+                type: 'PUT',
+                data: data,
+                success: function () {
+                    $('#editProfileModal').modal('hide')
+                    xtip.msg('保存成功')
+                },
+                error: function (data) {
+                    xtip.msg(data.responseText)
+                }
+            })
+        })
+        $('#id_invite_friends').click(function () {
+            var my_friends_list = $('#id_my_friends_list').val();
+            console.log(my_friends_list);
+            var channel_no = $('#id_group').attr('channel_no');
+            investFriendsToRoom(channel_no, my_friends_list);
+        });
+        var target_map = {
+            'friends': getFriends,
+            'chats': getChatRoome,
+            'talks': getTalkLog,
+        };
+        // chat/frienfs/talk
+        $(document).on("click", "[data-navigation-target]", function () {
+            var target = $(this).attr('data-navigation-target');
+            if ($.inArray(target, Object.keys(target_map)) !== -1) {
+                target_map[target]()
+            }
 
-      });
+        });
 
-      $('#id_find_group').click(function () {
-          getAllChatRoome()
-      });
+        $('#id_find_group').click(function () {
+            getAllChatRoome()
+        });
 
-      // 搜索群组时进群
-      function joinChatroom(channel_no) {
-          var my_friends_list = ['{{ user.id }}'];
-          console.log('搜索群组时进群', channel_no);
+        // 搜索群组时进群
+        function joinChatroom(channel_no) {
+            var my_friends_list = ['{{ user.id }}'];
+            console.log('搜索群组时进群', channel_no);
 
-          investFriendsToRoom(channel_no, my_friends_list)
-      }
+            investFriendsToRoom(channel_no, my_friends_list)
+        }
 
-      $('#id_talks').on('click', 'figure,h5,p', function () {
-          $('.talks').show();
-      });
+        $('#id_talks').on('click', 'figure,h5,p', function () {
+            $('.talks').show();
+        });
 
-      function postTalk() {
-          var content = $('#id_talk_content').val();
-          $.ajax({
-              url: '/api/talk_log/',
-              type: 'post',
-              data: {'content': content, 'profile': '{{user.profile.id}}'},
-              success: function () {
-                  xtip.msg('添加成功');
-                  getTalkLog();
-                  $('#addTalks').modal('hide')
-              },
-              error: function (data) {
-                  xtip.msg(data.responseText)
-              }
-          })
-      }
+        function postTalk() {
+            var content = $('#id_talk_content').val();
+            $.ajax({
+                url: '/api/talk_log/',
+                type: 'post',
+                data: {'content': content, 'profile': '{{user.profile.id}}'},
+                success: function () {
+                    xtip.msg('添加成功');
+                    getTalkLog();
+                    $('#addTalks').modal('hide')
+                },
+                error: function (data) {
+                    xtip.msg(data.responseText)
+                }
+            })
+        }
 
-      function showData() {
-          $.ajax({
-              url: '/api/get_statistic/',
-              type: 'get',
-              success: function (data) {
-                  console.log(data)
-                  $('#total_user').html(data.total_user)
-                  $('#total_room').html(data.total_room)
-                  $('#total_online').html(data.total_online)
-                  $('#total_history').html(data.total_history)
-                  showArea('revenue-chart', data.area)
-                  showLine('line-chart', data.line)
-                  showBar('bar-chart',data.bar)
-                  showDonut('sales-chart',data.donut)
-              }
-          })
+        function showData() {
+            $.ajax({
+                url: '/api/get_statistic/',
+                type: 'get',
+                success: function (data) {
+                    console.log(data)
+                    $('#total_user').html(data.total_user)
+                    $('#total_room').html(data.total_room)
+                    $('#total_online').html(data.total_online)
+                    $('#total_history').html(data.total_history)
+                    showArea('revenue-chart', data.area)
+                    showLine('line-chart', data.line)
+                    showBar('bar-chart', data.bar)
+                    showDonut('sales-chart', data.donut)
+                }
+            })
 
-      }
+        }
 
-      //show
-      function showArea(element, data) {
-          // AREA CHART
-          var area = new Morris.Area({
-              element: element,
-              resize: true,
-              data: data,
-              xkey: 'y',
-              ykeys: ['item1', 'item2'],
-              labels: ['单新增', '比总量差'],
-              lineColors: ['#a0d0e0', '#3c8dbc'],
-              hideHover: 'auto'
-          });
-      }
+        //show
+        function showArea(element, data) {
+            // AREA CHART
+            var area = new Morris.Area({
+                element: element,
+                resize: true,
+                data: data,
+                xkey: 'y',
+                ykeys: ['item1', 'item2'],
+                labels: ['单新增', '比总量差'],
+                lineColors: ['#a0d0e0', '#3c8dbc'],
+                hideHover: 'auto'
+            });
+        }
 
-      function showLine(element,data) {
-          // LINE CHART
-          var line = new Morris.Line({
-              element: element,
-              resize: true,
-              data: data,
-              xkey: 'y',
-              ykeys: ['item1'],
-              labels: ['人数'],
-              lineColors: ['#3c8dbc'],
-              hideHover: 'auto'
-          });
-      }
-      function showDonut(element,data){
-          //DONUT CHART
-          var donut = new Morris.Donut({
-              element: element,
-              resize: true,
-              colors: ["#3c8dbc", "#f56954", "#00a65a"],
-              data: data,
-              hideHover: 'auto'
-          });
-      }
-      function showBar(element,data){
-         //BAR CHART
-          var bar = new Morris.Bar({
-              element: element,
-              resize: true,
-              data: data,
-              barColors: ['#00a65a', '#f56954'],
-              xkey: 'y',
-              ykeys: ['a', 'b'],
-              labels: ['单新增', '累计数量'],
-              hideHover: 'auto'
-          });
-      }
+        function showLine(element, data) {
+            // LINE CHART
+            var line = new Morris.Line({
+                element: element,
+                resize: true,
+                data: data,
+                xkey: 'y',
+                ykeys: ['item1'],
+                labels: ['人数'],
+                lineColors: ['#3c8dbc'],
+                hideHover: 'auto'
+            });
+        }
 
-      $(document).ready(function () {
-          getHistory();
-          getChatRoome();
-          var uid = "{{ user.profile.unicode_id }}";
-          var ntfSocket = notificationConnect(uid);
-          showData();
-          $('.layout .content .chat .chat-body').niceScroll({cursorborderradius: "5px",});
-          $(".talks").niceScroll({cursorcolor: "#e6e9e7"});
-      });
+        function showDonut(element, data) {
+            //DONUT CHART
+            var donut = new Morris.Donut({
+                element: element,
+                resize: true,
+                colors: ["#3c8dbc", "#f56954", "#00a65a"],
+                data: data,
+                hideHover: 'auto'
+            });
+        }
 
-  </script>
+        function showBar(element, data) {
+            //BAR CHART
+            var bar = new Morris.Bar({
+                element: element,
+                resize: true,
+                data: data,
+                barColors: ['#00a65a', '#f56954'],
+                xkey: 'y',
+                ykeys: ['a', 'b'],
+                labels: ['单新增', '累计数量'],
+                hideHover: 'auto'
+            });
+        }
+
+        $(document).ready(function () {
+            getHistory();
+            getChatRoome();
+            var uid = "{{ user.profile.unicode_id }}";
+            var ntfSocket = notificationConnect(uid);
+            showData();
+            $('.layout .content .chat .chat-body').niceScroll({cursorborderradius: "5px",});
+            $(".talks").niceScroll({cursorcolor: "#e6e9e7"});
+        });
+
+    </script>
 {% endblock %}

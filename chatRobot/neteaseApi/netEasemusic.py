@@ -235,6 +235,13 @@ class NetEaseServer(object):
             self.song_details['artist'] = resp.get('songs', [{}])[0].get('ar', [{}])[0].get('name', None)
         return self.song_details
 
+    def get_song_lyric(self, song_id):
+        resp = self.ne.songs_lyric(song_id)
+        song_lyric = None
+        if resp.get('code') != '-1':
+            song_lyric = resp.get('lrc', {}).get('lyric', None)
+        return song_lyric
+
 
 """
 ------------------------------------------------------------------------------------------------------------------------
@@ -247,9 +254,10 @@ class NetEaseServer(object):
 def start():
     # 1452182536
     nes = NetEaseServer()
-    a = nes.get_song_id('霓虹甜心')
+    # a = nes.get_song_id('霓虹甜心')
+    a = '1452182536'
     print(a)
-    b =nes.get_song_url(a)
+    b = nes.get_song_lyric(a)
     print(b)
 
 

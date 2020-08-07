@@ -5,6 +5,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from django.contrib.auth.models import User, AnonymousUser
 
 from chat.models import ChatLog, ChatRoom
+from chatRobot.music_robot import MusicRobot
 from dj_chat.util import ChatCache
 from utils.chatrobot import sizhi, talk_with_me
 
@@ -160,6 +161,20 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     'user_id': str(chat_user.id),
                     'send_time': send_time.strftime('%p %H:%M'),
                     'msg_type': msg_type,
+                }
+            )
+        elif msg_type == 'chat_music':
+            print('chat,usi')
+            aplayer_data = MusicRobot().get_song_info(message)
+            print('>>>\n', aplayer_data)
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'message': [aplayer_data],
+                    'msg_type': msg_type,
+                    'user_id': '',
+                    'send_time': ''
                 }
             )
 
