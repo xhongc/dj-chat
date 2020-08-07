@@ -246,9 +246,11 @@ class NetEaseServer(object):
 
 def start():
     # 1452182536
-    nes = NetEase()
-    a = nes.songs_lyric('1452182536')
+    nes = NetEaseServer()
+    a = nes.get_song_id('霓虹甜心')
     print(a)
+    b =nes.get_song_url(a)
+    print(b)
 
 
 if __name__ == '__main__':

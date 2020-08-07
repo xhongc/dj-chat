@@ -3,8 +3,7 @@
 {% block css %}
   <link rel="stylesheet" href="{% static '/css/soho.min.css' %}">
   <link rel="stylesheet" href="{% static 'data-show/css/morris.css' %}">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.js" integrity="sha512-RWosNnDNw8FxHibJqdFRySIswOUgYhFxnmYO3fp+BgCU7gfo4z0oS7mYFBvaa8qu+axY39BmQOrhW3Tp70XbaQ==" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.css" integrity="sha512-CIYsJUa3pr1eoXlZFroEI0mq0UIMUqNouNinjpCkSWo3Bx5NRlQ0OuC6DtEB/bDqUWnzXc1gs2X/g52l36N5iw==" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.css" integrity="sha512-CIYsJUa3pr1eoXlZFroEI0mq0UIMUqNouNinjpCkSWo3Bx5NRlQ0OuC6DtEB/bDqUWnzXc1gs2X/g52l36N5iw==" crossorigin="anonymous" />
 
   <style>
     .message-info {
@@ -85,34 +84,6 @@
       </div>
     </div>
   </div>
-
-
-  {#      <div class="modal call fade show" id="call" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"#}
-  {#           aria-modal="true" style="display: block;">#}
-  {#        <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">#}
-  {#          <div class="modal-content">#}
-  {#            <div class="modal-body">#}
-  {#              <div class="call">#}
-  {#                <div class="call-background" style="background: "></div>#}
-  {#                <div>#}
-  {#                  <figure class="mb-4 avatar avatar-xl">#}
-  {#                    <img src="#" class="rounded-circle">#}
-  {#                  </figure>#}
-  {#                  <h4 class="text-center">Jennica Kindred calling ...</h4>#}
-  {#                  <div class="action-button">#}
-  {#                    <button type="button" class="btn btn-danger btn-floating btn-lg" data-dismiss="modal">#}
-  {#                      <i class="ti-close"></i>#}
-  {#                    </button>#}
-  {#                    <button type="button" class="btn btn-success btn-pulse btn-floating btn-lg">#}
-  {#                      <i class="fa fa-phone"></i>#}
-  {#                    </button>#}
-  {#                  </div>#}
-  {#                </div>#}
-  {#              </div>#}
-  {#            </div>#}
-  {#          </div>#}
-  {#        </div>#}
-  {#      </div>#}
 
   {#  添加创建群组#}
   <div class="modal" id="newGroup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -274,7 +245,7 @@
       </div>
     </div>
   </div>
-
+{#  设置#}
   <div class="modal" id="settingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
        aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
@@ -383,7 +354,7 @@
     </div>
   </div>
 
-
+{#个人信息#}
   <div class="modal" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
        aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
@@ -957,7 +928,7 @@
             <ul class="list-inline">
               {#              电话按钮#}
               <li class="list-inline-item">
-                <a href="#" class="btn btn-success">
+                <a href="#" class="btn btn-success" data-navigation-target="music-info">
                   <i class="fa fa-phone" aria-hidden="true"></i>
                 </a>
               </li>
@@ -1186,6 +1157,33 @@
         </div>
       </div>
       {#资料抽屉#}
+      {#  music#}
+      <div class="sidebar-group" id="id_music">
+        <div id="music-info" class="sidebar">
+          <header>
+            <span>Music</span>
+            <ul class="list-inline">
+              <li class="list-inline-item">
+                <a href="#" class="btn btn-light sidebar-close">
+                  <i class="ti-close"></i>
+                </a>
+              </li>
+            </ul>
+          </header>
+          <div class="#" style="overflow: hidden; outline: none;" tabindex="6" id="music_list">
+            <div class="pl-4 pr-4 text-center">
+              <figure class="avatar avatar-state-danger avatar-xl mb-4">
+                <img src="#" class="rounded-circle" id="id_admin_img_path">
+              </figure>
+              <h5 class="text-primary" id="id_admin_name">Admin</h5>
+              <p class="text-muted" id="id_admin_signature">I am admin</p>
+            </div>
+            <hr>
+          </div>
+        </div>
+      </div>
+
+
       {#群成员抽屉#}
       <div class="sidebar-group" id="id_group">
         <div id="room—member-info" class="sidebar">
@@ -1242,6 +1240,7 @@
 {% endblock %}
 {% block script %}
   <script src="{% static 'js/chat_api.js' %}"></script>
+  <script src="{% static 'js/music.js' %}"></script>
   <script src="{% static 'js/soho.min.js' %}"></script>
   <script src="{% static 'js/jquery.nicescroll.min.js' %}"></script>
   <script src="{% static 'js/popper.min.js' %}"></script>
@@ -1249,6 +1248,8 @@
   <script src="{% static 'data-show/js/morris.min.js' %}"></script>
   <script src="{% static 'data-show/js/raphael.min.js' %}"></script>
   <script src="{% static 'data-show/js/adminlte.min.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.js" integrity="sha512-RWosNnDNw8FxHibJqdFRySIswOUgYhFxnmYO3fp+BgCU7gfo4z0oS7mYFBvaa8qu+axY39BmQOrhW3Tp70XbaQ==" crossorigin="anonymous"></script>
+
 
   <script>
       var chatSocket = null;
