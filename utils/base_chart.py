@@ -45,16 +45,3 @@ def get_date_range(period, start, end):
         data.append(d)
     return data
 
-
-class Series(object):
-    def __init__(self, x_key, y_key, x_value, y_value, x_range, is_cumulative=False):
-        self.x_key = x_key
-        self.y_key = y_key
-        self.x_value = x_value
-        self.y_value = y_value
-        self.x_range = x_range
-
-        self.is_cumulative = is_cumulative
-
-    def series_data_list(self):
-        pass

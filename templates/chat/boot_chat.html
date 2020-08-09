@@ -2,10 +2,11 @@
 {% load staticfiles %}
 {% block css %}
     <link rel="stylesheet" href="{% static '/css/soho.min.css' %}">
+    <link rel="stylesheet" href="{% static '/css/APlayer.min.css' %}">
     <link rel="stylesheet" href="{% static 'data-show/css/morris.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.css"
-          integrity="sha512-CIYsJUa3pr1eoXlZFroEI0mq0UIMUqNouNinjpCkSWo3Bx5NRlQ0OuC6DtEB/bDqUWnzXc1gs2X/g52l36N5iw=="
-          crossorigin="anonymous"/>
+    {#    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.css"#}
+    {#          integrity="sha512-CIYsJUa3pr1eoXlZFroEI0mq0UIMUqNouNinjpCkSWo3Bx5NRlQ0OuC6DtEB/bDqUWnzXc1gs2X/g52l36N5iw=="#}
+    {#          crossorigin="anonymous"/>#}
 
     <style>
         .message-info {
@@ -1255,12 +1256,13 @@
     <script src="{% static 'js/jquery.nicescroll.min.js' %}"></script>
     <script src="{% static 'js/popper.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/APlayer.min.js' %}"></script>
     <script src="{% static 'data-show/js/morris.min.js' %}"></script>
     <script src="{% static 'data-show/js/raphael.min.js' %}"></script>
     <script src="{% static 'data-show/js/adminlte.min.js' %}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.js"
-            integrity="sha512-RWosNnDNw8FxHibJqdFRySIswOUgYhFxnmYO3fp+BgCU7gfo4z0oS7mYFBvaa8qu+axY39BmQOrhW3Tp70XbaQ=="
-            crossorigin="anonymous"></script>
+    {#    <script src="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.js"#}
+    {#            integrity="sha512-RWosNnDNw8FxHibJqdFRySIswOUgYhFxnmYO3fp+BgCU7gfo4z0oS7mYFBvaa8qu+axY39BmQOrhW3Tp70XbaQ=="#}
+    {#            crossorigin="anonymous"></script>#}
 
 
     <script>
@@ -1334,7 +1336,7 @@
             };
             ntfSocket.onclose = function (e) {
                 $('#id_online').html('Outline');
-                console.log('Socket is closed. Reconnect will be attempted in 1 second.', e);
+                xtip.msg('连接断开，请刷新重试')
             };
             ntfSocket.onerror = function (e) {
                 $('#id_online').html('Outline');
@@ -1358,18 +1360,34 @@
             }
 
             chatSocket.onopen = function (e) {
-                let username = "{{ user.profile.nick_name }}";
-                chatSocket.send(JSON.stringify({
-                    'message': username + '  加入',
-                    'msg_type': 'chat_info'
-                }));
+
+                if (channel_no.slice(0, 2) === 'GP') {
+                    let username = "{{ user.profile.nick_name }}";
+                    chatSocket.send(JSON.stringify({
+                        'message': username + '  加入',
+                        'msg_type': 'chat_info'
+                    }));
+                } else if (channel_no.slice(0, 2) === 'MC') {
+                    let username = "{{ user.profile.nick_name }}";
+                    chatSocket.send(JSON.stringify({
+                        'message': username + '  加入',
+                        'msg_type': 'chat_info'
+                    }));
+                    chatSocket.send(JSON.stringify({
+                        'message': 'init_data',
+                        'action': 'init_data',
+                        'msg_type': 'chat_music'
+                    }));
+                    $('[data-navigation-target="music-info"]').click()
+                }
+
             };
             chatSocket.onmessage = function (e) {
                 var data = JSON.parse(e.data);
                 parseChatMsg(data)
             };
             chatSocket.onclose = function (e) {
-                console.log('Socket is closed. Reconnect will be attempted in 1 second.', e);
+                console.log('Socket is closed.');
             };
             chatSocket.onerror = function (e) {
                 console.log('Socket is onerror.', e.reason);
@@ -1385,7 +1403,6 @@
             var user_id = data['user_id'];
             var send_time = data['send_time'];
             var me = window.localStorage.user_id;
-            console.log(msg_type);
             if (message) {
                 if (msg_type === 'chat_message') {
                     if (user_id === me) {
@@ -1397,13 +1414,59 @@
                     ChatosExamle.Message.delete();
                     ChatosExamle.Info.add('稍等加载中...', '', '');
                     ChatosExamle.Info.add(message, '', '');
-                } else if (msg_type === 'chat_music'){
-                    if(!window.ap){
+                } else if (msg_type === 'chat_music') {
+                    var is_first = false
+                    if (!window.ap) {
                         console.log('init ap')
-                        window.ap =MusicPlayerInit('#music_list')
+                        window.ap = MusicPlayerInit('#music_list')
+                        is_first = true
+                    }
+                    var action = data['action'];
+                    var song_index = data['song_index']
+                    console.log(action)
+                    if (action === 'init_data' && is_first) {
+                        ChatosExamle.Info.add('<div>1.输入 “点歌 歌名” 即可点歌。例如：点歌 旧城之王</br>2.如遇不好听的歌可以输入 例如：切歌 </div>', '', '');
+                        if (message.length !== 0) {
+                            ap.list.clear()
+                            addMusicList(ap, message)
+                            ap.play()
+                            console.log(message[0].song_process)
+                            window.seek_num = message[0].song_process
+                            {#ap.seek(message[0].song_process)#}
+                            console.log('ack歌曲播放进度')
+                            //ack 歌曲播放进度
+                            chatSocket.send(JSON.stringify({
+                                'message': 'ack 歌曲播放进度',
+                                'song_index': '',
+                                'msg_type': 'chat_music',
+                                'action': 'ack_song_process',
+                            }));
+                        }
+
+                    } else if (action === 'add_song') {
+                        console.log('action===\'add_song\'')
+                        addMusicList(ap, message)
+
+                    } else if (action === 'reload_song_url') {
+                        addMusicList(ap, message, song_index)
+                    } else if (action === 'tips') {
+                        xtip.msg('找不到歌曲，或歌曲已存在。')
+                    } else if (action === 'switch_next_song') {
+                        ap.list.remove(ap.list.index)
+                    } else if (action === 'syn_song_process') {
+                        console.log('调节到', message)
+                        window.seek_num = message;
+                        ap.seek(message)
+                    } else if (action === 'ack_song_process') {
+                        // 回答自己歌曲播放进度 timeupdate
+                        chatSocket.send(JSON.stringify({
+                            'message': ap.audio.currentTime.toString(),
+                            'song_index': '',
+                            'msg_type': 'chat_music',
+                            'action': 'syn_song_process',
+                        }));
                     }
 
-                    addMusicList(ap, message)
                 } else {
                     // ChatosExamle.Info.add(message, '', '');
                     xtip.danmu(message)
@@ -1514,6 +1577,7 @@
                     'msg_type': msg_type,
                     'send_user_nick_name': "{{ user.profile.nick_name }}",
                     'send_to_user_uid': channel_no,
+                    'now_song_id': ap.list.audios[ap.list.index] ? ap.list.audios[ap.list.index].id : '',
                 }));
                 messageInputDom.val('');
             } else {

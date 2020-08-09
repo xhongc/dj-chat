@@ -107,7 +107,7 @@ class StatisticViewsets(mixins.ListModelMixin, GenericViewSet):
     def list(self, request, *args, **kwargs):
         total_user = User.objects.count()
         total_room = ChatRoom.objects.count()
-        total_online = len(ChatCache().get_cache('__online') or {})
+        total_online = ChatCache('__online').set_len() or 0
         total_history = History.objects.aggregate(total=Sum('count'))['total']
         user_register_table = self.get_user_register_table()
         daily_user_register_table = self.get_daily_user_register_table()

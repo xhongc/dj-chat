@@ -9,25 +9,116 @@ function MusicPlayerInit(element) {
         loop: 'all',
         order: 'list',
         preload: 'auto',
-        volume: 0.7,
+        volume: 0.5,
         mutex: true,
         listFolded: false,
         listMaxHeight: 90,
         lrcType: 1,
+
     });
     ap.on('ended', function () {
-        ap.list.remove(ap.list.index)
+        var song_index = ap.list.index-1
+        var song_list = ap.list.audios[song_index]
+        var song_list_id = song_list ? song_list.id : ''
+        console.log('移除song', song_index, song_list_id)
+        // 播放结束移除redis里的歌单
+        chatSocket.send(JSON.stringify({
+            'message': song_list,
+            'song_index': song_index,
+            'msg_type': 'chat_music',
+            'action': 'remove_song',
+            'now_song_id': song_list_id,
+
+        }));
+        ap.list.remove(song_index)
+
     })
-    ap.on('error', function () {
-        ap.list.remove(ap.list.index)
+    //播放错误重新请求
+    ap.on('error', function (e) {
+        var song_index = ap.list.index
+        var song_list = ap.list.audios[song_index]
+        ap.list.remove(song_index)
+        console.log('歌曲重新获取url', song_index, ap.list.audios)
+        chatSocket.send(JSON.stringify({
+            'message': song_list,
+            'song_index': song_index,
+            'msg_type': 'chat_music',
+            'action': 'reload_song_url',
+        }));
     })
+    ap.on('abort', function (e) {
+        console.log('abortabortabortabort')
+    })
+    // ap.on('canplay', function (e) {
+    //     console.log('canplay', e)
+    // })
+    // ap.on('canplaythrough', function (e) {
+    //     console.log('canplaythrough', e)
+    // })
+    // ap.on('durationchange', function (e) {
+    //     console.log('durationchange', e)
+    // })
+    ap.on('emptied', function (e) {
+        console.log('emptied')
+    })
+    ap.on('loadeddata', function (e) {
+        console.log('loadeddata')
+    })
+    ap.on('loadedmetadata', function (e) {
+        console.log('loadedmetadata')
+    })
+    // ap.on('loadstart', function (e) {
+    //     console.log('loadstart', e)
+    // })
+    // ap.on('mozaudioavailable', function (e) {
+    //     console.log('mozaudioavailable', e)
+    // })
+    // ap.on('pause', function (e) {
+    //     console.log('pause', e)
+    //
+    // })
+    // ap.on('play', function (e) {
+    // })
+    // ap.on('playing', function (e) {
+    //     console.log('playing', ap.audio.currentTime)
+    //
+    // })
+    ap.on('progress', function (e) {
+        console.log('progress')
+        ap.play()
+        ap.seek(window.seek_num)
+        delete window.seek_num;
+    })
+    // ap.on('seeked', function (e) {
+    //     console.log('seeked', e)
+    // })
+    // ap.on('seeking', function (e) {
+    //     console.log('seeking', e)
+    // })
+    // ap.on('stalled', function (e) {
+    //     console.log('stalled', e)
+    // })
+    // ap.on('suspend', function (e) {
+    //     console.log('suspend', e)
+    // })
+    // ap.on('timeupdate', function (e) {
+    //
+    // })
+    // ap.on('volumechange', function (e) {
+    //     console.log('timeupdate', e)
+    // })
+    // ap.on('waiting', function (e) {
+    //     console.log('timeupdate', e)
+    // })
     return ap
 }
 
-function addMusicList(ap, music_info) {
-    ap.list.add(music_info)
+function addMusicList(ap, music_info, index = null) {
+    if (index) {
+        ap.list.switch(index);
+    } else {
+        ap.list.add(music_info)
+    }
+
 }
 
-function get() {
-
-}

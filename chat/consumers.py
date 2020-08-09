@@ -31,11 +31,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # 必须是我加入的频道
         if room_channel_no in self.request_user.profile.get_my_chat_room():
             # 加入成员保存字典 redis缓存中
-            ChatCache().append(self.room_group_name, self.request_user.profile.unicode_id)
+            ChatCache(self.room_group_name).set_add(self.request_user.profile.unicode_id)
             # 打印信息
             print('UID:%s加入房间(%s),剩余:%s' % (
                 self.request_user.profile.unicode_id, self.room_group_name,
-                ChatCache().get_cache(self.room_group_name)))
+                ChatCache(self.room_group_name).set_members()))
             # Join room group
             await self.channel_layer.group_add(
                 self.room_group_name,
@@ -55,9 +55,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         # Leave room group 缓存中清理
-        ChatCache().remove(self.room_group_name, self.request_user.profile.unicode_id)
+        ChatCache(self.room_group_name).set_remove(self.request_user.profile.unicode_id)
         print('UID:%s离开房间(%s),剩余:%s' % (
-            self.request_user.profile.unicode_id, self.room_group_name, ChatCache().get_cache(self.room_group_name)))
+            self.request_user.profile.unicode_id, self.room_group_name, ChatCache(self.room_group_name).set_members()))
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
@@ -66,9 +66,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # Receive message from WebSocket
     async def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
-        message = text_data_json['message']
+        message = text_data_json.get('message', '')
+        if message == '': return
         msg_type = text_data_json['msg_type']
         send_user_nick_name = text_data_json.get('send_user_nick_name', '') or ''
+        action = text_data_json.get('action', '') or ''
+        song_index = text_data_json.get('song_index', None)
+        now_song_id = text_data_json.get('now_song_id', None)
+
         chat_user = self.request_user
         send_time = datetime.now()
         # 机器人 加思知回复
@@ -107,7 +112,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             # Send message to room group 如果他人不在房间就单对单发通知
             if self.chat_room_model:
                 menbers_list = self.chat_room_model.get_members_unicode_id()
-                online_list = ChatCache().get_cache(self.room_group_name)
+                online_list = ChatCache(self.room_group_name).set_members()
                 outline_list = set(menbers_list) - online_list
                 print('成员人数：%s\n在线人数：%s\n离线人数：%s' % (menbers_list, online_list, outline_list))
                 for ntf in outline_list:
@@ -165,16 +170,57 @@ class ChatConsumer(AsyncWebsocketConsumer):
             )
         elif msg_type == 'chat_music':
             print('chat,usi')
-            aplayer_data = MusicRobot().get_song_info(message)
+            aplayer_data = []
+            if 'init_data' in message:
+                aplayer_data = MusicRobot().get_now_song_data_list()
+                action = 'init_data'
+                # 询问其他人进度
+            elif '点歌' in message:
+                message = message.replace('点歌', '', 1).strip()
+                song_info = MusicRobot().pick_a_song(message)
+                # 找不到歌曲，或歌曲已存在
+                if not song_info:
+                    action = 'tips'
+                else:
+                    aplayer_data = [song_info]
+                    action = 'add_song'
+            elif "切歌" in message:
+                MusicRobot().switch_next_song(now_song_id)
+                action = 'switch_next_song'
+            elif action == 'reload_song_url':
+                music_robot = MusicRobot()
+                # todo message['id'] change to now_song_id
+                music_robot.del_song_data(message['id'])
+                new_song_url = music_robot.get_song_url(message['id'])
+                message['url'] = new_song_url
+                music_robot.upload_song_data(message['id'], message)
+                aplayer_data = [message]
+            elif action == 'remove_song':
+                MusicRobot().del_song_data(now_song_id)
+                return
+            elif action == 'ack_song_process':
+                print('询问其他人播放进度')
+            elif action == 'syn_song_process':
+                print('回答自己歌曲播放进度', chat_user.profile.nick_name, message)
+                # todo 改为自己的 return
+                if float(message) < 1:
+                    return
+                aplayer_data = message
+            elif action == 'quit_listen_song':
+                print(message)
+            else:
+                return
             print('>>>\n', aplayer_data)
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
                     'type': 'chat_message',
-                    'message': [aplayer_data],
+                    'message': aplayer_data,
                     'msg_type': msg_type,
                     'user_id': '',
-                    'send_time': ''
+                    'send_time': '',
+                    'action': action,
+                    'song_index': song_index,
                 }
             )
 
@@ -185,6 +231,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         send_time = event['send_time']
         type = event['type']
         msg_type = event['msg_type']
+        action = event.get('action', 'null')
+        song_index = event.get('song_index', 0)
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'message': message,
@@ -192,6 +240,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'send_time': send_time,
             'type': type,
             'msg_type': msg_type,
+            'action': action,
+            'song_index': song_index
         }))
 
 
@@ -202,7 +252,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         uid = self.scope['url_route']['kwargs']['uid']
-        ChatCache().append('__online', uid)
+        ChatCache('__online').set_add(uid)
         if self.scope["user"].is_anonymous:
             # Reject the connection
             await self.close()
@@ -220,7 +270,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         # Leave room group
-        # ChatCache().remove('__online', self.uid)
+        # ChatCache().set_remove('__online', self.uid)
         await self.channel_layer.group_discard(
             self.uid_group,
             self.channel_name
@@ -230,7 +280,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
         msg_type = text_data_json['msg_type']
-        send_to_user_uid = text_data_json['send_to_user_uid']
+        send_to_user_uid = text_data_json.get('send_to_user_uid', '')
         send_user_nick_name = text_data_json.get('send_user_nick_name', '') or ''
         chat_user = self.scope.get('user')
         if msg_type == 'push_message':
