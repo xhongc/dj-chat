@@ -112,6 +112,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             # Send message to room group 如果他人不在房间就单对单发通知
             if self.chat_room_model:
                 menbers_list = self.chat_room_model.get_members_unicode_id()
+                menbers_list = [str(i) for i in menbers_list]
                 online_list = ChatCache(self.room_group_name).set_members()
                 outline_list = set(menbers_list) - online_list
                 print('成员人数：%s\n在线人数：%s\n离线人数：%s' % (menbers_list, online_list, outline_list))
