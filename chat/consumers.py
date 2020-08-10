@@ -169,7 +169,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 }
             )
         elif msg_type == 'chat_music':
-            print('chat,usi')
+            print('chat,music')
             aplayer_data = []
             if 'init_data' in message:
                 aplayer_data = MusicRobot().get_now_song_data_list()
@@ -213,7 +213,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 print(message)
             else:
                 return
-            print('>>>\n', aplayer_data)
+            print('>>>当前歌单\n', aplayer_data)
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {

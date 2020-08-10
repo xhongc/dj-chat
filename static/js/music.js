@@ -16,6 +16,10 @@ function MusicPlayerInit(element) {
         lrcType: 1,
 
     });
+    // 禁止切歌
+    $('.aplayer-bar-wrap').css("pointer-events","none")
+    $('.aplayer-list').css("pointer-events","none")
+    $('.aplayer-pic').css("pointer-events","none")
     ap.on('ended', function () {
         var song_index = ap.list.index - 1
         var song_list = ap.list.audios[song_index]
@@ -38,7 +42,7 @@ function MusicPlayerInit(element) {
         var song_index = ap.list.index
         var song_list = ap.list.audios[song_index]
         ap.list.remove(song_index)
-        console.log('歌曲重新获取url', song_index, ap.list.audios,window.reload_song_id)
+        console.log('歌曲重新获取url', song_index, ap.list.audios, window.reload_song_id)
         if (!window.reload_song_id) {
             window.reload_song_id = 'yes'
             chatSocket.send(JSON.stringify({
@@ -47,8 +51,7 @@ function MusicPlayerInit(element) {
                 'msg_type': 'chat_music',
                 'action': 'reload_song_url',
             }));
-        }
-        else {
+        } else {
             delete window.reload_song_id
         }
 
@@ -62,9 +65,9 @@ function MusicPlayerInit(element) {
     // ap.on('canplaythrough', function (e) {
     //     console.log('canplaythrough', e)
     // })
-    // ap.on('durationchange', function (e) {
-    //     console.log('durationchange', e)
-    // })
+    ap.on('durationchange', function (e) {
+        console.log('durationchange')
+    })
     ap.on('emptied', function (e) {
         console.log('emptied')
     })
@@ -93,23 +96,26 @@ function MusicPlayerInit(element) {
     ap.on('progress', function (e) {
         console.log('progress')
         ap.play()
-        ap.seek(window.seek_num)
-        delete window.seek_num;
+        if (window.seek_num) {
+            ap.seek(window.seek_num)
+            delete window.seek_num;
+        }
+
     })
     // ap.on('seeked', function (e) {
-    //     console.log('seeked', e)
+    //     console.log('seeked', ap.audio.currentTime.toString())
     // })
     // ap.on('seeking', function (e) {
-    //     console.log('seeking', e)
+    //     console.log('seeking', ap.audio.currentTime.toString())
     // })
     // ap.on('stalled', function (e) {
-    //     console.log('stalled', e)
+    //     console.log('stalled')
     // })
     // ap.on('suspend', function (e) {
-    //     console.log('suspend', e)
+    //     console.log('suspend')
     // })
     // ap.on('timeupdate', function (e) {
-    //
+    //     console.log('timeupdate', ap.audio.currentTime.toString())
     // })
     // ap.on('volumechange', function (e) {
     //     console.log('timeupdate', e)
