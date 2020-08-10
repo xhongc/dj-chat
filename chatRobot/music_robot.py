@@ -47,8 +47,8 @@ class MusicRobot(object):
             # 歌曲已经在歌单
             return None
         else:
-            self.get_song_info_and_upload(song_id)
-        return self.aplayer_data
+            aplayer_data = self.get_song_info_and_upload(song_id)
+        return aplayer_data
 
     def switch_next_song(self, now_song_id):
         self.ap_cache.hash_del(now_song_id)
@@ -57,6 +57,7 @@ class MusicRobot(object):
         song_lyric = self._get_song_lyric(song_id=song_id)
         song_detail = self._get_song_detail(song_id=song_id)
         song_url = self.get_song_url(song_id=song_id)
+        if not song_url: return None # 歌曲url 为none
         self.aplayer_data['id'] = song_id
         self.aplayer_data['name'] = song_detail['name']
         self.aplayer_data['artist'] = song_detail['artist']
@@ -72,7 +73,7 @@ class MusicRobot(object):
         self.ap_cache.hash_set(song_id, json.dumps(data))
 
     def get_now_song_data_list(self):
-        serializer_data = [json.loads(data) for data in self.ap_cache.hash_values()]
+        serializer_data = [json.loads(data.decode()) for data in self.ap_cache.hash_values()]
         return serializer_data
 
     def del_song_data(self, song_id):
@@ -91,5 +92,5 @@ if __name__ == '__main__':
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dj_chat.settings")
     mr = MusicRobot()
 
-    mr.update_song_data_song_process('1466792797','song_process','100')
+    mr.update_song_data_song_process('1466792797', 'song_process', '100')
     print(mr.get_now_song_data_list())
