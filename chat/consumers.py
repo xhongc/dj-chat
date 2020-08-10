@@ -169,7 +169,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 }
             )
         elif msg_type == 'chat_music':
-            print('chat,music')
             aplayer_data = []
             if 'init_data' in message:
                 aplayer_data = MusicRobot().get_now_song_data_list()
@@ -177,7 +176,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 # 询问其他人进度
             elif '点歌' in message:
                 message = message.replace('点歌', '', 1).strip()
-                song_info = MusicRobot().pick_a_song(message)
+                song_info = MusicRobot().pick_a_song_qq_music(message)
                 # 找不到歌曲，或歌曲已存在
                 if not song_info:
                     action = 'tips'

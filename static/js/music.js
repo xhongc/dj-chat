@@ -14,14 +14,16 @@ function MusicPlayerInit(element) {
         listFolded: false,
         listMaxHeight: 90,
         lrcType: 1,
-
     });
     // 禁止切歌
     $('.aplayer-bar-wrap').css("pointer-events", "none")
     $('.aplayer-list').css("pointer-events", "none")
     $('.aplayer-pic').css("pointer-events", "none")
     ap.on('ended', function () {
-        var song_index = ap.list.index - 1
+        var song_index = ap.list.index -1
+        if (song_index <0) {
+            song_index = 0
+        }
         var song_list = ap.list.audios[song_index]
         var song_list_id = song_list ? song_list.id : ''
         console.log('移除song', song_index, song_list_id)
@@ -116,7 +118,7 @@ function MusicPlayerInit(element) {
     // })
     ap.on('timeupdate', function (e) {
         var curr_time = parseInt(ap.audio.currentTime)
-        if (curr_time % 5 === 0 &&curr_time !==0) {
+        if (curr_time % 5 === 0 && curr_time !== 0) {
             if (window.curr_time_int !== curr_time) {
                 console.log('记录：', curr_time)
                 window.curr_time_int = curr_time

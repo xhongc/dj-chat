@@ -99,6 +99,7 @@ if __name__ == '__main__':
 
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dj_chat.settings")
     ca = ChatCache('musiclist')
-    ca.hash_del('357319')
     print(ca.hash_keys())
+    ca.hash_del(*ca.hash_keys())
+
     print(ca)

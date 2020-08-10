@@ -1,5 +1,7 @@
 import json
+import time
 
+from chatRobot.QqMusicApi.qq_music import QQMUsicServer
 from chatRobot.neteaseApi.netEasemusic import NetEaseServer
 from django.core.cache import cache
 
@@ -9,6 +11,7 @@ from dj_chat.util import ChatCache
 class MusicRobot(object):
     def __init__(self):
         self.nes = NetEaseServer()
+        self.engine = QQMUsicServer()
         self.aplayer_data = {
             'name': '',
             'artist': '',
@@ -59,6 +62,19 @@ class MusicRobot(object):
             if aplayer_data: break
         return aplayer_data
 
+    def pick_a_song_qq_music(self, keyword):
+        song_id = self.engine.get_song_id_list(keyword)
+        is_exist = self.ap_cache.hash_exists(song_id)
+        if is_exist:
+            # 歌曲已经在歌单
+            return None
+        else:
+            self.engine.get_song_url(song_id)
+            aplayer_data = self.engine.song_details
+            aplayer_data['add_time'] = time.time()
+            self.upload_song_data(song_id, aplayer_data)
+        return aplayer_data
+
     def switch_next_song(self, now_song_id):
         self.ap_cache.hash_del(now_song_id)
 
@@ -73,6 +89,7 @@ class MusicRobot(object):
         self.aplayer_data['url'] = song_url
         self.aplayer_data['cover'] = song_detail['picture_url']
         self.aplayer_data['lrc'] = song_lyric
+        self.aplayer_data['add_time'] = time.time()
 
         self.upload_song_data(song_id, self.aplayer_data)
         return self.aplayer_data
@@ -83,6 +100,7 @@ class MusicRobot(object):
 
     def get_now_song_data_list(self):
         serializer_data = [json.loads(data.decode()) for data in self.ap_cache.hash_values()]
+        serializer_data.sort(key=lambda x: x.get('add_time'))
         return serializer_data
 
     def del_song_data(self, song_id):
@@ -101,4 +119,5 @@ if __name__ == '__main__':
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dj_chat.settings")
     mr = MusicRobot()
 
-    mr._get_song_id('南方')
+    song = mr.pick_a_song_qq_music('南方')
+    print(song)
