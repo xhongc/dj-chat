@@ -120,7 +120,7 @@ function MusicPlayerInit(element) {
         var curr_time = parseInt(ap.audio.currentTime)
         if (curr_time % 5 === 0 && curr_time !== 0) {
             if (window.curr_time_int !== curr_time) {
-                console.log('记录：', curr_time)
+                // console.log('记录：', curr_time)
                 window.curr_time_int = curr_time
                 chatSocket.send(JSON.stringify({
                     'message': curr_time.toString(),
