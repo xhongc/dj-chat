@@ -82,7 +82,7 @@ class NetEase(object):
         try:
             response = self._raw_request(method, url, params)
             response = response.json()
-            print('[Netease api] url: {};\nresponse data:\n {}'.format(url, response))
+            # print('[Netease api] url: {};\nresponse data:\n {}'.format(url, response))
         except requests.exceptions.RequestException as e:
             print('[Netease api] request error: {}'.format(e))
         except ValueError as e:
@@ -225,6 +225,17 @@ class NetEaseServer(object):
         if resp.get('code') != '-1':
             song_id = resp.get('result', {}).get('songs', [{}])[0].get('id', None)
         return song_id
+
+    def get_song_id_list(self, keyword, offset=0, limit=3):
+        """
+        处理返回的数据列表
+        """
+        resp = self.ne.songs_search(keyword=keyword, offset=offset, limit=limit)
+        song_id_list = []
+        if resp.get('code') != '-1':
+            songs = resp.get('result', {}).get('songs', [{}])
+            song_id_list = [s_id.get('id', None) for s_id in songs]
+        return song_id_list
 
     def get_song_details(self, song_id):
         resp = self.ne.songs_detail(song_id)

@@ -192,9 +192,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 # todo message['id'] change to now_song_id
                 music_robot.del_song_data(message['id'])
                 new_song_url = music_robot.get_song_url(message['id'])
-                message['url'] = new_song_url
-                music_robot.upload_song_data(message['id'], message)
-                aplayer_data = [message]
+                if not new_song_url:
+                    action = 'tips'
+                else:
+                    message['url'] = new_song_url
+                    music_robot.upload_song_data(message['id'], message)
+                    aplayer_data = [message]
             elif action == 'remove_song':
                 MusicRobot().del_song_data(now_song_id)
                 return

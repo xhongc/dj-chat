@@ -24,6 +24,9 @@ class MusicRobot(object):
     def _get_song_id(self, keyword):
         return self.nes.get_song_id(keyword=keyword)
 
+    def _get_song_id_list(self, keyword, limit=3):
+        return self.nes.get_song_id_list(keyword=keyword, limit=limit)
+
     def get_song_url(self, song_id):
         return self.nes.get_song_url(song_id=song_id)
 
@@ -41,13 +44,19 @@ class MusicRobot(object):
         :param keyword:
         :return:
         """
-        song_id = self._get_song_id(keyword=keyword)
-        is_exist = self.ap_cache.hash_exists(song_id)
-        if is_exist:
-            # 歌曲已经在歌单
-            return None
-        else:
-            aplayer_data = self.get_song_info_and_upload(song_id)
+        # 默认选择3条查找有版权那首
+        song_id_list = self._get_song_id_list(keyword=keyword)
+        song_id_list_not_null = list(filter(lambda x: x, song_id_list))
+        aplayer_data = None
+        while song_id_list_not_null:
+            song_id = song_id_list_not_null.pop(0)
+            is_exist = self.ap_cache.hash_exists(song_id)
+            if is_exist:
+                # 歌曲已经在歌单
+                return None
+            else:
+                aplayer_data = self.get_song_info_and_upload(song_id)
+            if aplayer_data: break
         return aplayer_data
 
     def switch_next_song(self, now_song_id):
@@ -57,7 +66,7 @@ class MusicRobot(object):
         song_lyric = self._get_song_lyric(song_id=song_id)
         song_detail = self._get_song_detail(song_id=song_id)
         song_url = self.get_song_url(song_id=song_id)
-        if not song_url: return None # 歌曲url 为none
+        if not song_url: return None  # 歌曲url 为none
         self.aplayer_data['id'] = song_id
         self.aplayer_data['name'] = song_detail['name']
         self.aplayer_data['artist'] = song_detail['artist']
@@ -92,5 +101,4 @@ if __name__ == '__main__':
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dj_chat.settings")
     mr = MusicRobot()
 
-    mr.update_song_data_song_process('1466792797', 'song_process', '100')
-    print(mr.get_now_song_data_list())
+    mr._get_song_id('南方')
