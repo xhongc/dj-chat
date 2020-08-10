@@ -211,8 +211,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 aplayer_data = message
             elif action == 'quit_listen_song':
                 print(message)
-            else:
+            elif action == 'update_song':
+                MusicRobot().update_song_data_song_process(now_song_id, 'song_process', message)
                 return
+            else:
+                msg_type = 'chat_message'
+                aplayer_data = message
             print('>>>当前歌单\n', aplayer_data)
             await self.channel_layer.group_send(
                 self.room_group_name,

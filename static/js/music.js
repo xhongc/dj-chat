@@ -17,9 +17,9 @@ function MusicPlayerInit(element) {
 
     });
     // 禁止切歌
-    $('.aplayer-bar-wrap').css("pointer-events","none")
-    $('.aplayer-list').css("pointer-events","none")
-    $('.aplayer-pic').css("pointer-events","none")
+    $('.aplayer-bar-wrap').css("pointer-events", "none")
+    $('.aplayer-list').css("pointer-events", "none")
+    $('.aplayer-pic').css("pointer-events", "none")
     ap.on('ended', function () {
         var song_index = ap.list.index - 1
         var song_list = ap.list.audios[song_index]
@@ -114,9 +114,22 @@ function MusicPlayerInit(element) {
     // ap.on('suspend', function (e) {
     //     console.log('suspend')
     // })
-    // ap.on('timeupdate', function (e) {
-    //     console.log('timeupdate', ap.audio.currentTime.toString())
-    // })
+    ap.on('timeupdate', function (e) {
+        var curr_time = parseInt(ap.audio.currentTime)
+        if (curr_time % 5 === 0 &&curr_time !==0) {
+            if (window.curr_time_int !== curr_time) {
+                console.log('记录：', curr_time)
+                window.curr_time_int = curr_time
+                chatSocket.send(JSON.stringify({
+                    'message': curr_time.toString(),
+                    'song_index': '',
+                    'msg_type': 'chat_music',
+                    'action': 'update_song',
+                    'now_song_id': ap.list.audios[ap.list.index] ? ap.list.audios[ap.list.index].id : '',
+                }));
+            }
+        }
+    })
     // ap.on('volumechange', function (e) {
     //     console.log('timeupdate', e)
     // })

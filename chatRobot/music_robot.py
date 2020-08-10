@@ -89,7 +89,7 @@ class MusicRobot(object):
         self.ap_cache.hash_del(song_id)
 
     def update_song_data_song_process(self, song_id, sub_key, sub_value):
-        song_dict = json.loads(self.ap_cache.hash_hget(song_id))
+        song_dict = json.loads(self.ap_cache.hash_hget(song_id).decode())
 
         song_dict[sub_key] = sub_value
         self.ap_cache.hash_set(song_id, json.dumps(song_dict))
