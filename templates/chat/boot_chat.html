@@ -4,6 +4,10 @@
     <link rel="stylesheet" href="{% static '/css/soho.min.css' %}">
     <link rel="stylesheet" href="{% static '/css/APlayer.min.css' %}">
     <link rel="stylesheet" href="{% static 'data-show/css/morris.css' %}">
+    <link
+        rel="stylesheet"
+        href="https://cdn.staticfile.org/animate.css/4.1.0/animate.min.css"
+    />
     {#    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.css"#}
     {#          integrity="sha512-CIYsJUa3pr1eoXlZFroEI0mq0UIMUqNouNinjpCkSWo3Bx5NRlQ0OuC6DtEB/bDqUWnzXc1gs2X/g52l36N5iw=="#}
     {#          crossorigin="anonymous"/>#}
@@ -559,8 +563,8 @@
 
     <div class="layout">
 
-        <nav class="navigation">
-            <div class="nav-group">
+        <nav class="navigation animate__animated animate__rubberBand">
+            <div class="nav-group ">
                 <ul>
                     <li>
                         <a class="logo" href="/">
@@ -637,7 +641,7 @@
 
         <div class="content">
 
-            <div class="sidebar-group">
+            <div class="sidebar-group animate__animated animate__bounceInDown">
 
                 <div id="chats" class="sidebar active">
                     <header>
@@ -764,8 +768,8 @@
             </div>
             {#            可视化#}
             <div class="chat chat-bg homebox">
-                <div class="row">
-                    <div class="col-lg-3 col-xs-6">
+                <div class="row animate__animated animate__bounceInDown">
+                    <div class="col-lg-3 col-xs-6 ">
                         <!-- small box -->
                         <div class="small-box bg-aqua">
                             <div class="inner">
@@ -780,7 +784,7 @@
                         </div>
                     </div>
                     <!-- ./col -->
-                    <div class="col-lg-3 col-xs-6">
+                    <div class="col-lg-3 col-xs-6 ">
                         <!-- small box -->
                         <div class="small-box bg-green">
                             <div class="inner">
@@ -795,7 +799,7 @@
                         </div>
                     </div>
                     <!-- ./col -->
-                    <div class="col-lg-3 col-xs-6">
+                    <div class="col-lg-3 col-xs-6 ">
                         <!-- small box -->
                         <div class="small-box bg-yellow">
                             <div class="inner">
@@ -810,7 +814,7 @@
                         </div>
                     </div>
                     <!-- ./col -->
-                    <div class="col-lg-3 col-xs-6">
+                    <div class="col-lg-3 col-xs-6 ">
                         <!-- small box -->
                         <div class="small-box bg-red">
                             <div class="inner">
@@ -829,7 +833,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <!-- AREA CHART -->
-                        <div class="box box-primary">
+                        <div class="box box-primary animate__animated animate__bounceInDown">
                             <div class="box-header with-border">
                                 <h3 class="box-title">总注册人数表</h3>
 
@@ -850,7 +854,7 @@
                         <!-- /.box -->
 
                         <!-- DONUT CHART -->
-                        <div class="box box-danger">
+                        <div class="box box-danger animate__animated animate__bounceInLeft">
                             <div class="box-header with-border">
                                 <h3 class="box-title">访问人数表</h3>
 
@@ -874,7 +878,7 @@
                     <!-- /.col (LEFT) -->
                     <div class="col-md-6">
                         <!-- LINE CHART -->
-                        <div class="box box-info">
+                        <div class="box box-info animate__animated animate__bounceInRight">
                             <div class="box-header with-border">
                                 <h3 class="box-title">当日新增人数表</h3>
 
@@ -895,7 +899,7 @@
                         <!-- /.box -->
 
                         <!-- BAR CHART -->
-                        <div class="box box-success">
+                        <div class="box box-success animate__animated animate__bounceInUp">
                             <div class="box-header with-border">
                                 <h3 class="box-title">群组创建表</h3>
 
@@ -1274,6 +1278,7 @@
             $(this).siblings('li').removeClass('disabled');
             $(this).addClass('open-chat');
             $(this).addClass('disabled');
+            $(this).addClass('animate__animated animate__fadeInLeft');
             $(this).find('#id_badge_ntf').html('');
             $('#chat-message-submit').attr('channel_no', $(this).attr('channel_no'));
             var channel_no = $(this).attr('channel_no');
@@ -1526,7 +1531,7 @@
                     if (chat_body.length > 0) {
                         type = type ? type : '';
                         message = message ? message : '消息不能为空';
-                        $('.layout .content .chat .chat-body .messages').append('<div class="message-item ' + type + '"><div class="message-content">' + message + '</div><div class="message-action">' + send_time + (type ? '<i class="ti-check"></i>' : '') + '</div></div>');
+                        $('.layout .content .chat .chat-body .messages').append('<div class="message-item animate__animated animate__fadeInRight ' + type + '"><div class="message-content">' + message + '</div><div class="message-action">' + send_time + (type ? '<i class="ti-check"></i>' : '') + '</div></div>');
                         chat_body.scrollTop(chat_body.get(0).scrollHeight, -1)
                     }
                 },
@@ -1540,7 +1545,7 @@
                     if (chat_body.length > 0) {
                         type = type ? type : '';
                         message = message ? message : '消息不能为空';
-                        $('.layout .content .chat .chat-body .messages').append('<div class="message-info ' + type + '"><div class="message-content">' + message + '</div><div class="message-action">' + send_time + (type ? '<i class="ti-check"></i>' : '') + '</div></div>');
+                        $('.layout .content .chat .chat-body .messages').append('<div class="message-info animate__animated animate__rotateInDownLeft' + type + '"><div class="message-content">' + message + '</div><div class="message-action">' + send_time + (type ? '<i class="ti-check"></i>' : '') + '</div></div>');
                         chat_body.scrollTop(chat_body.get(0).scrollHeight, -1)
                     }
                 }
