@@ -9,6 +9,11 @@ from dj_chat.settings import MOREN_TOUXIANG, QUNZU_TOUXIANG
 
 
 class ChatRoom(models.Model):
+    CHAT_TYPE = (
+        ('COMMON', '普通类型'),
+        ('MUSIC', '音乐类型'),
+        ('ROBOT', '机器人回复'),
+    )
     room_name = models.CharField(max_length=64, null=False, blank=False, help_text='房间名称')
     room_description = models.CharField(max_length=255, default='这里还没什么描述', help_text='房间描述')
     img_path = models.CharField(max_length=255, default=QUNZU_TOUXIANG, help_text='头像地址')
@@ -17,7 +22,7 @@ class ChatRoom(models.Model):
     members = models.ManyToManyField('UserProfile', related_name='chat_member', help_text='房间成员')
     max_number = models.IntegerField(default=5, help_text='允许最大人数')
     ordering = models.IntegerField(default=99, help_text='置顶权')
-
+    chat_type = models.CharField(default='COMMON', choices=CHAT_TYPE, help_text='房间类型', max_length=16)
     date_created = models.DateTimeField(default=datetime.now)
     date_modified = models.DateTimeField(auto_now=True)
 

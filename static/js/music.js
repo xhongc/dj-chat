@@ -43,15 +43,18 @@ function MusicPlayerInit(element) {
     ap.on('error', function (e) {
         var song_index = ap.list.index
         var song_list = ap.list.audios[song_index]
+        var song_list_id = song_list ? song_list.id : ''
+
         ap.list.remove(song_index)
         console.log('歌曲重新获取url', song_index, ap.list.audios, window.reload_song_id)
         if (!window.reload_song_id) {
             window.reload_song_id = 'yes'
             chatSocket.send(JSON.stringify({
-                'message': song_list,
+                'message': 'reload_song_url',
                 'song_index': song_index,
                 'msg_type': 'chat_music',
                 'action': 'reload_song_url',
+                'now_song_id': song_list_id,
             }));
         } else {
             delete window.reload_song_id
