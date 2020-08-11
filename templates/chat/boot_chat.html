@@ -1272,6 +1272,7 @@
     <script>
         var chatSocket = null;
         var ntfSocket = null;
+        var ap=null
         $('.sidebar-body').on('click', 'li', function () {
             $('.homebox').hide();
             $(this).siblings('li').removeClass('open-chat');
@@ -1582,7 +1583,7 @@
                     'msg_type': msg_type,
                     'send_user_nick_name': "{{ user.profile.nick_name }}",
                     'send_to_user_uid': channel_no,
-                    'now_song_id':  '',
+                    'now_song_id':  ap ? ap.list.audios[ap.list.index].id : '',
                 }));
                 messageInputDom.val('');
             } else {
@@ -1788,6 +1789,7 @@
             showData();
             $('.layout .content .chat .chat-body').niceScroll({cursorborderradius: "5px",});
             $(".talks").niceScroll({cursorcolor: "#e6e9e7"});
+
         });
 
     </script>
