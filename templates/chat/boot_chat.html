@@ -1604,12 +1604,16 @@
           if (chatSocket != null && chatSocket.readyState === 1) {
               {#自己发的在回车就显示#}
               ChatosExamle.Message.add(message, 'inside-message', '');
+              var now_song_id =''
+              if(ap && ap.list.audios[ap.list.index]) {
+                  now_song_id = ap.list.audios[ap.list.index].id
+              }
               chatSocket.send(JSON.stringify({
                   'message': message,
                   'msg_type': msg_type,
                   'send_user_nick_name': "{{ user.profile.nick_name }}",
                   'send_to_user_uid': channel_no,
-                  'now_song_id': ap ? ap.list.audios[ap.list.index].id : '',
+                  'now_song_id': now_song_id,
               }));
               messageInputDom.val('');
           } else {
