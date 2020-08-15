@@ -57,7 +57,7 @@ CORS_ALLOW_HEADERS = (
     'content-encoding',
     'p3p',
     'vary',
-    'x-msedge-ref'
+    'x-msedge-ref',
 )
 
 # Application definition
@@ -121,6 +121,7 @@ INSTALLED_APPS = [
     'django_filters',
     'rest_framework',
     'admin_honeypot',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
