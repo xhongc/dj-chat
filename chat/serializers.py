@@ -150,8 +150,8 @@ class ListChatRoomSerializers(serializers.ModelSerializer):
     unread_no = serializers.SerializerMethodField()
 
     def get_unread_no(self, obj):
-        request = self._context.get('request')
-        unread_no = obj.said_to_room.filter(status='unread', said_to=request.user).count()
+        request_user = self._context.get('request_user')
+        unread_no = obj.said_to_room.filter(status='unread', said_to=request_user).count()
         if not unread_no:
             unread_no = ''
         return unread_no
