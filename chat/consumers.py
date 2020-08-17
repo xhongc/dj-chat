@@ -143,26 +143,90 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 }
             )
             await self.channel_layer.group_send(self.room_group_name, self.chaos.data)
+        elif room_type == 'MUSIC':
+            now_song_id = self.chaos.now_song_id
+            action = self.chaos.action
+            message = self.chaos.message
+            command = self.chaos.command
+            aplayer_data = []
+            if 'init_data' in message:
+                aplayer_data = MusicRobot().get_now_song_data_list()
+                action = 'init_data'
+                # 询问其他人进度
+            elif '点歌' in message:
+                message = message.replace('点歌', '', 1).strip()
+                song_info = MusicRobot().pick_a_song(message)
+                # 找不到歌曲，或歌曲已存在
+                if not song_info:
+                    action = 'tips'
+                else:
+                    aplayer_data = [song_info]
+                    action = 'add_song'
+            elif "切歌" in message:
+                MusicRobot().switch_next_song(now_song_id)
+                action = 'switch_next_song'
+            elif action == 'reload_song_url':
+                music_robot = MusicRobot()
+                music_robot.del_song_data(now_song_id)
+                new_song_url = music_robot.get_song_url(now_song_id)
+                if not new_song_url:
+                    action = 'tips'
+                else:
+                    message['url'] = new_song_url
+                    music_robot.upload_song_data(now_song_id, message)
+                    aplayer_data = [message]
+            elif action == 'remove_song':
+                MusicRobot().del_song_data(now_song_id)
+                return
+            elif action == 'ack_song_process':
+                print('询问其他人播放进度')
+            elif action == 'syn_song_process':
+                print('回答自己歌曲播放进度', self.request_user.profile.nick_name, message)
+                # todo 改为自己的 return
+                if float(message) < 1:
+                    return
+                aplayer_data = message
+            elif action == 'quit_listen_song':
+                print(message)
+            elif action == 'update_song':
+                MusicRobot().update_song_data_song_process(now_song_id, 'song_process', message)
+                return
+            else:
+                msg_type = 'chat_message'
+                aplayer_data = message
+            print('>>>当前歌单\n', aplayer_data)
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'message': aplayer_data,
+                    'msg_type': msg_type,
+                    'user_id': str(self.request_user.id),
+                    'send_time': '',
+                    'action': action,
+                    'song_index': self.chaos.song_index,
+                }
+            )
 
-            # if self.chaos.message:
-            # queryset = []
-            # for on in online_list:
-            #     queryset.append(ChatLog(chat_datetime=now,
-            #                             content=message,
-            #                             msg_type=chaos.msg_type,
-            #                             who_said=self.request_user,
-            #                             said_to=User.objects.filter(profile__unicode_id=on).first(),
-            #                             said_to_room=room_orm,
-            #                             status='read'))
-            # for out in outline_list:
-            #     queryset.append(ChatLog(chat_datetime=now,
-            #                             content=message,
-            #                             msg_type=chaos.msg_type,
-            #                             who_said=self.request_user,
-            #                             said_to=User.objects.filter(profile__unicode_id=out).first(),
-            #                             said_to_room=room_orm,
-            #                             status='unread'))
-            # ChatLog.objects.bulk_create(queryset)
+        # if self.chaos.message:
+        # queryset = []
+        # for on in online_list:
+        #     queryset.append(ChatLog(chat_datetime=now,
+        #                             content=message,
+        #                             msg_type=chaos.msg_type,
+        #                             who_said=self.request_user,
+        #                             said_to=User.objects.filter(profile__unicode_id=on).first(),
+        #                             said_to_room=room_orm,
+        #                             status='read'))
+        # for out in outline_list:
+        #     queryset.append(ChatLog(chat_datetime=now,
+        #                             content=message,
+        #                             msg_type=chaos.msg_type,
+        #                             who_said=self.request_user,
+        #                             said_to=User.objects.filter(profile__unicode_id=out).first(),
+        #                             said_to_room=room_orm,
+        #                             status='unread'))
+        # ChatLog.objects.bulk_create(queryset)
 
     def no_such_action(self):
         raise Exception('no such action')
@@ -194,68 +258,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         #             'user_id': str(self.request_user.id),
         #             'send_time': now.strftime('%p %H:%M'),
         #             'msg_type': msg_type,
-        #         }
-        #     )
-        # elif msg_type == 'chat_music':
-        #     now_song_id = chaos.now_song_id
-        #     action = chaos.action
-        #     aplayer_data = []
-        #     if 'init_data' in message:
-        #         aplayer_data = MusicRobot().get_now_song_data_list()
-        #         action = 'init_data'
-        #         # 询问其他人进度
-        #     elif '点歌' in message:
-        #         message = message.replace('点歌', '', 1).strip()
-        #         song_info = MusicRobot().pick_a_song(message)
-        #         # 找不到歌曲，或歌曲已存在
-        #         if not song_info:
-        #             action = 'tips'
-        #         else:
-        #             aplayer_data = [song_info]
-        #             action = 'add_song'
-        #     elif "切歌" in message:
-        #         MusicRobot().switch_next_song(now_song_id)
-        #         action = 'switch_next_song'
-        #     elif action == 'reload_song_url':
-        #         music_robot = MusicRobot()
-        #         music_robot.del_song_data(now_song_id)
-        #         new_song_url = music_robot.get_song_url(now_song_id)
-        #         if not new_song_url:
-        #             action = 'tips'
-        #         else:
-        #             message['url'] = new_song_url
-        #             music_robot.upload_song_data(now_song_id, message)
-        #             aplayer_data = [message]
-        #     elif action == 'remove_song':
-        #         MusicRobot().del_song_data(now_song_id)
-        #         return
-        #     elif action == 'ack_song_process':
-        #         print('询问其他人播放进度')
-        #     elif action == 'syn_song_process':
-        #         print('回答自己歌曲播放进度', self.request_user.profile.nick_name, message)
-        #         # todo 改为自己的 return
-        #         if float(message) < 1:
-        #             return
-        #         aplayer_data = message
-        #     elif action == 'quit_listen_song':
-        #         print(message)
-        #     elif action == 'update_song':
-        #         MusicRobot().update_song_data_song_process(now_song_id, 'song_process', message)
-        #         return
-        #     else:
-        #         msg_type = 'chat_message'
-        #         aplayer_data = message
-        #     print('>>>当前歌单\n', aplayer_data)
-        #     await self.channel_layer.group_send(
-        #         self.room_group_name,
-        #         {
-        #             'type': 'chat_message',
-        #             'message': aplayer_data,
-        #             'msg_type': msg_type,
-        #             'user_id': str(self.request_user.id),
-        #             'send_time': '',
-        #             'action': action,
-        #             'song_index': chaos.song_index,
         #         }
         #     )
 
