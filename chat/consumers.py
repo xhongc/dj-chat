@@ -114,7 +114,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     'type': 'chat_message',
                     'message': robot_msg,
                     'send_time': now.strftime('%p %H:%M'),
-                    'user_uid': 'robot'
+                    'user_uid': 'robot',
+                    'img_path': 'http://cdn.xuebai.wang/robot.png'
                 }
             )
             await self.channel_layer.group_send(self.room_group_name, self.chaos.data)
@@ -138,7 +139,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 {
                     'type': 'chat_message',
                     'send_time': now.strftime('%p %H:%M'),
-                    'user_uid': self.user_uid
+                    'user_uid': self.user_uid,
                 }
             )
             await self.channel_layer.group_send(self.room_group_name, self.chaos.data)
