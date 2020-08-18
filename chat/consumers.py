@@ -195,18 +195,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 msg_type = 'chat_message'
                 aplayer_data = message
             print('>>>当前歌单\n', aplayer_data)
-            await self.channel_layer.group_send(
-                self.room_group_name,
+            self.chaos.data.update(
                 {
                     'type': 'chat_message',
-                    'message': aplayer_data,
-                    'msg_type': msg_type,
-                    'user_id': str(self.request_user.id),
-                    'send_time': '',
-                    'action': action,
-                    'song_index': self.chaos.song_index,
+                    'send_time': now.strftime('%p %H:%M'),
+                    'user_uid': self.user_uid,
                 }
             )
+            await self.channel_layer.group_send(self.room_group_name, self.chaos.data)
 
         # if self.chaos.message:
         # queryset = []
