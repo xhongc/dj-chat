@@ -7,7 +7,13 @@ class ChaosBody(object):
         assert 'message' in data
         assert 'channel_no' in data
         for k, v in data.items():
-            setattr(self, k, v)
+            if k == 'action':
+                v_l = v.split('#')
+                setattr(self, k, v_l[0])
+                if len(v_l) > 1:
+                    setattr(self, 'command', v_l[1])
+            else:
+                setattr(self, k, v)
 
     @property
     def data(self):

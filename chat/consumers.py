@@ -172,22 +172,22 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = self.chaos.message
         command = self.chaos.command
         aplayer_data = []
-        if 'init_data' in message:
+        if command == 'init_data':
             aplayer_data = MusicRobot().get_now_song_data_list()
-            action = 'init_data'
+            command = 'init_data'
             # 询问其他人进度
         elif '点歌' in message:
             message = message.replace('点歌', '', 1).strip()
             song_info = MusicRobot().pick_a_song(message)
             # 找不到歌曲，或歌曲已存在
             if not song_info:
-                action = 'tips'
+                command = 'tips'
             else:
                 aplayer_data = [song_info]
-                action = 'add_song'
+                command = 'add_song'
         elif "切歌" in message:
             MusicRobot().switch_next_song(now_song_id)
-            action = 'switch_next_song'
+            command = 'switch_next_song'
         elif action == 'reload_song_url':
             music_robot = MusicRobot()
             music_robot.del_song_data(now_song_id)
@@ -224,6 +224,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'send_time': now.strftime('%p %H:%M'),
                 'user_uid': self.user_uid,
                 'action': 'chat_music',
+                'command': command,
                 'aplayer_data': aplayer_data
             }
         )
