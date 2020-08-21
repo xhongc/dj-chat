@@ -103,6 +103,9 @@ class MusicRobot(object):
         serializer_data.sort(key=lambda x: x.get('add_time'))
         return serializer_data
 
+    def get_song_data_index(self, song_id):
+        return json.loads(self.ap_cache.hash_hget(song_id))
+
     def del_song_data(self, song_id):
         self.ap_cache.hash_del(song_id)
 

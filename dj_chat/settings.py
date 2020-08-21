@@ -213,7 +213,7 @@ CHANNEL_LAYERS = {
     },
 }
 JWT_AUTH = {
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),  # 指明token的有效期
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),  # 指明token的有效期
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'utils.jwt_payload.jwt_response_payload_handler',
 }
 LOGGING = {

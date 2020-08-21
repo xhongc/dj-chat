@@ -182,37 +182,42 @@ class ChatConsumer(AsyncWebsocketConsumer):
             # 找不到歌曲，或歌曲已存在
             if not song_info:
                 command = 'tips'
+                aplayer_data = '找不到歌曲，或歌曲已存在'
             else:
                 aplayer_data = [song_info]
                 command = 'add_song'
         elif "切歌" in message:
             MusicRobot().switch_next_song(now_song_id)
             command = 'switch_next_song'
-        elif action == 'reload_song_url':
+        elif command == 'reload_song_url':
             music_robot = MusicRobot()
-            music_robot.del_song_data(now_song_id)
             new_song_url = music_robot.get_song_url(now_song_id)
             if not new_song_url:
-                action = 'tips'
+                music_robot.del_song_data(now_song_id)
+                command = 'tips'
+                aplayer_data = "没版权歌曲，请切换音乐源"
             else:
-                message['url'] = new_song_url
-                music_robot.upload_song_data(now_song_id, message)
-                aplayer_data = [message]
-        elif action == 'remove_song':
+                now_data = music_robot.get_song_data_index(now_song_id)
+                now_data['url'] = new_song_url
+                music_robot.upload_song_data(now_song_id, now_data)
+                aplayer_data = new_song_url
+        elif command == 'remove_song':
             MusicRobot().del_song_data(now_song_id)
             return
-        elif action == 'ack_song_process':
+        elif command == 'ack_song_process':
             print('询问其他人播放进度')
-        elif action == 'syn_song_process':
+        elif command == 'syn_song_process':
             print('回答自己歌曲播放进度', self.request_user.profile.nick_name, message)
             # todo 改为自己的 return
-            if float(message) < 1:
-                return
-            aplayer_data = message
-        elif action == 'quit_listen_song':
-            print(message)
-        elif action == 'update_song':
-            MusicRobot().update_song_data_song_process(now_song_id, 'song_process', message)
+            try:
+                if float(self.chaos.current_time) < 1:
+                    return
+                aplayer_data = self.chaos.current_time
+            except:
+                import traceback
+                traceback.print_exc()
+        elif command == 'update_song_time':
+            MusicRobot().update_song_data_song_process(now_song_id, 'song_process', self.chaos.current_time)
             return
         else:
             msg_type = 'chat_message'
