@@ -106,10 +106,11 @@ if __name__ == '__main__':
     import os
 
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dj_chat.settings")
-    ca = ChatCache('musiclist')
-    print(ca.hash_keys())
-    m = ca.hash_hget('1329734169')
-    m = json.loads(m)
-    m['url'] = 'qw.com'
-    m = json.dumps(m)
-    ca.hash_set('1329734169', m)
+    clear_all()
+    # ca = ChatCache('musiclist')
+    # print(ca.hash_keys())
+    # m = ca.hash_hget('1329734169')
+    # m = json.loads(m)
+    # m['url'] = 'qw.com'
+    # m = json.dumps(m)
+    # ca.hash_set('1329734169', m)

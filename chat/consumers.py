@@ -178,7 +178,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
             # 询问其他人进度
         elif '点歌' in message:
             message = message.replace('点歌', '', 1).strip()
-            song_info = MusicRobot().pick_a_song(message)
+            select_music_source = self.chaos.select_music_source
+            if select_music_source == '网易云音乐':
+                song_info = MusicRobot().pick_a_song(message)
+            elif select_music_source == 'QQ音乐':
+                song_info = MusicRobot().pick_a_song_qq_music(message)
+            else:
+                raise Exception('不支持的音乐源')
             # 找不到歌曲，或歌曲已存在
             if not song_info:
                 command = 'tips'
@@ -202,7 +208,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 music_robot.upload_song_data(now_song_id, now_data)
                 aplayer_data = new_song_url
         elif command == 'remove_song':
-            MusicRobot().del_song_data(now_song_id)
+            MusicRobot().del_song_data(self.chaos.last_song_id)
             return
         elif command == 'ack_song_process':
             print('询问其他人播放进度')

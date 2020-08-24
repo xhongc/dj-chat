@@ -88,7 +88,8 @@ class MusicRobot(object):
         self.aplayer_data['artist'] = song_detail['artist']
         self.aplayer_data['url'] = song_url
         self.aplayer_data['cover'] = song_detail['picture_url']
-        self.aplayer_data['lrc'] = song_lyric
+        if song_lyric:
+            self.aplayer_data['lrc'] = song_lyric
         self.aplayer_data['add_time'] = time.time()
 
         self.upload_song_data(song_id, self.aplayer_data)
