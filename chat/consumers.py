@@ -101,14 +101,33 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
         await self.channel_layer.group_send(self.room_group_name, self.chaos.data)
 
+    async def action_chat_log(self):
+        my_join_room = ChatRoom.objects.filter(
+            Q(admins__user=self.request_user) | Q(members__user=self.request_user)).distinct()
+
     # 群组聊天
     async def action_chat_message(self):
         now = datetime.now()
         room_orm = ChatRoom.objects.filter(channel_no=self.chaos.channel_no).first()
+        print(self.chaos.channel_no)
         room_type = room_orm.chat_type if room_orm else 'ERROR'
         if room_type == 'ROBOT':
+            # 与机器人聊天记录
+            ChatLog.objects.create(chat_datetime=now,
+                                   content=self.chaos.message,
+                                   msg_type='chat_message',
+                                   who_said=self.request_user,
+                                   said_to_id=self.request_user.id,
+                                   said_to_room=room_orm)
             robot_msg, msg_type = talk_with_me(self.chaos.message)
             robot_user, _ = User.objects.get_or_create(username='robot')
+
+            ChatLog.objects.create(chat_datetime=now,
+                                   content=robot_msg,
+                                   msg_type=msg_type,
+                                   who_said=robot_user,
+                                   said_to_id=self.request_user.id,
+                                   said_to_room=room_orm)
             self.chaos.data.update(
                 {
                     'type': 'chat_message',
@@ -119,21 +138,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 }
             )
             await self.channel_layer.group_send(self.room_group_name, self.chaos.data)
-            if self.chaos.message:
-                # 与机器人聊天记录
-                ChatLog.objects.create(chat_datetime=now,
-                                       content=self.chaos.message,
-                                       msg_type=msg_type,
-                                       who_said=self.request_user,
-                                       said_to_id=self.request_user.id,
-                                       said_to_room=room_orm)
-
-                ChatLog.objects.create(chat_datetime=now,
-                                       content=robot_msg,
-                                       msg_type=msg_type,
-                                       who_said=robot_user,
-                                       said_to_id=self.request_user.id,
-                                       said_to_room=room_orm)
         elif room_type == 'COMMON':
             self.chaos.data.update(
                 {
@@ -142,28 +146,23 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     'user_uid': self.user_uid,
                 }
             )
+            if self.chaos.message:
+                ChatLog.objects.create(chat_datetime=now,
+                                       content=self.chaos.message,
+                                       msg_type='chat_message',
+                                       who_said=self.request_user,
+                                       said_to_id=self.request_user.id,
+                                       said_to_room=room_orm)
             await self.channel_layer.group_send(self.room_group_name, self.chaos.data)
         elif room_type == 'MUSIC':
             await self.action_chat_music()
-        # if self.chaos.message:
-        # queryset = []
-        # for on in online_list:
-        #     queryset.append(ChatLog(chat_datetime=now,
-        #                             content=message,
-        #                             msg_type=chaos.msg_type,
-        #                             who_said=self.request_user,
-        #                             said_to=User.objects.filter(profile__unicode_id=on).first(),
-        #                             said_to_room=room_orm,
-        #                             status='read'))
-        # for out in outline_list:
-        #     queryset.append(ChatLog(chat_datetime=now,
-        #                             content=message,
-        #                             msg_type=chaos.msg_type,
-        #                             who_said=self.request_user,
-        #                             said_to=User.objects.filter(profile__unicode_id=out).first(),
-        #                             said_to_room=room_orm,
-        #                             status='unread'))
-        # ChatLog.objects.bulk_create(queryset)
+            if self.chaos.message:
+                ChatLog.objects.create(chat_datetime=now,
+                                       content=self.chaos.message,
+                                       msg_type='chat_message',
+                                       who_said=self.request_user,
+                                       said_to_id=self.request_user.id,
+                                       said_to_room=room_orm)
 
     async def action_chat_music(self):
         now = datetime.now()
@@ -171,6 +170,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         action = self.chaos.action
         message = self.chaos.message
         command = self.chaos.command
+        msg_type = 'chat_music'
         aplayer_data = []
         if command == 'init_data':
             aplayer_data = MusicRobot().get_now_song_data_list()
@@ -228,17 +228,18 @@ class ChatConsumer(AsyncWebsocketConsumer):
         else:
             msg_type = 'chat_message'
             aplayer_data = message
-        print('>>>当前歌单\n', aplayer_data)
+        # print('>>>当前歌单\n', aplayer_data)
         self.chaos.data.update(
             {
                 'type': 'chat_message',
                 'send_time': now.strftime('%p %H:%M'),
                 'user_uid': self.user_uid,
-                'action': 'chat_music',
+                'action': msg_type,
                 'command': command,
                 'aplayer_data': aplayer_data
             }
         )
+        print(self.chaos.data)
         await self.channel_layer.group_send(self.room_group_name, self.chaos.data)
 
     def no_such_action(self):

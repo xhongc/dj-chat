@@ -56,7 +56,6 @@ class TokenAuthMiddleware:
         token = parse_qs(scope["query_string"].decode("utf8"))["token"][0]
         jwt_value = token.split(' ')[-1]
         # Try to authenticate the user
-        print(token)
         try:
             payload = jwt_decode_handler(jwt_value)
         except jwt.ExpiredSignature:

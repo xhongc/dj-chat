@@ -117,11 +117,14 @@ class PostChatLogSerializers(serializers.ModelSerializer):
 
 
 class ListChatLogSerializers(serializers.ModelSerializer):
-    chat_datetime = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')
+    # chat_datetime = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')
+    message = serializers.CharField(source='content')
+    user_uid = serializers.IntegerField(source='who_said.profile.unicode_id')
+    img_path = serializers.CharField(source='who_said.profile.img_path')
 
     class Meta:
         model = ChatLog
-        fields = ('content', 'chat_datetime', 'who_said')
+        fields = ('message', 'user_uid', 'img_path')
 
 
 class ChatRoomSerializers(serializers.ModelSerializer):
@@ -148,6 +151,7 @@ class ListChatRoomSerializers(serializers.ModelSerializer):
     admins = FriendsSerializers2(many=True)
     members = FriendsSerializers2(many=True)
     unread_no = serializers.SerializerMethodField()
+    said_to_room = serializers.SerializerMethodField()
 
     def get_unread_no(self, obj):
         request_user = self._context.get('request_user')
@@ -155,6 +159,10 @@ class ListChatRoomSerializers(serializers.ModelSerializer):
         if not unread_no:
             unread_no = ''
         return unread_no
+
+    def get_said_to_room(self, obj):
+        obj = obj.said_to_room.order_by('-chat_datetime')[:20]
+        return ListChatLogSerializers(obj, many=True).data
 
     class Meta:
         model = ChatRoom

@@ -106,9 +106,12 @@ if __name__ == '__main__':
     import os
 
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dj_chat.settings")
-    clear_all()
-    # ca = ChatCache('musiclist')
-    # print(ca.hash_keys())
+    # clear_all()
+    ca = ChatCache('asgi::group:pubilc_chat')
+    print(ca.redis_client.zcard('asgi::group:pubilc_chat'))
+    print(ca.redis_client.zrange('asgi::group:pubilc_chat',0,-1))
+    # print(ca.redis_client.zremrangebyrank('asgi::group:pubilc_chat',0,-1))
+
     # m = ca.hash_hget('1329734169')
     # m = json.loads(m)
     # m['url'] = 'qw.com'

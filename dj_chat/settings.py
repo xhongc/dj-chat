@@ -86,7 +86,7 @@ CACHES = {
         'BACKEND': 'redis_cache.RedisCache',
         'LOCATION': "redis://%s:6379" % REDIS_SERVER,
         'OPTIONS': {
-            'DB': 1,
+            'DB': 0,
             'PASSWORD': '',
             'PARSER_CLASS': 'redis.connection.HiredisParser',
             'CONNECTION_POOL_CLASS': 'redis.BlockingConnectionPool',

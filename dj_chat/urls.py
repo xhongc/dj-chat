@@ -36,6 +36,7 @@ router.register(r'talk_log', viewset=chat_views.TalkLogViewsets, basename='talk_
 router.register(r'user_info', viewset=chat_views.UserInfoViewsets, basename='user_info')
 router.register(r'get_statistic', viewset=chat_views.StatisticViewsets, basename='get_statistic')
 router.register(r'history', viewset=chat_views.HistoryViewsets, basename='history')
+router.register(r'first_init', viewset=chat_views.FirstInitViewsets, basename='first_init')
 
 urlpatterns = [
     re_path(r'^chao/', admin.site.urls),

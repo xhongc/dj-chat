@@ -1,13 +1,19 @@
 import mimetypes
+import os
+import queue
 import re
-import time
+# import cv2 as cv
+import subprocess as sp
+import threading
+from collections import OrderedDict
 from datetime import datetime, timedelta
+from wsgiref.util import FileWrapper
 
-import requests
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.db.models import Q, F, Sum
+from django.db.models import Q, Sum
 from django.http import JsonResponse
+from django.http import StreamingHttpResponse
 from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins
@@ -17,7 +23,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
-from chat.filters import ChatLogFilter, PersonalChatLogFilter, ChatRoomFilter, UserProfileFilter
+from chat.filters import ChatLogFilter, PersonalChatLogFilter, ChatRoomFilter
 from chat.models import ChatRoom, ChatLog, UserProfile, TalkLog, History
 from chat.serializers import FriendsSerializers, ListFriendsSerializers, ChatRoomSerializers, \
     ListChatLogSerializers, ListChatRoomSerializers, UpdateChatRoomSerializers, FriendsSerializers2, \
@@ -25,13 +31,28 @@ from chat.serializers import FriendsSerializers, ListFriendsSerializers, ChatRoo
 from dj_chat.util import ChatCache
 from utils.base_chart import get_period_expression, get_date_range
 from utils.base_serializer import BasePagination
-from collections import OrderedDict
 from utils.relativedelta import relativedelta
 
 
 @login_required(login_url='/login/')
 def index(request):
     return render(request, 'chat/boot_chat.html', locals())
+
+
+class FirstInitViewsets(mixins.ListModelMixin, GenericViewSet):
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+
+    def list(self, request, *args, **kwargs):
+        my_join_room = ChatRoom.objects.filter(
+            Q(admins__user=request.user) | Q(members__user=request.user)).distinct()
+        room_info = ListChatRoomSerializers(my_join_room, many=True).data
+        user_info = FriendsSerializers2(request.user.profile).data
+        extra_data = {
+            'user_info': user_info,
+            'room_info': room_info
+        }
+        return JsonResponse({'extra_data': extra_data, 'status': '0000'})
 
 
 class StatisticViewsets(mixins.ListModelMixin, GenericViewSet):
@@ -329,12 +350,6 @@ class HistoryViewsets(mixins.ListModelMixin, GenericViewSet):
         return JsonResponse({}, status=200)
 
 
-import queue
-import threading
-# import cv2 as cv
-import subprocess as sp
-
-
 class Live(object):
     def __init__(self):
         self.frame_queue = queue.Queue()
@@ -415,12 +430,6 @@ def play_video(request):
     live = Live()
     live.run()
     return render(request, 'chat/video.html', {'error_message': "ii"})
-
-
-import re
-import os
-from wsgiref.util import FileWrapper
-from django.http import StreamingHttpResponse
 
 
 def file_iterator(file_name, chunk_size=8192, offset=0, length=None):
