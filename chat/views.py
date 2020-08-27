@@ -30,7 +30,7 @@ from chat.serializers import FriendsSerializers, ListFriendsSerializers, ChatRoo
     RegisterSerializers, ListTalkLogSerializers, PostTalkLogSerializers, UserInfoSerializer
 from dj_chat.util import ChatCache
 from utils.base_chart import get_period_expression, get_date_range
-from utils.base_serializer import BasePagination
+from utils.base_serializer import BasePagination, ChatLogPagination
 from utils.relativedelta import relativedelta
 
 
@@ -196,7 +196,7 @@ class FriendsViewsets(mixins.CreateModelMixin, mixins.ListModelMixin, GenericVie
 
 class ChatLogViewsets(mixins.ListModelMixin, GenericViewSet):
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
-    pagination_class = BasePagination
+    pagination_class = ChatLogPagination
     filter_backends = (DjangoFilterBackend,)
     filterset_class = ChatLogFilter
 
@@ -206,22 +206,14 @@ class ChatLogViewsets(mixins.ListModelMixin, GenericViewSet):
         return ListChatLogSerializers
 
     def get_queryset(self):
-        start = datetime.now().date()
-        end = start + timedelta(days=1)
-        return ChatLog.objects.filter(chat_datetime__range=(start, end), said_to=self.request.user).order_by(
-            '-chat_datetime', '-id')
+        return ChatLog.objects.all().order_by('-chat_datetime', '-id')
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
-            # 把未读变成已读
-            ChatLog.objects.filter(status='unread', said_to=request.user,
-                                   said_to_room__channel_no=request.query_params.get(
-                                       'said_to_room__channel_no')).update(
-                status='read')
-            return self.get_paginated_response(serializer.data[::-1])
+            return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)

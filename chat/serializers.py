@@ -161,7 +161,7 @@ class ListChatRoomSerializers(serializers.ModelSerializer):
         return unread_no
 
     def get_said_to_room(self, obj):
-        obj = obj.said_to_room.order_by('-chat_datetime')[:20]
+        obj = obj.said_to_room.order_by('-chat_datetime', '-id')[:20]
         return ListChatLogSerializers(obj, many=True).data
 
     class Meta:

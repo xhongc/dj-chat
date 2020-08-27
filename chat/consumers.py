@@ -33,77 +33,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.channel_name)
         await self.accept()
 
-    # async def connect_1(self):
-    #     # 游客拒绝
-    #     if self.request_user.is_anonymous:
-    #         await self.close()
-    #     # 初始化信息
-    #     self.profile_uid = self.request_user.profile.unicode_id
-    #     # url参数上的channel_no
-    #     self.room_channel_no = self.scope['url_route']['kwargs']['room_name']
-    #     self.chat_room_model = ChatRoom.objects.filter(channel_no=self.room_channel_no).first()
-    #     self.room_type = self.chat_room_model.chat_type
-    #     # 拼接websocket组的名字
-    #     self.room_group_name = self.room_type + '_' + self.room_channel_no
-    #     # 初始化信息结束
-    #
-    #     # 必须是我加入的频道
-    #     if self.room_channel_no in self.request_user.profile.get_my_chat_room():
-    #         # 加入成员保存字典 redis缓存中
-    #         ChatCache(self.room_group_name).set_add(self.profile_uid)
-    #         # 打印信息
-    #         print('UID:%s加入房间(%s),剩余:%s' % (
-    #             self.profile_uid, self.room_group_name,
-    #             ChatCache(self.room_group_name).set_members()))
-    #         # Join room group
-    #         await self.channel_layer.group_add(
-    #             self.room_group_name,
-    #             self.channel_name
-    #         )
-    #         await self.accept()
-    #     # 机器人回复频道
-    #     elif self.room_type == 'ROBOT':
-    #         # Join room group
-    #         await self.channel_layer.group_add(
-    #             self.room_group_name,
-    #             self.channel_name
-    #         )
-    #         await self.accept()
-    #     else:
-    #         await self.close()
-
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
         )
-
-    # 初始化房间信息
-    async def action_first_init(self):
-        # 我加入的房间信息
-        now = datetime.now()
-        my_join_room = ChatRoom.objects.filter(
-            Q(admins__user=self.request_user) | Q(members__user=self.request_user)).distinct()
-        room_info = ListChatRoomSerializers(my_join_room, many=True,
-                                            context={'request_user': self.request_user}).data
-        user_info = FriendsSerializers2(self.request_user.profile).data
-        extra_data = {
-            'user_info': user_info,
-            'room_info': room_info
-        }
-        self.chaos.data.update(
-            {
-                'type': 'chat_message',
-                'message': '初始化房间信息',
-                'send_time': now.strftime('%p %H:%M'),
-                'extra_data': extra_data,
-            }
-        )
-        await self.channel_layer.group_send(self.room_group_name, self.chaos.data)
-
-    async def action_chat_log(self):
-        my_join_room = ChatRoom.objects.filter(
-            Q(admins__user=self.request_user) | Q(members__user=self.request_user)).distinct()
 
     # 群组聊天
     async def action_chat_message(self):
