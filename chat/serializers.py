@@ -61,6 +61,7 @@ class FriendsSerializers(serializers.Serializer):
 
 class FriendsSerializers2(serializers.ModelSerializer):
     img_path = serializers.SerializerMethodField()
+    date_created = serializers.DateTimeField(format='%Y-%m-%d')
 
     def get_img_path(self, obj):
         return obj.get_img_path()
@@ -117,14 +118,14 @@ class PostChatLogSerializers(serializers.ModelSerializer):
 
 
 class ListChatLogSerializers(serializers.ModelSerializer):
-    # chat_datetime = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')
+    chat_datetime = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')
     message = serializers.CharField(source='content')
     user_uid = serializers.IntegerField(source='who_said.profile.unicode_id')
     img_path = serializers.CharField(source='who_said.profile.img_path')
 
     class Meta:
         model = ChatLog
-        fields = ('message', 'user_uid', 'img_path')
+        fields = ('message', 'user_uid', 'img_path', 'chat_datetime')
 
 
 class ChatRoomSerializers(serializers.ModelSerializer):

@@ -2,62 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-    }
-
-    .box {
-      {#width: 640px;#}
-      {#height: 585px;#}
-      border: 1px solid #BBBBBB;
-      border-top: 3px solid #094683;
-      {#margin: 10px auto;#}
-    }
-
-    .title {
-      width: 600px;
-      margin: 0 auto; /*使盒子居中*/
-      text-align: center; /*使文本在盒子居中，可以尝试把这两句分别注释看下实现效果就理解了！*/
-      margin-top: 26px;
-      border: 1px solid #CCCCCC;
-      padding-bottom: 10px;
-
-    }
-
-    .title h2 {
-      font-weight: normal;
-      margin-bottom: 10px;
-    }
-
-    .title h6 {
-      font-size: 12px;
-      font-weight: normal;
-      color: #999999;
-    }
-
-    .title span {
-      color: #990000;
-    }
-
-    .photo {
-      margin: 0 auto;
-      width: 567px;
-      height: 427px;
-      margin-top: 10px;
-    }
-  </style>
+  <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+  <link href="https://cdn.bootcss.com/font-awesome/5.7.2/css/all.min.css">
 </head>
 <body>
-  <div class="title">
-    <h2>我是标题</h2>
-    <h6>
-      2015年08月08日 18:19 <span>新浪体育</span> 微博 我有话说（<span>106712</span>人参与） 收藏本文
-    </h6>
-  </div>
-  <div class="photo">
-    <img src="tiyu.png">
-  </div>
+<div id="captcha"></div>
 </body>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $('#captcha').sliderCaptcha();
+</script>
 </html>
