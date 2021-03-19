@@ -17,7 +17,7 @@ Django==2.2.14
 django-cors-headers==3.4.0
 django-filter==2.3.0
 django-redis==4.12.1
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 djangorestframework-jwt==1.11.0
 gevent==20.6.2
 greenlet==0.4.16
