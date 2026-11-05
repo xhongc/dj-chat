@@ -29,7 +29,7 @@ def ghs():
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36'
     }
     try:
-        resp = requests.get('https://api.66mz8.com/api/rand.tbimg.php?format=json', headers=headers).json()
+        resp = requests.get('https://api.66mz8.com/api/rand.tbimg.php?format=json', headers=headers, timeout=30).json()
         if resp.get('code') == 200:
             return IMG_HTML % (resp.get('pic_url'))
     except:
@@ -67,7 +67,7 @@ def sizhi(content):
         "userid": "charles"
     }
     try:
-        resp = requests.post(url, data=data)
+        resp = requests.post(url, data=data, timeout=30)
         resp = json.loads(resp.text)
         if resp.get('message', '') == 'success':
             return resp.get('data').get('info').get('text')
