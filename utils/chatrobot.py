@@ -67,7 +67,7 @@ def sizhi(content):
         "userid": "charles"
     }
     try:
-        resp = requests.post(url, data=data)
+        resp = requests.post(url, data=data, timeout=30)
         resp = json.loads(resp.text)
         if resp.get('message', '') == 'success':
             return resp.get('data').get('info').get('text')
